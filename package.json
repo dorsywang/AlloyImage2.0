@@ -1,0 +1,28 @@
+{
+  "name": "alloyimage2.0",
+  "version": "2.0.0",
+  "description": "AlloyImage Version 2.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dorsywang/AlloyImage2.0.git"
+  },
+  "keywords": [
+    "AlloyImage"
+  ],
+  "author": "dorsy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dorsywang/AlloyImage2.0/issues"
+  },
+  "homepage": "https://github.com/dorsywang/AlloyImage2.0#readme",
+  "dependencies": {
+    "webpack": "^1.13.2"
+  }
+}
