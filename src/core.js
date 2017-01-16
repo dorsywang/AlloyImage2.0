@@ -1,8 +1,9 @@
 import 'babel-polyfill';
 
-import Reflector from "./reflector";
+import LayerPixelProcesser from "./layerPixelProcesser";
 import {loadImage, uniqueId} from "./util";
 import {drawImageIOS} from "./fix";
+import addLayer from "./addLayer";
 
 import toGray from "./filter/toGray";
 
@@ -35,7 +36,35 @@ class AlloyImage{
 
             this.width = this.canvas.width;
             this.height = this.canvas.height;
+
+            this.layers = [];
+
         });
+    }
+
+    set width(w){
+        this.then(() => {
+            this.canvas.width = w;
+        });
+
+        return this;
+    }
+
+    get width(){
+        return this.canvas.width;
+    }
+
+
+    set height(h){
+        this.then(() => {
+            this.canvas.height = h;
+        });
+
+        return this;
+    }
+
+    get height(){
+        return this.canvas.height;
     }
 
     async initCanvas(img, width, height){
@@ -105,6 +134,59 @@ class AlloyImage{
         return this;
     }
 
+    getImageData(){
+        return this.then(() => {
+            return this.imgData;
+        });
+    }
+
+    add(aiObj, ...args){
+        let numberArr = [], method, alpha, dx, dy, isFast, channel;
+
+        //做重载
+        for(let i = 0; i < arguments.length; i ++){
+            if(!i) continue;
+
+            switch(typeof(arguments[i])){
+                case "string":
+                    if(/\d+%/.test(arguments[i])){//alpha
+                        alpha = arguments[i].replace("%", "");
+                    }else if(/[RGB]+/.test(arguments[i])){//channel
+                        channel = arguments[i];
+                    }else{//method
+                        method = arguments[i];
+                    }
+                break;
+
+                case "number":
+                    numberArr.push(arguments[i]);
+                break;
+
+                case "boolean":
+                   isFast = arguments[i];
+                break;
+            }
+        }
+
+        //赋值
+        dx = numberArr[0] || 0;
+        dy = numberArr[1] || 0;
+        method = method || "正常";
+        alpha = alpha / 100 || 1;
+        isFast = isFast || false;
+        channel = channel || "RGB";
+
+        //console.log("add init");
+
+            //做映射转发
+        this.then(async () => {
+            addLayer(this.imgData, await aiObj.getImageData(), method, alpha, dx, dy, isFast, channel);
+        });
+
+        return this;
+    
+    }
+
     then(fn){
         this._tasker = this._tasker.then(fn);
 
@@ -112,12 +194,31 @@ class AlloyImage{
     }
 
     async _doAct(method, args){
-        await Reflector.reflect(this.canvas, method, args);
+        let layerPixelProcesser = new LayerPixelProcesser(this.imgData);
+
+        let imgData = await layerPixelProcesser.process(method, args);
+
+        this.imgData = imgData;
     }
 
-    _complileLayers(){
+    // 获得合成视图
+    _getCompositeView(){
+        
+        let compositeCanvas = document.createElement('canvas');
+        compositeCanvas.width = this.width;
+        compositeCanvas.height =  this.height;
+
+        let compositeContext = compositeCanvas.getContext("2d");
+
+        compositeContext.putImageData(this.imgData, 0, 0);
+
+        return {
+            compositeCanvas,
+            compositeContext
+        }
+
+
         //如果其上无其他挂载图层，加快处理
-        return ;
         if(this.layers.length == 0){
             this.tempPsLib = {
                 imgData: this.imgData
@@ -149,7 +250,7 @@ class AlloyImage{
 
     show(selector){
         return this.then(() => {
-            this._complileLayers();
+            let {compositeCanvas}  = this._getCompositeView();
 
 
             //以临时对象data显示
@@ -160,12 +261,12 @@ class AlloyImage{
             if(selector){
                 if(typeof selector == "string"){
                     var el = document.querySelector(selector);
-                    el.appendChild(this.canvas);
+                    el.appendChild(compositeCanvas);
                 }else{
-                    selector.appendChild(this.canvas);
+                    selector.appendChild(compositeCanvas);
                 }
             }else{
-                document.body.appendChild(this.canvas);
+                document.body.appendChild(compositeCanvas);
             }
 
             return this;
@@ -173,8 +274,16 @@ class AlloyImage{
         });
     }
 
+    addLayer(...args){
+        this.then(() => {
+            this.layers.push(args);
+        });
+
+        return this;
+    }
+
     static addFilter(filter){
-        Reflector.addFilter(filter);
+        LayerPixelProcesser.addFilter(filter);
     }
 }
 

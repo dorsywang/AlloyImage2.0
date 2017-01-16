@@ -50,19 +50,25 @@
 	    value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	__webpack_require__(1);
 
-	var _reflector = __webpack_require__(298);
+	var _layerPixelProcesser = __webpack_require__(298);
 
-	var _reflector2 = _interopRequireDefault(_reflector);
+	var _layerPixelProcesser2 = _interopRequireDefault(_layerPixelProcesser);
 
 	var _util = __webpack_require__(299);
 
 	var _fix = __webpack_require__(300);
 
-	var _toGray = __webpack_require__(301);
+	var _addLayer = __webpack_require__(301);
+
+	var _addLayer2 = _interopRequireDefault(_addLayer);
+
+	var _toGray = __webpack_require__(302);
 
 	var _toGray2 = _interopRequireDefault(_toGray);
 
@@ -120,7 +126,9 @@
 	                            _this.width = _this.canvas.width;
 	                            _this.height = _this.canvas.height;
 
-	                        case 18:
+	                            _this.layers = [];
+
+	                        case 19:
 	                        case "end":
 	                            return _context.stop();
 	                    }
@@ -258,6 +266,101 @@
 	            return this;
 	        }
 	    }, {
+	        key: "getImageData",
+	        value: function getImageData() {
+	            var _this3 = this;
+
+	            return this.then(function () {
+	                return _this3.imgData;
+	            });
+	        }
+	    }, {
+	        key: "add",
+	        value: function add(aiObj) {
+	            var _this4 = this;
+
+	            for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	                args[_key2 - 1] = arguments[_key2];
+	            }
+
+	            var numberArr = [],
+	                method = void 0,
+	                alpha = void 0,
+	                dx = void 0,
+	                dy = void 0,
+	                isFast = void 0,
+	                channel = void 0;
+
+	            //做重载
+	            for (var i = 0; i < arguments.length; i++) {
+	                if (!i) continue;
+
+	                switch (_typeof(arguments[i])) {
+	                    case "string":
+	                        if (/\d+%/.test(arguments[i])) {
+	                            //alpha
+	                            alpha = arguments[i].replace("%", "");
+	                        } else if (/[RGB]+/.test(arguments[i])) {
+	                            //channel
+	                            channel = arguments[i];
+	                        } else {
+	                            //method
+	                            method = arguments[i];
+	                        }
+	                        break;
+
+	                    case "number":
+	                        numberArr.push(arguments[i]);
+	                        break;
+
+	                    case "boolean":
+	                        isFast = arguments[i];
+	                        break;
+	                }
+	            }
+
+	            //赋值
+	            dx = numberArr[0] || 0;
+	            dy = numberArr[1] || 0;
+	            method = method || "正常";
+	            alpha = alpha / 100 || 1;
+	            isFast = isFast || false;
+	            channel = channel || "RGB";
+
+	            //console.log("add init");
+
+	            //做映射转发
+	            this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+	                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	                    while (1) {
+	                        switch (_context4.prev = _context4.next) {
+	                            case 0:
+	                                _context4.t0 = _addLayer2.default;
+	                                _context4.t1 = _this4.imgData;
+	                                _context4.next = 4;
+	                                return aiObj.getImageData();
+
+	                            case 4:
+	                                _context4.t2 = _context4.sent;
+	                                _context4.t3 = method;
+	                                _context4.t4 = alpha;
+	                                _context4.t5 = dx;
+	                                _context4.t6 = dy;
+	                                _context4.t7 = isFast;
+	                                _context4.t8 = channel;
+	                                (0, _context4.t0)(_context4.t1, _context4.t2, _context4.t3, _context4.t4, _context4.t5, _context4.t6, _context4.t7, _context4.t8);
+
+	                            case 12:
+	                            case "end":
+	                                return _context4.stop();
+	                        }
+	                    }
+	                }, _callee4, _this4);
+	            })));
+
+	            return this;
+	        }
+	    }, {
 	        key: "then",
 	        value: function then(fn) {
 	            this._tasker = this._tasker.then(fn);
@@ -267,33 +370,57 @@
 	    }, {
 	        key: "_doAct",
 	        value: function () {
-	            var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(method, args) {
-	                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	            var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(method, args) {
+	                var layerPixelProcesser, imgData;
+	                return regeneratorRuntime.wrap(function _callee5$(_context5) {
 	                    while (1) {
-	                        switch (_context4.prev = _context4.next) {
+	                        switch (_context5.prev = _context5.next) {
 	                            case 0:
-	                                _context4.next = 2;
-	                                return _reflector2.default.reflect(this.canvas, method, args);
+	                                layerPixelProcesser = new _layerPixelProcesser2.default(this.imgData);
+	                                _context5.next = 3;
+	                                return layerPixelProcesser.process(method, args);
 
-	                            case 2:
+	                            case 3:
+	                                imgData = _context5.sent;
+
+
+	                                this.imgData = imgData;
+
+	                            case 5:
 	                            case "end":
-	                                return _context4.stop();
+	                                return _context5.stop();
 	                        }
 	                    }
-	                }, _callee4, this);
+	                }, _callee5, this);
 	            }));
 
 	            function _doAct(_x4, _x5) {
-	                return _ref5.apply(this, arguments);
+	                return _ref6.apply(this, arguments);
 	            }
 
 	            return _doAct;
 	        }()
+
+	        // 获得合成视图
+
 	    }, {
-	        key: "_complileLayers",
-	        value: function _complileLayers() {
+	        key: "_getCompositeView",
+	        value: function _getCompositeView() {
+
+	            var compositeCanvas = document.createElement('canvas');
+	            compositeCanvas.width = this.width;
+	            compositeCanvas.height = this.height;
+
+	            var compositeContext = compositeCanvas.getContext("2d");
+
+	            compositeContext.putImageData(this.imgData, 0, 0);
+
+	            return {
+	                compositeCanvas: compositeCanvas,
+	                compositeContext: compositeContext
+	            };
+
 	            //如果其上无其他挂载图层，加快处理
-	            return;
 	            if (this.layers.length == 0) {
 	                this.tempPsLib = {
 	                    imgData: this.imgData
@@ -321,10 +448,11 @@
 	    }, {
 	        key: "show",
 	        value: function show(selector) {
-	            var _this3 = this;
+	            var _this5 = this;
 
 	            return this.then(function () {
-	                _this3._complileLayers();
+	                var _getCompositeView2 = _this5._getCompositeView(),
+	                    compositeCanvas = _getCompositeView2.compositeCanvas;
 
 	                //以临时对象data显示
 	                /*
@@ -334,21 +462,64 @@
 	                if (selector) {
 	                    if (typeof selector == "string") {
 	                        var el = document.querySelector(selector);
-	                        el.appendChild(_this3.canvas);
+	                        el.appendChild(compositeCanvas);
 	                    } else {
-	                        selector.appendChild(_this3.canvas);
+	                        selector.appendChild(compositeCanvas);
 	                    }
 	                } else {
-	                    document.body.appendChild(_this3.canvas);
+	                    document.body.appendChild(compositeCanvas);
 	                }
 
-	                return _this3;
+	                return _this5;
 	            });
+	        }
+	    }, {
+	        key: "addLayer",
+	        value: function addLayer() {
+	            var _this6 = this;
+
+	            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	                args[_key3] = arguments[_key3];
+	            }
+
+	            this.then(function () {
+	                _this6.layers.push(args);
+	            });
+
+	            return this;
+	        }
+	    }, {
+	        key: "width",
+	        set: function set(w) {
+	            var _this7 = this;
+
+	            this.then(function () {
+	                _this7.canvas.width = w;
+	            });
+
+	            return this;
+	        },
+	        get: function get() {
+	            return this.canvas.width;
+	        }
+	    }, {
+	        key: "height",
+	        set: function set(h) {
+	            var _this8 = this;
+
+	            this.then(function () {
+	                _this8.canvas.height = h;
+	            });
+
+	            return this;
+	        },
+	        get: function get() {
+	            return this.canvas.height;
 	        }
 	    }], [{
 	        key: "addFilter",
 	        value: function addFilter(filter) {
-	            _reflector2.default.addFilter(filter);
+	            _layerPixelProcesser2.default.addFilter(filter);
 	        }
 	    }]);
 
@@ -8506,7 +8677,7 @@
 /* 298 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8514,34 +8685,67 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	exports.default = new (function () {
-	    function _class() {
-	        _classCallCheck(this, _class);
+	var LayerPixelProcesser = function () {
+	    function LayerPixelProcesser(imgData) {
+	        _classCallCheck(this, LayerPixelProcesser);
 
-	        this.filterMap = {};
+	        this.imgData = imgData;
 	    }
 
-	    _createClass(_class, [{
-	        key: 'reflect',
-	        value: function reflect(canvas, name, args) {
-	            var filter = this.filterMap[name];
+	    _createClass(LayerPixelProcesser, [{
+	        key: "process",
+	        value: function () {
+	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(name, args) {
+	                var filter, _ref2, data, width, height;
 
-	            filter.doFilter(canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height), args);
-	        }
-	    }, {
-	        key: 'addFilter',
+	                return regeneratorRuntime.wrap(function _callee$(_context) {
+	                    while (1) {
+	                        switch (_context.prev = _context.next) {
+	                            case 0:
+	                                filter = LayerPixelProcesser.filterMap[name];
+	                                _context.next = 3;
+	                                return filter.doFilter(this.imgData, args);
+
+	                            case 3:
+	                                _ref2 = _context.sent;
+	                                data = _ref2.data;
+	                                width = _ref2.width;
+	                                height = _ref2.height;
+	                                return _context.abrupt("return", new ImageData(data, width, height));
+
+	                            case 8:
+	                            case "end":
+	                                return _context.stop();
+	                        }
+	                    }
+	                }, _callee, this);
+	            }));
+
+	            function process(_x, _x2) {
+	                return _ref.apply(this, arguments);
+	            }
+
+	            return process;
+	        }()
+	    }], [{
+	        key: "addFilter",
 	        value: function addFilter(Filter) {
 	            var filter = new Filter();
 	            var filterName = Filter.name;
 
-	            this.filterMap[filterName] = filter;
+	            LayerPixelProcesser.filterMap[filterName] = filter;
 	        }
 	    }]);
 
-	    return _class;
-	}())();
+	    return LayerPixelProcesser;
+	}();
+
+	LayerPixelProcesser.filterMap = {};
+	exports.default = LayerPixelProcesser;
 
 /***/ },
 /* 299 */
@@ -8637,6 +8841,299 @@
 
 /***/ },
 /* 301 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = addLayer;
+	/**
+	 * @author: Bin Wang
+	 * @description: Main add
+	 *
+	 */
+
+	//isFast用于快速，适用于中间处理
+	function addLayer(lowerData, upperData, method, alpha, dx, dy, isFast, channel) {
+	    var l = lowerData.data,
+	        u = upperData.data;
+
+	    dx = dx || 0;
+	    dy = dy || 0;
+	    alpha = alpha || 1; //alpha 范围为0 - 100
+	    isFast = isFast || false;
+	    channel = channel || "RGB";
+
+	    if (!/[RGB]+/.test(channel)) {
+	        channel = "RGB";
+	    }
+
+	    var channelString = channel.replace("R", "0").replace("G", "1").replace("B", "2"),
+	        jump = 1,
+	        result = void 0,
+	        width = lowerData.width,
+	        height = lowerData.height,
+	        upperLength = u.length,
+	        upperWidth = upperData.width,
+	        upperHeight = upperData.height,
+	        indexOfArr = [channelString.indexOf("0") > -1, channelString.indexOf("1") > -1, channelString.indexOf("2") > -1],
+	        everyJump = 4 * jump;
+
+	    /*
+	    if(isFast){
+	    jump = 1; 
+	    }
+	    */
+
+	    var ii = void 0,
+	        row = void 0,
+	        col = void 0,
+	        uRow = void 0,
+	        uCol = void 0,
+	        uIi = void 0,
+	        uI = void 0;
+
+	    //计算重叠部分x ,y范围
+	    var xMin = void 0,
+	        yMin = void 0,
+	        xMax = void 0,
+	        yMax = void 0;
+
+	    var uXMin = dx;
+	    var uXMax = dx + upperWidth;
+	    var uYMin = dy;
+	    var uYMax = dy + upperHeight;
+
+	    if (uXMin > width) {
+	        return;
+	    } else if (uXMin < 0) {
+	        uXMin = 0;
+	    }
+
+	    if (uXMax < 0) {
+	        return;
+	    } else if (uXMax > width) {
+	        uXMax = width;
+	    }
+
+	    if (uYMin > height) {
+	        return;
+	    } else if (uYMin < 0) {
+	        uYMin = 0;
+	    }
+
+	    if (uYMax < 0) {
+	        return;
+	    } else if (uYMax > height) {
+	        uYMax = height;
+	    }
+
+	    var currRow = void 0,
+	        upperY = void 0,
+	        upperRow = void 0;
+	    for (var y = uYMin; y < uYMax; y++) {
+	        currRow = y * width;
+	        upperY = y - dy;
+	        upperRow = upperY * upperWidth;
+
+	        for (var x = uXMin; x < uXMax; x++) {
+	            //计算此时对应的upperX,Y
+	            var upperX = x - dx;
+
+	            //计算此时的i
+	            var i = (currRow + x) * 4;
+
+	            //计算此时的upperI
+	            var _uI = (upperRow + upperX) * 4;
+
+	            //for(var i = 0, n = l.length; i < n; i += everyJump){
+
+	            //ii = i / 4;
+
+	            //得到当前点的坐标 y分量
+	            //row = ~~(ii / width); 
+	            //col = ii % width;
+
+	            //uRow = row - dy;
+	            //uCol = col - dx;
+
+	            //uIi = uRow * upperWidth + uCol;
+	            //uI = uIi * 4;
+
+	            //if(uI >= 0 && uI < (upperLength - 4) && uCol < upperWidth && uCol >= 0){
+
+	            //l[i + 3] = u[uI + 3];//透明度
+	            for (var j = 0; j < 3; j++) {
+
+	                //若此点透明则不计算
+	                if (u[_uI + 3] == 0) break;else l[i + 3] = u[_uI + 3];
+
+	                switch (method) {
+	                    case "颜色减淡":
+	                        if (indexOfArr[j]) {
+	                            result = l[i + j] + l[i + j] * u[_uI + j] / (255 - u[_uI + j]);
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "变暗":
+	                        if (indexOfArr[j]) {
+	                            result = l[i + j] < u[_uI + j] ? l[i + j] : u[_uI + j];
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "变亮":
+	                        if (indexOfArr[j]) {
+	                            result = l[i + j] > u[_uI + j] ? l[i + j] : u[_uI + j];
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "正片叠底":
+	                        if (indexOfArr[j]) {
+	                            result = ~~(l[i + j] * u[_uI + j] / 255);
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "滤色":
+	                        if (indexOfArr[j]) {
+	                            result = ~~(255 - (255 - l[i + j]) * (255 - u[_uI + j]) / 255);
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "叠加":
+	                        if (indexOfArr[j]) {
+	                            if (l[i + j] <= 127.5) {
+	                                result = l[i + j] * u[_uI + j] / 127.5;
+	                            } else {
+	                                result = 255 - (255 - l[i + j]) * (255 - u[_uI + j]) / 127.5;
+	                            }
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "强光":
+	                        if (indexOfArr[j]) {
+	                            if (u[_uI + j] <= 127.5) {
+	                                result = l[i + j] * u[_uI + j] / 127.5;
+	                            } else {
+	                                result = l[i + j] + (255 - l[i + j]) * (u[_uI + j] - 127.5) / 127.5;
+	                            }
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "差值":
+	                        if (indexOfArr[j]) {
+	                            result = l[i + j] > u[_uI + j] ? l[i + j] - u[_uI + j] : u[_uI + j] - l[i + j];
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "排除":
+	                        if (indexOfArr[j]) {
+	                            result = l[i + j] + u[_uI + j] - l[i + j] * u[_uI + j] / 127.5;
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "点光":
+	                        if (indexOfArr[j]) {
+	                            if (l[i + j] < 2 * u[_uI + j] - 255) {
+	                                result = 2 * u[_uI + j] - 255;
+	                            } else if (l[i + j] < 2 * u[_uI + j]) {
+	                                result = l[i + j];
+	                            } else {
+	                                result = 2 * u[_uI + j];
+	                            }
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "颜色加深":
+	                        if (indexOfArr[j]) {
+	                            result = 255 - 255 * (255 - l[i + j]) / u[_uI + j];
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "线性加深":
+	                        if (indexOfArr[j]) {
+	                            var tempR = l[i + j] + u[_uI + j];
+	                            result = tempR > 255 ? tempR - 255 : 0;
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "线性减淡":
+	                        if (indexOfArr[j]) {
+	                            var tempR = l[i + j] + u[_uI + j];
+	                            result = tempR > 255 ? 255 : tempR;
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "柔光":
+	                        if (indexOfArr[j]) {
+	                            if (u[_uI + j] < 127.5) {
+	                                result = ((2 * u[_uI + j] - 255) * (255 - l[i + j]) / (255 * 255) + 1) * l[i + j];
+	                            } else {
+	                                result = (2 * u[_uI + j] - 255) * (Math.sqrt(l[i + j] / 255) - l[i + j] / 255) + l[i + j];
+	                            }
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "亮光":
+	                        if (indexOfArr[j]) {
+	                            if (u[_uI + j] < 127.5) {
+	                                result = (1 - (255 - l[i + j]) / (2 * u[_uI + j])) * 255;
+	                            } else {
+	                                result = l[i + j] / (2 * (1 - u[_uI + j] / 255));
+	                            }
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "线性光":
+	                        if (indexOfArr[j]) {
+	                            var tempR = l[i + j] + 2 * u[_uI + j] - 255;
+	                            result = tempR > 255 ? 255 : tempR;
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    case "实色混合":
+	                        if (indexOfArr[j]) {
+	                            if (u[_uI + j] < 255 - l[i + j]) {
+	                                result = 0;
+	                            } else {
+	                                result = 255;
+	                            }
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                        break;
+
+	                    default:
+	                        if (indexOfArr[j]) {
+	                            result = u[_uI + j];
+	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
+	                        }
+	                } //end switch
+	            } //end for
+	        } //end y
+	    } //end x
+
+	    return lowerData;
+	};
+
+/***/ },
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8647,7 +9144,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _AlloyImageFilter = __webpack_require__(302);
+	var _AlloyImageFilter = __webpack_require__(303);
 
 	var _AlloyImageFilter2 = _interopRequireDefault(_AlloyImageFilter);
 
@@ -8691,7 +9188,7 @@
 	exports.default = toGray;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8702,7 +9199,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _dorsyMath = __webpack_require__(303);
+	var _dorsyMath = __webpack_require__(304);
 
 	var _dorsyMath2 = _interopRequireDefault(_dorsyMath);
 
@@ -8718,7 +9215,13 @@
 	    _createClass(Filter, [{
 	        key: "doFilter",
 	        value: function doFilter(imgData, args) {
-	            var result = this.process(imgData, { dorsyMath: _dorsyMath2.default });
+	            var _this = this;
+
+	            return new Promise(function (rs, rj) {
+	                var result = _this.process(imgData, { dorsyMath: _dorsyMath2.default });
+
+	                rs(result);
+	            });
 	        }
 	    }]);
 
@@ -8728,7 +9231,7 @@
 	exports.default = Filter;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports) {
 
 	"use strict";

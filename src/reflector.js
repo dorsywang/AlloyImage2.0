@@ -1,7 +1,9 @@
-export default new class{
-    constructor(){
+export default class{
+    constructor(canvas, context, imgData){
         this.filterMap = {
         };
+
+        this.canvas = canvas;
     }
 
     reflect(canvas, name, args){
