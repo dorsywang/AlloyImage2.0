@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class corrode extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "腐蚀";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         let R = parseInt(args[0]) || 3;
         let xLength = R * 2 + 1;
 

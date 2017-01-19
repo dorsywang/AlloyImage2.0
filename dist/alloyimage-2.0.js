@@ -72,61 +72,81 @@
 
 	var _toGray2 = _interopRequireDefault(_toGray);
 
-	var _corrode = __webpack_require__(307);
+	var _corrode = __webpack_require__(308);
 
 	var _corrode2 = _interopRequireDefault(_corrode);
 
-	var _darkCorner = __webpack_require__(308);
+	var _darkCorner = __webpack_require__(309);
 
 	var _darkCorner2 = _interopRequireDefault(_darkCorner);
 
-	var _dotted = __webpack_require__(309);
+	var _dotted = __webpack_require__(310);
 
 	var _dotted2 = _interopRequireDefault(_dotted);
 
-	var _embossment = __webpack_require__(310);
+	var _embossment = __webpack_require__(311);
 
 	var _embossment2 = _interopRequireDefault(_embossment);
 
-	var _gaussBlur = __webpack_require__(311);
+	var _gaussBlur = __webpack_require__(312);
 
 	var _gaussBlur2 = _interopRequireDefault(_gaussBlur);
 
-	var _lapOfGauss = __webpack_require__(312);
+	var _lapOfGauss = __webpack_require__(313);
 
 	var _lapOfGauss2 = _interopRequireDefault(_lapOfGauss);
 
-	var _mosaic = __webpack_require__(313);
+	var _mosaic = __webpack_require__(314);
 
 	var _mosaic2 = _interopRequireDefault(_mosaic);
 
-	var _noise = __webpack_require__(314);
+	var _noise = __webpack_require__(315);
 
 	var _noise2 = _interopRequireDefault(_noise);
 
-	var _oilPainting = __webpack_require__(315);
+	var _oilPainting = __webpack_require__(316);
 
 	var _oilPainting2 = _interopRequireDefault(_oilPainting);
 
-	var _posterize = __webpack_require__(316);
+	var _posterize = __webpack_require__(317);
 
 	var _posterize2 = _interopRequireDefault(_posterize);
 
-	var _sepia = __webpack_require__(317);
+	var _sepia = __webpack_require__(318);
 
 	var _sepia2 = _interopRequireDefault(_sepia);
 
-	var _sharp = __webpack_require__(318);
+	var _sharp = __webpack_require__(319);
 
 	var _sharp2 = _interopRequireDefault(_sharp);
 
-	var _toReverse = __webpack_require__(319);
+	var _toReverse = __webpack_require__(320);
 
 	var _toReverse2 = _interopRequireDefault(_toReverse);
 
-	var _toThresh = __webpack_require__(320);
+	var _toThresh = __webpack_require__(321);
 
 	var _toThresh2 = _interopRequireDefault(_toThresh);
+
+	var _brightness = __webpack_require__(322);
+
+	var _brightness2 = _interopRequireDefault(_brightness);
+
+	var _curve = __webpack_require__(324);
+
+	var _curve2 = _interopRequireDefault(_curve);
+
+	var _gamma = __webpack_require__(325);
+
+	var _gamma2 = _interopRequireDefault(_gamma);
+
+	var _seletiveColor = __webpack_require__(326);
+
+	var _seletiveColor2 = _interopRequireDefault(_seletiveColor);
+
+	var _setHSI = __webpack_require__(327);
+
+	var _setHSI2 = _interopRequireDefault(_setHSI);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -568,6 +588,11 @@
 	        value: function addFilter(filter) {
 	            _layerPixelProcesser2.default.addFilter(filter);
 	        }
+	    }, {
+	        key: "addAlteration",
+	        value: function addAlteration(alteration) {
+	            _layerPixelProcesser2.default.addAlteration(alteration);
+	        }
 	    }]);
 
 	    return AlloyImage;
@@ -588,6 +613,12 @@
 	AlloyImage.addFilter(_sharp2.default);
 	AlloyImage.addFilter(_toReverse2.default);
 	AlloyImage.addFilter(_toThresh2.default);
+
+	AlloyImage.addAlteration(_brightness2.default);
+	AlloyImage.addAlteration(_curve2.default);
+	AlloyImage.addAlteration(_gamma2.default);
+	AlloyImage.addAlteration(_seletiveColor2.default);
+	AlloyImage.addAlteration(_setHSI2.default);
 
 	exports.default = AlloyImage;
 
@@ -8761,24 +8792,35 @@
 	        key: "process",
 	        value: function () {
 	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(name, args) {
-	                var filter, _ref2, data, width, height;
+	                var filter, alteration, doProcess, _ref2, data, width, height;
 
 	                return regeneratorRuntime.wrap(function _callee$(_context) {
 	                    while (1) {
 	                        switch (_context.prev = _context.next) {
 	                            case 0:
-	                                filter = LayerPixelProcesser.filterMap[name];
-	                                _context.next = 3;
-	                                return filter.doFilter(this.imgData, args);
+	                                name = name.toLocaleLowerCase();
 
-	                            case 3:
+	                                filter = LayerPixelProcesser.filterMap[name];
+	                                alteration = LayerPixelProcesser.alterationMap[name];
+	                                doProcess = void 0;
+
+	                                if (alteration) {
+	                                    doProcess = alteration.doProcess.bind(alteration);
+	                                } else {
+	                                    doProcess = filter.doProcess.bind(filter);
+	                                }
+
+	                                _context.next = 7;
+	                                return doProcess(this.imgData, args);
+
+	                            case 7:
 	                                _ref2 = _context.sent;
 	                                data = _ref2.data;
 	                                width = _ref2.width;
 	                                height = _ref2.height;
 	                                return _context.abrupt("return", new ImageData(data, width, height));
 
-	                            case 8:
+	                            case 12:
 	                            case "end":
 	                                return _context.stop();
 	                        }
@@ -8796,9 +8838,27 @@
 	        key: "addFilter",
 	        value: function addFilter(Filter) {
 	            var filter = new Filter();
-	            var filterName = Filter.name;
+	            var filterName = Filter.name.toLocaleLowerCase();
+	            var filterCName = filter.cname;
 
 	            LayerPixelProcesser.filterMap[filterName] = filter;
+
+	            if (filterCName) {
+	                LayerPixelProcesser.filterMap[filterCName] = filter;
+	            }
+	        }
+	    }, {
+	        key: "addAlteration",
+	        value: function addAlteration(Alteration) {
+	            var alteration = new Alteration();
+	            var alterationName = Alteration.name.toLocaleLowerCase();
+	            var alterationCName = alteration.cname;
+
+	            LayerPixelProcesser.alterationMap[alterationName] = alteration;
+
+	            if (alterationCName) {
+	                LayerPixelProcesser.alterationMap[alterationCName] = alteration;
+	            }
 	        }
 	    }]);
 
@@ -8806,6 +8866,7 @@
 	}();
 
 	LayerPixelProcesser.filterMap = {};
+	LayerPixelProcesser.alterationMap = {};
 	exports.default = LayerPixelProcesser;
 
 /***/ },
@@ -9239,18 +9300,18 @@
 
 	        var _temp, _this, _ret;
 
+	        _classCallCheck(this, toGray);
+
 	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
 	        }
 
-	        _classCallCheck(this, toGray);
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toGray.__proto__ || Object.getPrototypeOf(toGray)).call.apply(_ref, [this].concat(args))), _this), _this.process = function (_ref2, _ref3) {
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toGray.__proto__ || Object.getPrototypeOf(toGray)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "灰度处理", _this.process = function (_ref2, _ref3) {
 	            var data = _ref2.data,
 	                width = _ref2.width,
 	                height = _ref2.height;
 	            var dorsyMath = _ref3.dorsyMath;
-	            return function () {
+	            return function (args) {
 	                for (var i = 0, n = data.length; i < n; i += 4) {
 	                    var gray = parseInt(0.299 * data[i] + 0.578 * data[i + 1] + 0.114 * data[i + 2]);
 	                    data[i + 2] = data[i + 1] = data[i] = gray;
@@ -9276,9 +9337,45 @@
 	    value: true
 	});
 
+	var _PixelProcesser2 = __webpack_require__(304);
+
+	var _PixelProcesser3 = _interopRequireDefault(_PixelProcesser2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Filter = function (_PixelProcesser) {
+	    _inherits(Filter, _PixelProcesser);
+
+	    function Filter() {
+	        _classCallCheck(this, Filter);
+
+	        return _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this));
+	    }
+
+	    return Filter;
+	}(_PixelProcesser3.default);
+
+	exports.default = Filter;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _dorsyMath = __webpack_require__(304);
+	var _dorsyMath = __webpack_require__(305);
 
 	var _dorsyMath2 = _interopRequireDefault(_dorsyMath);
 
@@ -9286,14 +9383,14 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Filter = function () {
-	    function Filter() {
-	        _classCallCheck(this, Filter);
+	var PixelProcesser = function () {
+	    function PixelProcesser() {
+	        _classCallCheck(this, PixelProcesser);
 	    }
 
-	    _createClass(Filter, [{
-	        key: "doFilter",
-	        value: function doFilter(imgData, args) {
+	    _createClass(PixelProcesser, [{
+	        key: "doProcess",
+	        value: function doProcess(imgData, args) {
 	            var _this = this;
 
 	            return new Promise(function (rs, rj) {
@@ -9304,13 +9401,13 @@
 	        }
 	    }]);
 
-	    return Filter;
+	    return PixelProcesser;
 	}();
 
-	exports.default = Filter;
+	exports.default = PixelProcesser;
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9321,11 +9418,11 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _c = __webpack_require__(305);
+	var _c = __webpack_require__(306);
 
 	var _c2 = _interopRequireDefault(_c);
 
-	var _matrix = __webpack_require__(306);
+	var _matrix = __webpack_require__(307);
 
 	var _matrix2 = _interopRequireDefault(_matrix);
 
@@ -9680,7 +9777,7 @@
 	}())();
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9768,7 +9865,7 @@
 	exports.default = C;
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9892,7 +9989,7 @@
 	exports.default = Matrix;
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9934,13 +10031,15 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "腐蚀";
+
 	    this.process = function (_ref2, _ref3) {
 	        var data = _ref2.data,
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
-	            var R = parseInt(arguments.length <= 0 ? undefined : arguments[0]) || 3;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 3;
 	            var xLength = R * 2 + 1;
 
 	            //区块
@@ -9967,7 +10066,7 @@
 	exports.default = corrode;
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10009,20 +10108,22 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	        this.cname = "暗角";
+
 	        this.process = function (_ref2, _ref3) {
 	                var data = _ref2.data,
 	                    width = _ref2.width,
 	                    height = _ref2.height;
 	                var dorsyMath = _ref3.dorsyMath;
-	                return function () {
+	                return function (args) {
 	                        //暗角级别 分1-10级吧
-	                        var R = parseInt(arguments.length <= 0 ? undefined : arguments[0]) || 3;
+	                        var R = parseInt(args[0]) || 3;
 
 	                        //暗角的形状
-	                        var type = (arguments.length <= 2 ? undefined : arguments[2]) || "round";
+	                        var type = args[2] || "round";
 
 	                        //暗角最终的级别 0 - 255
-	                        var lastLevel = (arguments.length <= 1 ? undefined : arguments[1]) || 30;
+	                        var lastLevel = args[1] || 30;
 
 	                        var xLength = R * 2 + 1;
 
@@ -10074,7 +10175,7 @@
 	;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10116,17 +10217,19 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	        this.cname = "喷点";
+
 	        this.process = function (_ref2, _ref3) {
 	                var data = _ref2.data,
 	                    width = _ref2.width,
 	                    height = _ref2.height;
 	                var dorsyMath = _ref3.dorsyMath;
-	                return function () {
+	                return function (args) {
 	                        //矩形半径
-	                        var R = parseInt(arguments.length <= 0 ? undefined : arguments[0]) || 1;
+	                        var R = parseInt(args[0]) || 1;
 
 	                        //内小圆半径
-	                        var r = parseInt(arguments.length <= 1 ? undefined : arguments[1]) || 1;
+	                        var r = parseInt(args[1]) || 1;
 
 	                        var xLength = R * 2 + 1;
 
@@ -10181,7 +10284,7 @@
 	exports.default = dotted;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10210,18 +10313,18 @@
 
 	        var _temp, _this, _ret;
 
+	        _classCallCheck(this, embossment);
+
 	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
 	        }
 
-	        _classCallCheck(this, embossment);
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = embossment.__proto__ || Object.getPrototypeOf(embossment)).call.apply(_ref, [this].concat(args))), _this), _this.process = function (_ref2, _ref3) {
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = embossment.__proto__ || Object.getPrototypeOf(embossment)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "浮雕效果", _this.process = function (_ref2, _ref3) {
 	            var data = _ref2.data,
 	                width = _ref2.width,
 	                height = _ref2.height;
 	            var dorsyMath = _ref3.dorsyMath;
-	            return function () {
+	            return function (args) {
 	                var outData = [];
 	                for (var i = 0, n = data.length; i < n; i += 4) {
 
@@ -10253,7 +10356,7 @@
 	exports.default = embossment;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10305,12 +10408,14 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "高斯模糊";
+
 	    this.process = function (_ref2, _ref3) {
 	        var data = _ref2.data,
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
+	        return function (args) {
 	            var pixes = data;
 
 	            var gaussMatrix = [],
@@ -10326,8 +10431,8 @@
 	                k,
 	                len;
 
-	            var radius = arguments.length <= 0 ? undefined : arguments[0];
-	            var sigma = arguments.length <= 1 ? undefined : arguments[1];
+	            var radius = args[0];
+	            var sigma = args[1];
 
 	            radius = Math.floor(radius) || 3;
 	            sigma = sigma || radius / 3;
@@ -10407,7 +10512,7 @@
 	exports.default = gaussBlur;
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10436,18 +10541,18 @@
 
 	                var _temp, _this, _ret;
 
+	                _classCallCheck(this, lapOfGauss);
+
 	                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	                        args[_key] = arguments[_key];
 	                }
-
-	                _classCallCheck(this, lapOfGauss);
 
 	                return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = lapOfGauss.__proto__ || Object.getPrototypeOf(lapOfGauss)).call.apply(_ref, [this].concat(args))), _this), _this.process = function (_ref2, _ref3) {
 	                        var data = _ref2.data,
 	                            width = _ref2.width,
 	                            height = _ref2.height;
 	                        var dorsyMath = _ref3.dorsyMath;
-	                        return function () {
+	                        return function (args) {
 	                                var template1 = [-2, -4, -4, -4, -2, -4, 0, 8, 0, -4, -4, 8, 24, 8, -4, -4, 0, 8, 0, -4, -2, -4, -4, -4, -2];
 
 	                                var template2 = [0, 1, 0, 1, -4, 1, 0, 1, 0];
@@ -10465,7 +10570,7 @@
 	exports.default = lapOfGauss;
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10507,13 +10612,15 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "马赛克";
+
 	    this.process = function (_ref2, _ref3) {
 	        var data = _ref2.data,
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
-	            var R = parseInt(arguments.length <= 0 ? undefined : arguments[0]) || 3;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 3;
 	            var xLength = R * 2 + 1;
 
 	            for (var x = 0, n = parseInt(width / xLength); x < n; x++) {
@@ -10555,7 +10662,7 @@
 	exports.default = mosaic;
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10597,13 +10704,15 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "添加杂色";
+
 	    this.process = function (_ref2, _ref3) {
 	        var data = _ref2.data,
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
-	            var R = parseInt(arguments.length <= 0 ? undefined : arguments[0]) || 100;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 100;
 
 	            var xLength = R * 2 + 1;
 
@@ -10628,7 +10737,7 @@
 	exports.default = noise;
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10675,8 +10784,8 @@
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
-	            var R = parseInt(arguments.length <= 0 ? undefined : arguments[0]) || 16;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 16;
 	            var xLength = R * 2 + 1;
 
 	            //区块
@@ -10705,7 +10814,7 @@
 	exports.default = oilPainting;
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10752,12 +10861,12 @@
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
+	        return function (args) {
 	            var dM = dorsyMath;
 
 	            //灰度阶数
 	            //由原来的255阶映射为现在的阶数
-	            var step = (arguments.length <= 0 ? undefined : arguments[0]) || 20;
+	            var step = args[0] || 20;
 
 	            step = step < 1 ? 1 : step > 255 ? 255 : step;
 	            var level = Math.floor(255 / step);
@@ -10777,7 +10886,7 @@
 	exports.default = posterize;
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10806,18 +10915,18 @@
 
 	        var _temp, _this, _ret;
 
+	        _classCallCheck(this, sepia);
+
 	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
 	        }
-
-	        _classCallCheck(this, sepia);
 
 	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = sepia.__proto__ || Object.getPrototypeOf(sepia)).call.apply(_ref, [this].concat(args))), _this), _this.process = function (_ref2, _ref3) {
 	            var data = _ref2.data,
 	                width = _ref2.width,
 	                height = _ref2.height;
 	            var dorsyMath = _ref3.dorsyMath;
-	            return function () {
+	            return function (args) {
 	                for (var x = 0; x < width; x++) {
 	                    for (var y = 0; y < height; y++) {
 	                        dorsyMath.xyCal({ data: data, width: width, height: height }, x, y, function (r, g, b) {
@@ -10836,7 +10945,7 @@
 	exports.default = sepia;
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10878,13 +10987,15 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "锐化";
+
 	    this.process = function (_ref2, _ref3) {
 	        var data = _ref2.data,
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
-	            var lamta = (arguments.length <= 0 ? undefined : arguments[0]) || 0.6;
+	        return function (args) {
+	            var lamta = args[0] || 0.6;
 
 	            for (var i = 0, n = data.length; i < n; i += 4) {
 	                var ii = i / 4;
@@ -10910,7 +11021,7 @@
 	exports.default = sharp;
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10939,18 +11050,18 @@
 
 	        var _temp, _this, _ret;
 
+	        _classCallCheck(this, toReverse);
+
 	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
 	        }
 
-	        _classCallCheck(this, toReverse);
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toReverse.__proto__ || Object.getPrototypeOf(toReverse)).call.apply(_ref, [this].concat(args))), _this), _this.process = function (_ref2, _ref3) {
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toReverse.__proto__ || Object.getPrototypeOf(toReverse)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "反色", _this.process = function (_ref2, _ref3) {
 	            var data = _ref2.data,
 	                width = _ref2.width,
 	                height = _ref2.height;
 	            var dorsyMath = _ref3.dorsyMath;
-	            return function () {
+	            return function (args) {
 	                for (var i = 0, n = data.length; i < n; i += 4) {
 	                    data[i] = 255 - data[i];
 	                    data[i + 1] = 255 - data[i + 1];
@@ -10968,7 +11079,7 @@
 	exports.default = toReverse;
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11010,18 +11121,20 @@
 	}(_AlloyImageFilter2.default);
 
 	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "灰度阈值";
+
 	    this.process = function (_ref2, _ref3) {
 	        var data = _ref2.data,
 	            width = _ref2.width,
 	            height = _ref2.height;
 	        var dorsyMath = _ref3.dorsyMath;
-	        return function () {
+	        return function (args) {
 	            for (var i = 0, n = data.length; i < n; i += 4) {
 	                var gray = parseInt(0.299 * data[i] + 0.578 * data[i + 1] + 0.114 * data[i + 2]);
 	                data[i + 2] = data[i + 1] = data[i] = gray;
 	            }
 
-	            var arg = (arguments.length <= 0 ? undefined : arguments[0]) || 128;
+	            var arg = args[0] || 128;
 	            for (var i = 0, n = data.length; i < n; i++) {
 	                if ((i + 1) % 4) {
 	                    data[i] = data[i] > arg ? 255 : 0;
@@ -11034,6 +11147,586 @@
 	};
 
 	exports.default = toThresh;
+
+/***/ },
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _AlloyImageAlteration = __webpack_require__(323);
+
+	var _AlloyImageAlteration2 = _interopRequireDefault(_AlloyImageAlteration);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Brightness = function (_Alteration) {
+	    _inherits(Brightness, _Alteration);
+
+	    function Brightness() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, Brightness);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Brightness.__proto__ || Object.getPrototypeOf(Brightness)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return Brightness;
+	}(_AlloyImageAlteration2.default);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "亮度";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var brightness = args[0] / 50; // -1,1
+	            var arg2 = args[1] || 0;
+
+	            var c = arg2 / 50; // -1,1
+	            var k = Math.tan((45 + 44 * c) * Math.PI / 180);
+
+	            for (var i = 0, n = data.length; i < n; i += 4) {
+	                for (var j = 0; j < 3; j++) {
+	                    data[i + j] = (data[i + j] - 127.5 * (1 - brightness)) * k + 127.5 * (1 + brightness);
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
+	    };
+	};
+
+	exports.default = Brightness;
+
+/***/ },
+/* 323 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _dorsyMath = __webpack_require__(305);
+
+	var _dorsyMath2 = _interopRequireDefault(_dorsyMath);
+
+	var _PixelProcesser2 = __webpack_require__(304);
+
+	var _PixelProcesser3 = _interopRequireDefault(_PixelProcesser2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Alteration = function (_PixelProcesser) {
+	    _inherits(Alteration, _PixelProcesser);
+
+	    function Alteration() {
+	        _classCallCheck(this, Alteration);
+
+	        return _possibleConstructorReturn(this, (Alteration.__proto__ || Object.getPrototypeOf(Alteration)).call(this));
+	    }
+
+	    return Alteration;
+	}(_PixelProcesser3.default);
+
+	exports.default = Alteration;
+
+/***/ },
+/* 324 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _AlloyImageAlteration = __webpack_require__(323);
+
+	var _AlloyImageAlteration2 = _interopRequireDefault(_AlloyImageAlteration);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Curve = function (_Alteration) {
+	    _inherits(Curve, _Alteration);
+
+	    function Curve() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, Curve);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Curve.__proto__ || Object.getPrototypeOf(Curve)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return Curve;
+	}(_AlloyImageAlteration2.default);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "曲线";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            /*
+	             * arg   arg[0] = [3,3] ,arg[1]  = [2,2]
+	             * */
+
+	            //获得插值函数
+	            var f = dorsyMath.lagrange(args[0], args[1]);
+
+	            //调节通道
+	            var channel = args[2];
+	            if (!/[RGB]+/.test(channel)) {
+	                channel = "RGB";
+	            }
+
+	            var channelString = channel.replace("R", "0").replace("G", "1").replace("B", "2");
+
+	            var indexOfArr = [channelString.indexOf("0") > -1, channelString.indexOf("1") > -1, channelString.indexOf("2") > -1];
+
+	            //区块
+	            for (var x = 0; x < width; x++) {
+
+	                for (var y = 0; y < height; y++) {
+
+	                    var realI = y * width + x;
+
+	                    for (var j = 0; j < 3; j++) {
+	                        if (!indexOfArr[j]) continue;
+	                        data[realI * 4 + j] = f(data[realI * 4 + j]);
+	                    }
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
+	    };
+	};
+
+	exports.default = Curve;
+
+/***/ },
+/* 325 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _AlloyImageAlteration = __webpack_require__(323);
+
+	var _AlloyImageAlteration2 = _interopRequireDefault(_AlloyImageAlteration);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Gamma = function (_Alteration) {
+	    _inherits(Gamma, _Alteration);
+
+	    function Gamma() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, Gamma);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Gamma.__proto__ || Object.getPrototypeOf(Gamma)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return Gamma;
+	}(_AlloyImageAlteration2.default);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "伽马";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+
+	            //gamma阶-100， 100
+	            var gamma;
+
+	            if (args[0] == undefined) gamma = 10;else gamma = args[0];
+
+	            var normalizedArg = (gamma + 100) / 200 * 2;
+
+	            for (var x = 0; x < width; x++) {
+	                for (var y = 0; y < height; y++) {
+	                    dorsyMath.xyCal({ data: data, width: width, height: height }, x, y, function (r, g, b) {
+	                        return [Math.pow(r, normalizedArg), Math.pow(g, normalizedArg), Math.pow(b, normalizedArg)];
+	                    });
+	                }
+	            }
+	            return { data: data, width: width, height: height };
+	        };
+	    };
+	};
+
+	exports.default = Gamma;
+
+/***/ },
+/* 326 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _AlloyImageAlteration = __webpack_require__(323);
+
+	var _AlloyImageAlteration2 = _interopRequireDefault(_AlloyImageAlteration);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author: Bin Wang
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @description:  可选颜色 
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @参考：http://wenku.baidu.com/view/e32d41ea856a561252d36f0b.html
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var SeletiveColor = function (_Alteration) {
+	    _inherits(SeletiveColor, _Alteration);
+
+	    //end process Method
+	    function SeletiveColor() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, SeletiveColor);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SeletiveColor.__proto__ || Object.getPrototypeOf(SeletiveColor)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return SeletiveColor;
+	}(_AlloyImageAlteration2.default); //end M defination
+
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "可选颜色";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            //选择的颜色
+	            var color = args[0];
+
+	            //百分数
+	            var C = args[1];
+	            var M = args[2];
+	            var Y = args[3];
+	            var K = args[4];
+
+	            //是否相对
+	            var isRelative = args[5] || 0;
+
+	            var maxColorMap = {
+	                red: "R",
+	                green: "G",
+	                blue: "B",
+	                "红色": "R",
+	                "绿色": "G",
+	                "蓝色": "B"
+	            };
+
+	            var minColorMap = {
+	                cyan: "R",
+	                magenta: "G",
+	                yellow: "B",
+	                "青色": "R",
+	                "洋红": "G",
+	                "黄色": "B"
+	            };
+
+	            //检查是否是被选中的颜色
+	            var checkSelectedColor = function checkSelectedColor(colorObj) {
+	                if (maxColorMap[color]) {
+	                    return Math.max(colorObj.R, colorObj.G, colorObj.B) == colorObj[maxColorMap[color]];
+	                } else if (minColorMap[color]) {
+	                    return Math.min(colorObj.R, colorObj.G, colorObj.B) == colorObj[minColorMap[color]];
+	                } else if (color == "black" || color == "黑色") {
+	                    return Math.min(colorObj.R, colorObj.G, colorObj.B) < 128;
+	                } else if (color == "white" || color == "白色") {
+	                    return Math.max(colorObj.R, colorObj.G, colorObj.B) > 128;
+	                } else if (color == "中性色") {
+	                    return !(Math.max(colorObj.R, colorObj.G, colorObj.B) < 1 || Math.min(colorObj.R, colorObj.G, colorObj.B) > 224);
+	                }
+	            };
+
+	            var upLimit = 0;
+	            var lowLimit = 0;
+	            var limit = 0;
+
+	            var alterNum = [C, M, Y, K];
+	            for (var x = 0, w = width; x < w; x++) {
+	                for (var y = 0, h = height; y < h; y++) {
+	                    dorsyMath.xyCal({ data: data, width: width, height: height }, x, y, function (R, G, B) {
+	                        var colorObj = {
+	                            R: R,
+	                            G: G,
+	                            B: B
+	                        };
+
+	                        var colorArr = [R, G, B];
+	                        var resultArr = [];
+
+	                        if (checkSelectedColor(colorObj)) {
+	                            if (maxColorMap[color]) {
+	                                var maxColor = maxColorMap[color];
+
+	                                var middleValue = R + G + B - Math.max(R, G, B) - Math.min(R, G, B);
+	                                limit = colorObj[maxColor] - middleValue;
+	                            } else if (minColorMap[color]) {
+	                                var minColor = minColorMap[color];
+
+	                                var middleValue = R + G + B - Math.max(R, G, B) - Math.min(R, G, B);
+	                                limit = middleValue - colorObj[minColor];
+	                            } else if (color == "black" || color == "黑色") {
+	                                limit = parseInt(127.5 - Math.max(R, G, B)) * 2;
+	                            } else if (color == "white" || color == "白色") {
+	                                limit = parseInt(Math.min(R, G, B) - 127.5) * 2;
+	                            } else if (color == "中性色") {
+	                                limit = 255 - (Math.abs(Math.max(R, G, B) - 127.5) + Math.abs(Math.min(R, G, B) - 127.5));
+	                            } else {
+	                                return;
+	                            }
+
+	                            for (var i = 0; i < 3; i++) {
+	                                //可减少到的量
+	                                var lowLimitDelta = parseInt(limit * (colorArr[i] / 255));
+	                                var lowLimit = colorArr[i] - lowLimitDelta;
+
+	                                //可增加到的量
+	                                var upLimitDelta = parseInt(limit * (1 - colorArr[i] / 255));
+	                                var upLimit = colorArr[i] + upLimitDelta;
+
+	                                //将黑色算进去 得到影响百分比因子
+	                                var factor = alterNum[i] + K + alterNum[i] * K;
+
+	                                //相对调节
+	                                if (isRelative) {
+	                                    //如果分量大于128  减少量=增加量
+	                                    if (colorArr[i] > 128) {
+	                                        lowLimitDelta = upLimitDelta;
+	                                    }
+
+	                                    //先算出黑色导致的原始增量
+	                                    if (K > 0) {
+	                                        var realUpLimit = colorArr[i] - K * lowLimitDelta;
+	                                    } else {
+	                                        var realUpLimit = colorArr[i] - K * upLimitDelta;
+	                                    }
+
+	                                    //标准化
+	                                    if (realUpLimit > upLimit) realUpLimit = upLimit;
+	                                    if (realUpLimit < lowLimit) realUpLimit = lowLimit;
+
+	                                    upLimitDelta = upLimit - realUpLimit;
+	                                    lowLimitDelta = realUpLimit - lowLimit;
+
+	                                    if (K < 0) {
+	                                        lowLimitDelta = upLimitDelta;
+	                                    } else {}
+
+	                                    //> 0表明在减少
+	                                    if (alterNum[i] > 0) {
+	                                        realUpLimit -= alterNum[i] * lowLimitDelta;
+	                                    } else {
+	                                        realUpLimit -= alterNum[i] * upLimitDelta;
+	                                    }
+	                                } else {
+
+	                                    //现在量
+	                                    var realUpLimit = limit * -factor + colorArr[i];
+	                                }
+
+	                                if (realUpLimit > upLimit) realUpLimit = upLimit;
+	                                if (realUpLimit < lowLimit) realUpLimit = lowLimit;
+
+	                                resultArr[i] = realUpLimit;
+	                            }
+
+	                            return resultArr;
+	                        }
+	                    }); //end xyCal
+	                } //end forY
+	            } //end forX
+
+	            return { data: data, width: width, height: height };
+	        };
+	    };
+	};
+
+	exports.default = SeletiveColor;
+
+/***/ },
+/* 327 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _AlloyImageAlteration = __webpack_require__(323);
+
+	var _AlloyImageAlteration2 = _interopRequireDefault(_AlloyImageAlteration);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author: Bin Wang
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @description: 调整RGB 饱和和度  
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * H (-2*Math.PI , 2 * Math.PI)  S (-100,100) I (-100,100)
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 着色原理  勾选着色后，所有的像素不管之前是什么色相，都变成当前设置的色相，
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 然后饱和度变成现在设置的饱和度，但保持明度为原来的基础上加上设置的明度
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var SetHSI = function (_Alteration) {
+	    _inherits(SetHSI, _Alteration);
+
+	    function SetHSI() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, SetHSI);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SetHSI.__proto__ || Object.getPrototypeOf(SetHSI)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return SetHSI;
+	}(_AlloyImageAlteration2.default);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "色相/饱和度调节";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            args[0] = args[0] / 180 * Math.PI;
+	            args[1] = args[1] / 100 || 0;
+	            args[2] = args[2] / 100 * 255 || 0;
+	            args[3] = args[3] || false; //着色
+
+	            //调节通道
+	            var channel = args[4];
+	            if (!/[RGBCMY]+/.test(channel)) {
+	                channel = "RGBCMY";
+	            }
+
+	            var letters = channel.split("");
+	            var indexOf = {};
+
+	            for (var i = 0; i < letters.length; i++) {
+	                indexOf[letters[i]] = 1;
+	            }
+
+	            dorsyMath.applyInHSI({ data: data, width: width, height: height }, function (i, color) {
+	                if (!indexOf[color]) return;
+
+	                if (args[3]) {
+	                    i.H = args[0];
+	                    i.S = args[1];
+	                    i.I += args[2];
+	                } else {
+	                    i.H += args[0];
+	                    i.S += args[1];
+	                    i.I += args[2];
+	                }
+	            });
+
+	            return { data: data, width: width, height: height };
+	        };
+	    };
+	};
+
+	exports.default = SetHSI;
 
 /***/ }
 /******/ ]);

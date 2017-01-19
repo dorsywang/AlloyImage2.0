@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class noise extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "添加杂色";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 100;
       
         var xLength = R * 2 + 1;

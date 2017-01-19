@@ -1,6 +1,6 @@
 import Filter from "./AlloyImage-filter";
 export default class oilPainting extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 16;
         var xLength = R * 2 + 1;
 

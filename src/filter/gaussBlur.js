@@ -1,5 +1,6 @@
 import Filter from "./AlloyImage-filter";
 export default class gaussBlur extends Filter{ 
+    cname = "高斯模糊";
             /**
              * 高斯模糊
              * @param  {Array} pixes  pix array
@@ -9,7 +10,7 @@ export default class gaussBlur extends Filter{
              * @param  {Number} sigma 标准方差, 可选, 默认取值为 radius / 3
              * @return {Array}
              */
-     process = ({data, width, height}, {dorsyMath}) => (...args) => {
+     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var pixes = data;
 
         var gaussMatrix = [],

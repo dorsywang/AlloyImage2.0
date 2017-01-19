@@ -1,6 +1,6 @@
 import Filter from "./AlloyImage-filter";
 export default class lapOfGauss extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var template1 = [
             -2,-4,-4,-4,-2,
             -4,0,8,0,-4,

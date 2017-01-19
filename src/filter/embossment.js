@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class embossment extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "浮雕效果";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var outData = [];
         for(var i = 0,n = data.length;i < n;i += 4){
 

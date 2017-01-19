@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class mosaic extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "马赛克";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 3;
         var xLength = R * 2 + 1;
 

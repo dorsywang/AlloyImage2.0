@@ -1,6 +1,6 @@
 import Filter from "./AlloyImage-filter";
 export default class posterize extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var dM = dorsyMath;
 
         //灰度阶数

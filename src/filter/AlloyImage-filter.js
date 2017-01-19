@@ -1,14 +1,7 @@
-import dorsyMath from "./../dorsyMath";
+import PixelProcesser from "./../PixelProcesser";
 
-export default class Filter{
+export default class Filter extends PixelProcesser{
     constructor(){
-    }
-
-    doFilter(imgData, args){
-        return new Promise((rs, rj) => {
-            let result = this.process(imgData, {dorsyMath})(args);
-
-            rs(result);
-        });
+        super();
     }
 }

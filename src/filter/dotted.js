@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class dotted extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "喷点";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         //矩形半径
         var R = parseInt(args[0]) || 1;
 

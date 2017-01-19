@@ -21,6 +21,12 @@ import sharp from './filter/sharp';
 import toReverse from './filter/toReverse';
 import toThresh from './filter/toThresh';
 
+import brightness from './alteration/brightness';
+import curve from './alteration/curve';
+import gamma from './alteration/gamma';
+import seletiveColor from './alteration/seletiveColor';
+import setHSI from './alteration/setHSI';
+
 class AlloyImage{
     constructor(img, width, height){
         this._tasker = Promise.resolve(true);
@@ -296,6 +302,10 @@ class AlloyImage{
     static addFilter(filter){
         LayerPixelProcesser.addFilter(filter);
     }
+
+    static addAlteration(alteration){
+        LayerPixelProcesser.addAlteration(alteration);
+    }
 }
 
 AlloyImage.addFilter(toGray);
@@ -313,6 +323,12 @@ AlloyImage.addFilter(sepia);
 AlloyImage.addFilter(sharp);
 AlloyImage.addFilter(toReverse);
 AlloyImage.addFilter(toThresh);
+
+AlloyImage.addAlteration(brightness);
+AlloyImage.addAlteration(curve);
+AlloyImage.addAlteration(gamma);
+AlloyImage.addAlteration(seletiveColor);
+AlloyImage.addAlteration(setHSI);
 
 
 export default AlloyImage;

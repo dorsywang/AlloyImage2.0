@@ -1,6 +1,6 @@
 import Filter from "./AlloyImage-filter";
 export default class sepia extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         for(var x = 0; x < width; x ++){
             for(var y = 0; y < height; y ++){
                 dorsyMath.xyCal({data, width, height}, x, y, function(r, g, b){

@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class darkCorner extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "暗角";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         //暗角级别 分1-10级吧
         var R = parseInt(args[0]) || 3;
 

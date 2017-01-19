@@ -1,6 +1,7 @@
 import Filter from "./AlloyImage-filter";
 export default class sharp extends Filter{ 
-    process = ({data, width, height}, {dorsyMath}) => (...args) => {
+    cname = "锐化";
+    process = ({data, width, height}, {dorsyMath}) => (args) => {
         var lamta = args[0] || 0.6;
                
 
