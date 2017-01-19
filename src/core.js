@@ -1,11 +1,25 @@
 import 'babel-polyfill';
 
 import LayerPixelProcesser from "./layerPixelProcesser";
-import {loadImage, uniqueId} from "./util";
+import {loadImage, uniqueId, device} from "./util";
 import {drawImageIOS} from "./fix";
 import addLayer from "./addLayer";
 
 import toGray from "./filter/toGray";
+import corrode from "./filter/corrode";
+import darkCorner from "./filter/darkCorner";
+import dotted from "./filter/dotted";
+import embossment from './filter/embossment';
+import gaussBlur from './filter/gaussBlur';
+import lapOfGauss from './filter/lapOfGauss';
+import mosaic from './filter/mosaic';
+import noise from './filter/noise';
+import oilPainting from './filter/oilPainting';
+import posterize from './filter/posterize';
+import sepia from './filter/sepia';
+import sharp from './filter/sharp';
+import toReverse from './filter/toReverse';
+import toThresh from './filter/toThresh';
 
 class AlloyImage{
     constructor(img, width, height){
@@ -82,14 +96,11 @@ class AlloyImage{
             context.fillRect(0, 0, img, width);
 
             this.srcImg = "";
-        }else if(typeof img == "string"){
-            let img = await loadImage(img);
-
-            canvas.width = parseInt(img.width);
-            canvas.height = parseInt(img.height);
-
-            context.drawImage(img, 0, 0, img.width, img.height);
         }else{
+            if(typeof img == "string"){
+                img = await loadImage(img);
+            }
+
             let dw = width, dh = height;
 
             let sw = img.width, sh = img.height;
@@ -288,6 +299,20 @@ class AlloyImage{
 }
 
 AlloyImage.addFilter(toGray);
+AlloyImage.addFilter(corrode);
+AlloyImage.addFilter(darkCorner);
+AlloyImage.addFilter(dotted);
+AlloyImage.addFilter(embossment);
+AlloyImage.addFilter(gaussBlur);
+AlloyImage.addFilter(lapOfGauss);
+AlloyImage.addFilter(mosaic);
+AlloyImage.addFilter(noise);
+AlloyImage.addFilter(oilPainting);
+AlloyImage.addFilter(posterize);
+AlloyImage.addFilter(sepia);
+AlloyImage.addFilter(sharp);
+AlloyImage.addFilter(toReverse);
+AlloyImage.addFilter(toThresh);
 
 
 export default AlloyImage;

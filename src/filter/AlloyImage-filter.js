@@ -6,7 +6,7 @@ export default class Filter{
 
     doFilter(imgData, args){
         return new Promise((rs, rj) => {
-            let result = this.process(imgData, {dorsyMath});
+            let result = this.process(imgData, {dorsyMath})(args);
 
             rs(result);
         });

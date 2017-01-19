@@ -9,7 +9,21 @@
 <script type="text/javascript" src="../dist/alloyimage-2.0.js"></script>
 
 <script type="text/javascript">
-new AlloyImage(200, 200, 'red').act('toGray').add(new AlloyImage(100, 200, 'blue'), 0, 10, '20%', 'rgb').show();
+new AlloyImage('img/7.jpg', 200, 200).add(new AlloyImage('img/5.jpg', 200, 200).act('corrode'), 100, 100, '100%', 'rgb')
+  //.act('darkCorner', 3, 200, 'round')
+  //.act('dotted')
+  //.act('embossment')
+  //.act('gaussBlur')
+  //.act('lapOfGauss')
+  //.act('mosaic', 2)
+  //.act('noise', 200)
+  //.act('oilPainting', 10)
+  //.act('posterize', 3)
+  //.act('sepia', 3)
+  //.act('sharp', 3)
+  //.act('toReverse', 3)
+  .act('toThresh', 3)
+.show();
 </script>
 </body>
 </html>

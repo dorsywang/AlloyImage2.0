@@ -17,6 +17,22 @@ export let loadImage = src => new Promise((rs, rj) => {
     tmpImg.src = src;
 });
 
+export let device = (() => {
+    if(window.navigator){
+        let ua = window.navigator.userAgent;
+
+        if(/Android|android/.test(ua)){
+            return 'android';
+        }else if(/iPhone|iPad|iPod/.test(ua)){
+            return 'ios';
+        }else{
+            return 'other';
+        }
+    }else{
+        return "sandBox";
+    }
+})();
+
 export let uniqueId = () => {
     return ~~ (Math.random() * 1e6);
 };
