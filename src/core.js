@@ -145,6 +145,7 @@ class AlloyImage{
 
     act(method, ...args){
         this.then(async () => {
+            console.log('act', method);
             await this._doAct(method, args);
         });
 
@@ -205,6 +206,7 @@ class AlloyImage{
     }
 
     then(fn){
+        
         this._tasker = this._tasker.then(fn);
 
         return this;
@@ -266,7 +268,10 @@ class AlloyImage{
     }
 
     show(selector){
-        return this.then(() => {
+        this.then(() => {
+
+            console.log('show');
+
             let {compositeCanvas}  = this._getCompositeView();
 
 
@@ -286,9 +291,9 @@ class AlloyImage{
                 document.body.appendChild(compositeCanvas);
             }
 
-            return this;
-            
         });
+
+        return this;
     }
 
     addLayer(...args){
@@ -305,6 +310,24 @@ class AlloyImage{
 
     static addAlteration(alteration){
         LayerPixelProcesser.addAlteration(alteration);
+    }
+
+    // clone只对单图层有效
+    clone(){
+        let newAIObj = new AlloyImage(1, 1); //this.width, this.height);
+
+        newAIObj.then(() => {
+            return this.then(() => {
+
+                // 这里直接取 立即生效
+                newAIObj.canvas.width = this.width;
+                newAIObj.canvas.height = this.height;
+
+                newAIObj.imgData = this.imgData;
+            });
+        });
+
+        return newAIObj;
     }
 }
 

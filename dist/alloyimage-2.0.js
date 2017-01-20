@@ -319,10 +319,11 @@
 	                    while (1) {
 	                        switch (_context3.prev = _context3.next) {
 	                            case 0:
-	                                _context3.next = 2;
+	                                console.log('act', method);
+	                                _context3.next = 3;
 	                                return _this2._doAct(method, args);
 
-	                            case 2:
+	                            case 3:
 	                            case "end":
 	                                return _context3.stop();
 	                        }
@@ -430,6 +431,7 @@
 	    }, {
 	        key: "then",
 	        value: function then(fn) {
+
 	            this._tasker = this._tasker.then(fn);
 
 	            return this;
@@ -517,7 +519,10 @@
 	        value: function show(selector) {
 	            var _this5 = this;
 
-	            return this.then(function () {
+	            this.then(function () {
+
+	                console.log('show');
+
 	                var _getCompositeView2 = _this5._getCompositeView(),
 	                    compositeCanvas = _getCompositeView2.compositeCanvas;
 
@@ -536,9 +541,9 @@
 	                } else {
 	                    document.body.appendChild(compositeCanvas);
 	                }
-
-	                return _this5;
 	            });
+
+	            return this;
 	        }
 	    }, {
 	        key: "addLayer",
@@ -556,12 +561,35 @@
 	            return this;
 	        }
 	    }, {
-	        key: "width",
-	        set: function set(w) {
+	        key: "clone",
+
+
+	        // clone只对单图层有效
+	        value: function clone() {
 	            var _this7 = this;
 
+	            var newAIObj = new AlloyImage(1, 1); //this.width, this.height);
+
+	            newAIObj.then(function () {
+	                return _this7.then(function () {
+
+	                    // 这里直接取 立即生效
+	                    newAIObj.canvas.width = _this7.width;
+	                    newAIObj.canvas.height = _this7.height;
+
+	                    newAIObj.imgData = _this7.imgData;
+	                });
+	            });
+
+	            return newAIObj;
+	        }
+	    }, {
+	        key: "width",
+	        set: function set(w) {
+	            var _this8 = this;
+
 	            this.then(function () {
-	                _this7.canvas.width = w;
+	                _this8.canvas.width = w;
 	            });
 
 	            return this;
@@ -572,10 +600,10 @@
 	    }, {
 	        key: "height",
 	        set: function set(h) {
-	            var _this8 = this;
+	            var _this9 = this;
 
 	            this.then(function () {
-	                _this8.canvas.height = h;
+	                _this9.canvas.height = h;
 	            });
 
 	            return this;
