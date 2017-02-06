@@ -157,53 +157,6 @@ class AlloyImage{
         
     }
 
-    show(selector){
-        this.then(() => {
-
-            console.log('show');
-
-            let {compositeCanvas}  = this._getCompositeView();
-
-
-            //以临时对象data显示
-            /*
-            this.context.putImageData(this.tempPsLib.imgData, 0, 0);
-            */
-
-            if(selector){
-                if(typeof selector == "string"){
-                    var el = document.querySelector(selector);
-                    el.appendChild(compositeCanvas);
-                }else{
-                    selector.appendChild(compositeCanvas);
-                }
-            }else{
-                document.body.appendChild(compositeCanvas);
-            }
-
-        });
-
-        return this;
-    }
-
-    // clone只对单图层有效
-    clone(){
-        let newAIObj = new AlloyImage(1, 1); //this.width, this.height);
-
-        newAIObj.then(() => {
-            return this.then(() => {
-
-                // 这里直接取 立即生效
-                newAIObj.canvas.width = this.width;
-                newAIObj.canvas.height = this.height;
-
-                newAIObj.imgData = this.imgData;
-            });
-        });
-
-        return newAIObj;
-    }
-
     static extend(func){
         let name = func.name;
 
@@ -212,5 +165,13 @@ class AlloyImage{
     }
 }
 
-
 export default AlloyImage;
+
+
+export let register = (obj, ai) => {
+    for(var i in obj){
+        if(obj.hasOwnProperty(i)){
+            obj[i](ai);
+        }
+    }
+};

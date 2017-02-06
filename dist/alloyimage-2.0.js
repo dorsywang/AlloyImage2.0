@@ -167,7 +167,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Alteration = exports.Filter = undefined;
 
@@ -195,11 +195,23 @@
 
 	var _size2 = _interopRequireDefault(_size);
 
+	var _show = __webpack_require__(333);
+
+	var _show2 = _interopRequireDefault(_show);
+
+	var _clone = __webpack_require__(334);
+
+	var _clone2 = _interopRequireDefault(_clone);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	(0, _addLayer2.default)(_core2.default);
-	(0, _act2.default)(_core2.default);
-	(0, _size2.default)(_core2.default);
+	(0, _core.register)({
+	    addLayer: _addLayer2.default,
+	    act: _act2.default,
+	    size: _size2.default,
+	    show: _show2.default,
+	    clone: _clone2.default
+	}, _core2.default);
 
 	exports.default = _core2.default;
 	exports.Filter = _filter2.default;
@@ -214,6 +226,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.register = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -440,60 +453,6 @@
 	                //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	            }
 	        }
-	    }, {
-	        key: "show",
-	        value: function show(selector) {
-	            var _this3 = this;
-
-	            this.then(function () {
-
-	                console.log('show');
-
-	                var _getCompositeView2 = _this3._getCompositeView(),
-	                    compositeCanvas = _getCompositeView2.compositeCanvas;
-
-	                //以临时对象data显示
-	                /*
-	                this.context.putImageData(this.tempPsLib.imgData, 0, 0);
-	                */
-
-	                if (selector) {
-	                    if (typeof selector == "string") {
-	                        var el = document.querySelector(selector);
-	                        el.appendChild(compositeCanvas);
-	                    } else {
-	                        selector.appendChild(compositeCanvas);
-	                    }
-	                } else {
-	                    document.body.appendChild(compositeCanvas);
-	                }
-	            });
-
-	            return this;
-	        }
-
-	        // clone只对单图层有效
-
-	    }, {
-	        key: "clone",
-	        value: function clone() {
-	            var _this4 = this;
-
-	            var newAIObj = new AlloyImage(1, 1); //this.width, this.height);
-
-	            newAIObj.then(function () {
-	                return _this4.then(function () {
-
-	                    // 这里直接取 立即生效
-	                    newAIObj.canvas.width = _this4.width;
-	                    newAIObj.canvas.height = _this4.height;
-
-	                    newAIObj.imgData = _this4.imgData;
-	                });
-	            });
-
-	            return newAIObj;
-	        }
 	    }], [{
 	        key: "extend",
 	        value: function extend(func) {
@@ -508,6 +467,13 @@
 	}();
 
 	exports.default = AlloyImage;
+	var register = exports.register = function register(obj, ai) {
+	    for (var i in obj) {
+	        if (obj.hasOwnProperty(i)) {
+	            obj[i](ai);
+	        }
+	    }
+	};
 
 /***/ },
 /* 3 */
@@ -11801,6 +11767,82 @@
 	            }
 	        }
 	    });
+	};
+
+/***/ },
+/* 333 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	function show(selector) {
+	    var _this = this;
+
+	    this.then(function () {
+
+	        console.log('show');
+
+	        var _getCompositeView = _this._getCompositeView(),
+	            compositeCanvas = _getCompositeView.compositeCanvas;
+
+	        //以临时对象data显示
+	        /*
+	        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
+	        */
+
+	        if (selector) {
+	            if (typeof selector == "string") {
+	                var el = document.querySelector(selector);
+	                el.appendChild(compositeCanvas);
+	            } else {
+	                selector.appendChild(compositeCanvas);
+	            }
+	        } else {
+	            document.body.appendChild(compositeCanvas);
+	        }
+	    });
+
+	    return this;
+	}
+
+	exports.default = function (AlloyImage) {
+	    AlloyImage.extend(show);
+	};
+
+/***/ },
+/* 334 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// clone只对单图层有效
+	function clone() {
+	    var _this = this;
+
+	    var newAIObj = new AlloyImage(1, 1); //this.width, this.height);
+
+	    newAIObj.then(function () {
+	        return _this.then(function () {
+
+	            // 这里直接取 立即生效
+	            newAIObj.canvas.width = _this.width;
+	            newAIObj.canvas.height = _this.height;
+
+	            newAIObj.imgData = _this.imgData;
+	        });
+	    });
+
+	    return newAIObj;
+	}
+
+	exports.default = function (AlloyImage) {
+	    AlloyImage.extend(clone);
 	};
 
 /***/ }

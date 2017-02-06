@@ -1,16 +1,21 @@
-import AlloyImage from './core';
+import AlloyImage, {register} from './core';
 
 import Filter from './filter';
 import Alteration from './alteration';
 
 import addLayer from './addLayer';
-import registerAct from './act';
-import registerSize from './size';
+import act from './act';
+import size from './size';
+import show from './show';
+import clone from './clone';
 
-
-addLayer(AlloyImage);
-registerAct(AlloyImage);
-registerSize(AlloyImage);
+register({
+    addLayer,
+    act,
+    size,
+    show,
+    clone
+}, AlloyImage);
 
 
 export default AlloyImage;
