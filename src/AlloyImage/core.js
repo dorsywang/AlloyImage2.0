@@ -1,6 +1,5 @@
 import 'babel-polyfill';
 
-import LayerPixelProcesser from "./layerPixelProcesser";
 import {loadImage, uniqueId, device} from "./util";
 import {drawImageIOS} from "./fix";
 
@@ -37,31 +36,6 @@ class AlloyImage{
             this.layers = [];
 
         });
-    }
-
-    set width(w){
-        this.then(() => {
-            this.canvas.width = w;
-        });
-
-        return this;
-    }
-
-    get width(){
-        return this.canvas.width;
-    }
-
-
-    set height(h){
-        this.then(() => {
-            this.canvas.height = h;
-        });
-
-        return this;
-    }
-
-    get height(){
-        return this.canvas.height;
     }
 
     async initCanvas(img, width, height){
@@ -120,15 +94,6 @@ class AlloyImage{
         return {canvas, context};
     }
 
-    act(method, ...args){
-        this.then(async () => {
-            console.log('act', method);
-            await this._doAct(method, args);
-        });
-
-        return this;
-    }
-
     getImageData(){
         return this.then(() => {
             return this.imgData;
@@ -144,14 +109,7 @@ class AlloyImage{
         return this;
     }
 
-    async _doAct(method, args){
-        let layerPixelProcesser = new LayerPixelProcesser(this.imgData);
-
-        let imgData = await layerPixelProcesser.process(method, args);
-
-        this.imgData = imgData;
-    }
-
+  
     // 获得合成视图
     _getCompositeView(){
         
@@ -226,22 +184,6 @@ class AlloyImage{
         });
 
         return this;
-    }
-
-    addLayer(...args){
-        this.then(() => {
-            this.layers.push(args);
-        });
-
-        return this;
-    }
-
-    static addFilter(filter){
-        LayerPixelProcesser.addFilter(filter);
-    }
-
-    static addAlteration(alteration){
-        LayerPixelProcesser.addAlteration(alteration);
     }
 
     // clone只对单图层有效

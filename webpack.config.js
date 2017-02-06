@@ -1,5 +1,7 @@
+var path = require("path");
+
 module.exports = {
-    entry: './src/core.js',
+    entry: './src/index.js',
     output: {
         filename: 'alloyimage-2.0.js',
         path: './dist'
@@ -9,6 +11,12 @@ module.exports = {
       loaders: [
         { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
       ]
+    },
+
+    resolve:{
+        alias: {
+            AlloyImage: path.resolve(__dirname, "./src/AlloyImage")
+        }
     }
     
 };

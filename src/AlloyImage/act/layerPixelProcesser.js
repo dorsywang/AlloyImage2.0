@@ -47,3 +47,16 @@ export default class LayerPixelProcesser{
         }
     }
 }
+
+
+/*
+export default AlloyImage => {
+    AlloyImage.addFilter = filter => {
+        LayerPixelProcesser.addFilter(filter);
+    };
+
+    AlloyImage.addAlteration = alteration => {
+        LayerPixelProcesser.addAlteration(alteration);
+    };
+};
+*/
