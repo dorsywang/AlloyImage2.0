@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class corrode extends Filter{ 
     cname = "腐蚀";
     process = ({data, width, height}, {dorsyMath}) => (args) => {

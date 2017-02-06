@@ -6,7 +6,7 @@
  * 然后饱和度变成现在设置的饱和度，但保持明度为原来的基础上加上设置的明度
  *
  */
-import Alteration from "./AlloyImage-alteration";
+import {Alteration} from "AlloyImage";
 
 export default class SetHSI extends Alteration{
     cname = "色相/饱和度调节";

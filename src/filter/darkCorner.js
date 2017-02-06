@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class darkCorner extends Filter{ 
     cname = "暗角";
     process = ({data, width, height}, {dorsyMath}) => (args) => {

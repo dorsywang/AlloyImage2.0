@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class gaussBlur extends Filter{ 
     cname = "高斯模糊";
             /**

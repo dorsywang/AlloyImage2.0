@@ -1,4 +1,4 @@
-import Alteration from "./AlloyImage-alteration";
+import {Alteration} from "AlloyImage";
 
 export default class Gamma extends Alteration{
     cname = "伽马";

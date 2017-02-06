@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 
 export default class toGray extends Filter{
     cname = "灰度处理";

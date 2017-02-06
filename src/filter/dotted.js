@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class dotted extends Filter{ 
     cname = "喷点";
     process = ({data, width, height}, {dorsyMath}) => (args) => {

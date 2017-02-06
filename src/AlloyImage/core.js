@@ -3,29 +3,6 @@ import 'babel-polyfill';
 import LayerPixelProcesser from "./layerPixelProcesser";
 import {loadImage, uniqueId, device} from "./util";
 import {drawImageIOS} from "./fix";
-import addLayer from "./addLayer";
-
-import toGray from "./filter/toGray";
-import corrode from "./filter/corrode";
-import darkCorner from "./filter/darkCorner";
-import dotted from "./filter/dotted";
-import embossment from './filter/embossment';
-import gaussBlur from './filter/gaussBlur';
-import lapOfGauss from './filter/lapOfGauss';
-import mosaic from './filter/mosaic';
-import noise from './filter/noise';
-import oilPainting from './filter/oilPainting';
-import posterize from './filter/posterize';
-import sepia from './filter/sepia';
-import sharp from './filter/sharp';
-import toReverse from './filter/toReverse';
-import toThresh from './filter/toThresh';
-
-import brightness from './alteration/brightness';
-import curve from './alteration/curve';
-import gamma from './alteration/gamma';
-import seletiveColor from './alteration/seletiveColor';
-import setHSI from './alteration/setHSI';
 
 class AlloyImage{
     constructor(img, width, height){
@@ -158,52 +135,7 @@ class AlloyImage{
         });
     }
 
-    add(aiObj, ...args){
-        let numberArr = [], method, alpha, dx, dy, isFast, channel;
-
-        //做重载
-        for(let i = 0; i < arguments.length; i ++){
-            if(!i) continue;
-
-            switch(typeof(arguments[i])){
-                case "string":
-                    if(/\d+%/.test(arguments[i])){//alpha
-                        alpha = arguments[i].replace("%", "");
-                    }else if(/[RGB]+/.test(arguments[i])){//channel
-                        channel = arguments[i];
-                    }else{//method
-                        method = arguments[i];
-                    }
-                break;
-
-                case "number":
-                    numberArr.push(arguments[i]);
-                break;
-
-                case "boolean":
-                   isFast = arguments[i];
-                break;
-            }
-        }
-
-        //赋值
-        dx = numberArr[0] || 0;
-        dy = numberArr[1] || 0;
-        method = method || "正常";
-        alpha = alpha / 100 || 1;
-        isFast = isFast || false;
-        channel = channel || "RGB";
-
-        //console.log("add init");
-
-            //做映射转发
-        this.then(async () => {
-            addLayer(this.imgData, await aiObj.getImageData(), method, alpha, dx, dy, isFast, channel);
-        });
-
-        return this;
     
-    }
 
     then(fn){
         
@@ -329,31 +261,14 @@ class AlloyImage{
 
         return newAIObj;
     }
+
+    static extend(func){
+        let name = func.name;
+
+        console.log(name, 'name');
+        this.prototype[name] = func;
+    }
 }
-
-AlloyImage.addFilter(toGray);
-AlloyImage.addFilter(corrode);
-AlloyImage.addFilter(darkCorner);
-AlloyImage.addFilter(dotted);
-AlloyImage.addFilter(embossment);
-AlloyImage.addFilter(gaussBlur);
-AlloyImage.addFilter(lapOfGauss);
-AlloyImage.addFilter(mosaic);
-AlloyImage.addFilter(noise);
-AlloyImage.addFilter(oilPainting);
-AlloyImage.addFilter(posterize);
-AlloyImage.addFilter(sepia);
-AlloyImage.addFilter(sharp);
-AlloyImage.addFilter(toReverse);
-AlloyImage.addFilter(toThresh);
-
-AlloyImage.addAlteration(brightness);
-AlloyImage.addAlteration(curve);
-AlloyImage.addAlteration(gamma);
-AlloyImage.addAlteration(seletiveColor);
-AlloyImage.addAlteration(setHSI);
 
 
 export default AlloyImage;
-
-window.AlloyImage = AlloyImage;

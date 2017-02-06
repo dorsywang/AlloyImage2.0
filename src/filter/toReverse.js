@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 
 export default class toReverse extends Filter{
     cname = "反色";

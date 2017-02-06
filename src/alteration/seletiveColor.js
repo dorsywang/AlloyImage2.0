@@ -4,7 +4,7 @@
  * @参考：http://wenku.baidu.com/view/e32d41ea856a561252d36f0b.html
  *
  */
-import Alteration from "./AlloyImage-alteration";
+import {Alteration} from "AlloyImage";
 
 export default class SeletiveColor extends Alteration{
     cname = "可选颜色";

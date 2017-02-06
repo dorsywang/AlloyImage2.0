@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class sharp extends Filter{ 
     cname = "锐化";
     process = ({data, width, height}, {dorsyMath}) => (args) => {

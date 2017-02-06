@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class oilPainting extends Filter{ 
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 16;

@@ -1,4 +1,4 @@
-import Alteration from "./AlloyImage-alteration";
+import {Alteration} from "AlloyImage";
 
 export default class Curve extends Alteration{
     cname = "曲线";

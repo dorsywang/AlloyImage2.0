@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class mosaic extends Filter{ 
     cname = "马赛克";
     process = ({data, width, height}, {dorsyMath}) => (args) => {

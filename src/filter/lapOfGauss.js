@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class lapOfGauss extends Filter{ 
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var template1 = [

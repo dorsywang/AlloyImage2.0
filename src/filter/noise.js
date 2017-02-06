@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class noise extends Filter{ 
     cname = "添加杂色";
     process = ({data, width, height}, {dorsyMath}) => (args) => {

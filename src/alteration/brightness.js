@@ -1,4 +1,4 @@
-import Alteration from "./AlloyImage-alteration";
+import {Alteration} from "AlloyImage";
 
 export default class Brightness extends Alteration{
     cname = "亮度";

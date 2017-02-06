@@ -1,4 +1,4 @@
-import Filter from "./AlloyImage-filter";
+import {Filter} from "AlloyImage";
 export default class sepia extends Filter{ 
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         for(var x = 0; x < width; x ++){
