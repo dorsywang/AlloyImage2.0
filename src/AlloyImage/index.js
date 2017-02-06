@@ -15,7 +15,7 @@ register({
     size,
     show,
     clone
-}, AlloyImage);
+});
 
 
 export default AlloyImage;

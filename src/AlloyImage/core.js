@@ -165,13 +165,14 @@ class AlloyImage{
     }
 }
 
-export default AlloyImage;
 
 
-export let register = (obj, ai) => {
+export let register = (obj) => {
     for(var i in obj){
         if(obj.hasOwnProperty(i)){
-            obj[i](ai);
+            obj[i](AlloyImage);
         }
     }
 };
+
+export default AlloyImage;

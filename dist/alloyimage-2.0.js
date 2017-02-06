@@ -50,83 +50,83 @@
 
 	var _AlloyImage2 = _interopRequireDefault(_AlloyImage);
 
-	var _toGray = __webpack_require__(312);
+	var _toGray = __webpack_require__(315);
 
 	var _toGray2 = _interopRequireDefault(_toGray);
 
-	var _corrode = __webpack_require__(313);
+	var _corrode = __webpack_require__(316);
 
 	var _corrode2 = _interopRequireDefault(_corrode);
 
-	var _darkCorner = __webpack_require__(314);
+	var _darkCorner = __webpack_require__(317);
 
 	var _darkCorner2 = _interopRequireDefault(_darkCorner);
 
-	var _dotted = __webpack_require__(315);
+	var _dotted = __webpack_require__(318);
 
 	var _dotted2 = _interopRequireDefault(_dotted);
 
-	var _embossment = __webpack_require__(316);
+	var _embossment = __webpack_require__(319);
 
 	var _embossment2 = _interopRequireDefault(_embossment);
 
-	var _gaussBlur = __webpack_require__(317);
+	var _gaussBlur = __webpack_require__(320);
 
 	var _gaussBlur2 = _interopRequireDefault(_gaussBlur);
 
-	var _lapOfGauss = __webpack_require__(318);
+	var _lapOfGauss = __webpack_require__(321);
 
 	var _lapOfGauss2 = _interopRequireDefault(_lapOfGauss);
 
-	var _mosaic = __webpack_require__(319);
+	var _mosaic = __webpack_require__(322);
 
 	var _mosaic2 = _interopRequireDefault(_mosaic);
 
-	var _noise = __webpack_require__(320);
+	var _noise = __webpack_require__(323);
 
 	var _noise2 = _interopRequireDefault(_noise);
 
-	var _oilPainting = __webpack_require__(321);
+	var _oilPainting = __webpack_require__(324);
 
 	var _oilPainting2 = _interopRequireDefault(_oilPainting);
 
-	var _posterize = __webpack_require__(322);
+	var _posterize = __webpack_require__(325);
 
 	var _posterize2 = _interopRequireDefault(_posterize);
 
-	var _sepia = __webpack_require__(323);
+	var _sepia = __webpack_require__(326);
 
 	var _sepia2 = _interopRequireDefault(_sepia);
 
-	var _sharp = __webpack_require__(324);
+	var _sharp = __webpack_require__(327);
 
 	var _sharp2 = _interopRequireDefault(_sharp);
 
-	var _toReverse = __webpack_require__(325);
+	var _toReverse = __webpack_require__(328);
 
 	var _toReverse2 = _interopRequireDefault(_toReverse);
 
-	var _toThresh = __webpack_require__(326);
+	var _toThresh = __webpack_require__(329);
 
 	var _toThresh2 = _interopRequireDefault(_toThresh);
 
-	var _brightness = __webpack_require__(327);
+	var _brightness = __webpack_require__(330);
 
 	var _brightness2 = _interopRequireDefault(_brightness);
 
-	var _curve = __webpack_require__(328);
+	var _curve = __webpack_require__(331);
 
 	var _curve2 = _interopRequireDefault(_curve);
 
-	var _gamma = __webpack_require__(329);
+	var _gamma = __webpack_require__(332);
 
 	var _gamma2 = _interopRequireDefault(_gamma);
 
-	var _seletiveColor = __webpack_require__(330);
+	var _seletiveColor = __webpack_require__(333);
 
 	var _seletiveColor2 = _interopRequireDefault(_seletiveColor);
 
-	var _setHSI = __webpack_require__(331);
+	var _setHSI = __webpack_require__(334);
 
 	var _setHSI2 = _interopRequireDefault(_setHSI);
 
@@ -191,15 +191,15 @@
 
 	var _act2 = _interopRequireDefault(_act);
 
-	var _size = __webpack_require__(332);
+	var _size = __webpack_require__(312);
 
 	var _size2 = _interopRequireDefault(_size);
 
-	var _show = __webpack_require__(333);
+	var _show = __webpack_require__(313);
 
 	var _show2 = _interopRequireDefault(_show);
 
-	var _clone = __webpack_require__(334);
+	var _clone = __webpack_require__(314);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
@@ -211,7 +211,7 @@
 	    size: _size2.default,
 	    show: _show2.default,
 	    clone: _clone2.default
-	}, _core2.default);
+	});
 
 	exports.default = _core2.default;
 	exports.Filter = _filter2.default;
@@ -466,14 +466,15 @@
 	    return AlloyImage;
 	}();
 
-	exports.default = AlloyImage;
-	var register = exports.register = function register(obj, ai) {
+	var register = exports.register = function register(obj) {
 	    for (var i in obj) {
 	        if (obj.hasOwnProperty(i)) {
-	            obj[i](ai);
+	            obj[i](AlloyImage);
 	        }
 	    }
 	};
+
+	exports.default = AlloyImage;
 
 /***/ },
 /* 3 */
@@ -10048,6 +10049,128 @@
 
 /***/ },
 /* 312 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (AlloyImage) {
+	    Object.defineProperties(AlloyImage.prototype, {
+	        width: {
+	            get: function get() {
+	                return this.canvas.width;
+	            },
+
+	            set: function set(w) {
+	                var _this = this;
+
+	                this.then(function () {
+	                    _this.canvas.width = w;
+	                });
+
+	                return this;
+	            }
+	        },
+
+	        height: {
+	            get: function get() {
+	                return this.canvas.height;
+	            },
+
+	            set: function set(h) {
+	                var _this2 = this;
+
+	                this.then(function () {
+	                    _this2.canvas.height = h;
+	                });
+
+	                return this;
+	            }
+	        }
+	    });
+	};
+
+/***/ },
+/* 313 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	function show(selector) {
+	    var _this = this;
+
+	    this.then(function () {
+
+	        console.log('show');
+
+	        var _getCompositeView = _this._getCompositeView(),
+	            compositeCanvas = _getCompositeView.compositeCanvas;
+
+	        //以临时对象data显示
+	        /*
+	        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
+	        */
+
+	        if (selector) {
+	            if (typeof selector == "string") {
+	                var el = document.querySelector(selector);
+	                el.appendChild(compositeCanvas);
+	            } else {
+	                selector.appendChild(compositeCanvas);
+	            }
+	        } else {
+	            document.body.appendChild(compositeCanvas);
+	        }
+	    });
+
+	    return this;
+	}
+
+	exports.default = function (AlloyImage) {
+	    AlloyImage.extend(show);
+	};
+
+/***/ },
+/* 314 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// clone只对单图层有效
+	function clone() {
+	    var _this = this;
+
+	    var newAIObj = new AlloyImage(1, 1); //this.width, this.height);
+
+	    newAIObj.then(function () {
+	        return _this.then(function () {
+
+	            // 这里直接取 立即生效
+	            newAIObj.canvas.width = _this.width;
+	            newAIObj.canvas.height = _this.height;
+
+	            newAIObj.imgData = _this.imgData;
+	        });
+	    });
+
+	    return newAIObj;
+	}
+
+	exports.default = function (AlloyImage) {
+	    AlloyImage.extend(clone);
+	};
+
+/***/ },
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10100,7 +10223,7 @@
 	exports.default = toGray;
 
 /***/ },
-/* 313 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10173,7 +10296,7 @@
 	exports.default = corrode;
 
 /***/ },
-/* 314 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10278,7 +10401,7 @@
 	;
 
 /***/ },
-/* 315 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10383,7 +10506,7 @@
 	exports.default = dotted;
 
 /***/ },
-/* 316 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10451,7 +10574,7 @@
 	exports.default = embossment;
 
 /***/ },
-/* 317 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10603,7 +10726,7 @@
 	exports.default = gaussBlur;
 
 /***/ },
-/* 318 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10657,7 +10780,7 @@
 	exports.default = lapOfGauss;
 
 /***/ },
-/* 319 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10745,7 +10868,7 @@
 	exports.default = mosaic;
 
 /***/ },
-/* 320 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10816,7 +10939,7 @@
 	exports.default = noise;
 
 /***/ },
-/* 321 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10889,7 +11012,7 @@
 	exports.default = oilPainting;
 
 /***/ },
-/* 322 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10957,7 +11080,7 @@
 	exports.default = posterize;
 
 /***/ },
-/* 323 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11012,7 +11135,7 @@
 	exports.default = sepia;
 
 /***/ },
-/* 324 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11084,7 +11207,7 @@
 	exports.default = sharp;
 
 /***/ },
-/* 325 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11138,7 +11261,7 @@
 	exports.default = toReverse;
 
 /***/ },
-/* 326 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11204,7 +11327,7 @@
 	exports.default = toThresh;
 
 /***/ },
-/* 327 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11270,7 +11393,7 @@
 	exports.default = Brightness;
 
 /***/ },
-/* 328 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11355,7 +11478,7 @@
 	exports.default = Curve;
 
 /***/ },
-/* 329 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11424,7 +11547,7 @@
 	exports.default = Gamma;
 
 /***/ },
-/* 330 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11630,7 +11753,7 @@
 	exports.default = SeletiveColor;
 
 /***/ },
-/* 331 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11722,128 +11845,6 @@
 	};
 
 	exports.default = SetHSI;
-
-/***/ },
-/* 332 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	exports.default = function (AlloyImage) {
-	    Object.defineProperties(AlloyImage.prototype, {
-	        width: {
-	            get: function get() {
-	                return this.canvas.width;
-	            },
-
-	            set: function set(w) {
-	                var _this = this;
-
-	                this.then(function () {
-	                    _this.canvas.width = w;
-	                });
-
-	                return this;
-	            }
-	        },
-
-	        height: {
-	            get: function get() {
-	                return this.canvas.height;
-	            },
-
-	            set: function set(h) {
-	                var _this2 = this;
-
-	                this.then(function () {
-	                    _this2.canvas.height = h;
-	                });
-
-	                return this;
-	            }
-	        }
-	    });
-	};
-
-/***/ },
-/* 333 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function show(selector) {
-	    var _this = this;
-
-	    this.then(function () {
-
-	        console.log('show');
-
-	        var _getCompositeView = _this._getCompositeView(),
-	            compositeCanvas = _getCompositeView.compositeCanvas;
-
-	        //以临时对象data显示
-	        /*
-	        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
-	        */
-
-	        if (selector) {
-	            if (typeof selector == "string") {
-	                var el = document.querySelector(selector);
-	                el.appendChild(compositeCanvas);
-	            } else {
-	                selector.appendChild(compositeCanvas);
-	            }
-	        } else {
-	            document.body.appendChild(compositeCanvas);
-	        }
-	    });
-
-	    return this;
-	}
-
-	exports.default = function (AlloyImage) {
-	    AlloyImage.extend(show);
-	};
-
-/***/ },
-/* 334 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	// clone只对单图层有效
-	function clone() {
-	    var _this = this;
-
-	    var newAIObj = new AlloyImage(1, 1); //this.width, this.height);
-
-	    newAIObj.then(function () {
-	        return _this.then(function () {
-
-	            // 这里直接取 立即生效
-	            newAIObj.canvas.width = _this.width;
-	            newAIObj.canvas.height = _this.height;
-
-	            newAIObj.imgData = _this.imgData;
-	        });
-	    });
-
-	    return newAIObj;
-	}
-
-	exports.default = function (AlloyImage) {
-	    AlloyImage.extend(clone);
-	};
 
 /***/ }
 /******/ ]);
