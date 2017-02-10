@@ -288,9 +288,12 @@
 	                            _this.width = _this.canvas.width;
 	                            _this.height = _this.canvas.height;
 
-	                            _this.layers = [];
+	                            _this.immediatelyDo = _this;
+	                            _this.immediatelyDo.then = function (func) {
+	                                return func.call(this);
+	                            };
 
-	                        case 19:
+	                        case 20:
 	                        case "end":
 	                            return _context.stop();
 	                    }
@@ -413,52 +416,108 @@
 
 	    }, {
 	        key: "_getCompositeView",
-	        value: function _getCompositeView() {
+	        value: function () {
+	            var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	                var compositeCanvas, compositeContext, tempAIObj, i, tA, layers, currLayer, tempPsLib;
+	                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+	                    while (1) {
+	                        switch (_context3.prev = _context3.next) {
+	                            case 0:
+	                                if (!(this.layers.length === 0)) {
+	                                    _context3.next = 10;
+	                                    break;
+	                                }
 
-	            var compositeCanvas = document.createElement('canvas');
-	            compositeCanvas.width = this.width;
-	            compositeCanvas.height = this.height;
+	                                compositeCanvas = document.createElement('canvas');
 
-	            var compositeContext = compositeCanvas.getContext("2d");
+	                                compositeCanvas.width = this.width;
+	                                compositeCanvas.height = this.height;
 
-	            compositeContext.putImageData(this.imgData, 0, 0);
+	                                compositeContext = compositeCanvas.getContext("2d");
 
-	            return {
-	                compositeCanvas: compositeCanvas,
-	                compositeContext: compositeContext
-	            };
 
-	            //如果其上无其他挂载图层，加快处理
-	            if (this.layers.length == 0) {
-	                this.tempPsLib = {
-	                    imgData: this.imgData
-	                };
-	            } else {
+	                                console.log(this.imgData, 'show');
+	                                compositeContext.putImageData(this.imgData, 0, 0);
 
-	                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
-	                var tempPsLib = new AlloyImage(this.canvas.width, this.canvas.height);
-	                /*
-	                tempPsLib.add(this, "正常", 0, 0, isFast);
-	                this.tempPsLib = tempPsLib;
-	                  //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
-	                for(var i = 0; i < this.layers.length; i ++){
-	                    var tA = this.layers[i];
-	                    var layers = tA[0].layers;
-	                    var currLayer = tA[0];
-	                      if(layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
-	                    tempPsLib.add(currLayer, tA[1], tA[2], tA[3], isFast);
-	                }
-	                */
+	                                return _context3.abrupt("return", {
+	                                    compositeCanvas: compositeCanvas,
+	                                    compositeContext: compositeContext
+	                                });
 
-	                //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	                            case 10:
+
+	                                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
+	                                tempAIObj = new AlloyImage(this.canvas.width, this.canvas.height);
+
+	                                tempAIObj.add(this, "正常", 0, 0);
+
+	                                //this.tempPsLib = tempPsLib;
+
+	                                //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
+	                                for (i = 0; i < this.layers.length; i++) {
+	                                    tA = this.layers[i];
+	                                    layers = tA[0].layers;
+	                                    currLayer = tA[0];
+
+
+	                                    if (layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
+	                                    tempAIObj.add(currLayer, tA[1], tA[2], tA[3]);
+	                                }
+
+	                                _context3.next = 15;
+	                                return tempAIObj;
+
+	                            case 15:
+	                                return _context3.abrupt("return", {
+	                                    compositeCanvas: tempAIObj.canvas,
+	                                    compositeContext: tempAIObj.context
+	                                });
+
+	                            case 16:
+	                                //如果其上无其他挂载图层，加快处理
+	                                if (this.layers.length == 0) {
+	                                    this.tempPsLib = {
+	                                        imgData: this.imgData
+	                                    };
+	                                } else {
+
+	                                    //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
+	                                    tempPsLib = new AlloyImage(this.canvas.width, this.canvas.height);
+	                                    /*
+	                                    tempPsLib.add(this, "正常", 0, 0, isFast);
+	                                    this.tempPsLib = tempPsLib;
+	                                      //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
+	                                    for(var i = 0; i < this.layers.length; i ++){
+	                                        var tA = this.layers[i];
+	                                        var layers = tA[0].layers;
+	                                        var currLayer = tA[0];
+	                                          if(layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
+	                                        tempPsLib.add(currLayer, tA[1], tA[2], tA[3], isFast);
+	                                    }
+	                                    */
+
+	                                    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	                                }
+
+	                            case 17:
+	                            case "end":
+	                                return _context3.stop();
+	                        }
+	                    }
+	                }, _callee3, this);
+	            }));
+
+	            function _getCompositeView() {
+	                return _ref4.apply(this, arguments);
 	            }
-	        }
+
+	            return _getCompositeView;
+	        }()
 	    }], [{
 	        key: "extend",
 	        value: function extend(func) {
 	            var name = func.name;
 
-	            console.log(name, 'name');
 	            this.prototype[name] = func;
 	        }
 	    }]);
@@ -9499,29 +9558,52 @@
 	    //console.log("add init");
 
 	    //做映射转发
+	    // 这里有两个异步队列
+	    // 要等this完成，也要等aiObj完成
+	    // 所以不能简单then, 不然then后面的内容执行的时候，aiObj已不在这个时机
+
+
+	    var readyFunc = void 0;
+
+	    var p = new Promise(function (rs, rj) {
+	        console.log('do addLayer');
+
+	        aiObj.then(function () {
+	            var _context;
+
+	            console.log('this will be shown before show');
+
+	            var aiObjImgData = (_context = aiObj.immediatelyDo, aiObj.getImageData).call(_context);
+
+	            /*
+	            console.log(aiObjImgData, 'imgData');
+	              _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
+	            console.log('do addLayer OK');
+	            */
+
+	            rs(aiObjImgData);
+	        });
+	    });
+
 	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	        var aiObjImgData;
+	        return regeneratorRuntime.wrap(function _callee$(_context2) {
 	            while (1) {
-	                switch (_context.prev = _context.next) {
+	                switch (_context2.prev = _context2.next) {
 	                    case 0:
-	                        _context.t0 = _addLayer3.default;
-	                        _context.t1 = _this.imgData;
-	                        _context.next = 4;
-	                        return aiObj.getImageData();
+	                        _context2.next = 2;
+	                        return p;
 
-	                    case 4:
-	                        _context.t2 = _context.sent;
-	                        _context.t3 = method;
-	                        _context.t4 = alpha;
-	                        _context.t5 = dx;
-	                        _context.t6 = dy;
-	                        _context.t7 = isFast;
-	                        _context.t8 = channel;
-	                        (0, _context.t0)(_context.t1, _context.t2, _context.t3, _context.t4, _context.t5, _context.t6, _context.t7, _context.t8);
+	                    case 2:
+	                        aiObjImgData = _context2.sent;
 
-	                    case 12:
+	                        console.log(_this.imgData, 'before');
+
+	                        _this.imgData = (0, _addLayer3.default)(_this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
+
+	                    case 5:
 	                    case "end":
-	                        return _context.stop();
+	                        return _context2.stop();
 	                }
 	            }
 	        }, _callee, _this);
@@ -10097,37 +10179,60 @@
 /* 313 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	function show(selector) {
+
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+	function show(selector, flag) {
 	    var _this = this;
 
-	    this.then(function () {
+	    console.log('show invoked');
+	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        var _ref2, compositeCanvas, el;
 
-	        console.log('show');
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
 
-	        var _getCompositeView = _this._getCompositeView(),
-	            compositeCanvas = _getCompositeView.compositeCanvas;
+	                        console.log('show', flag);
 
-	        //以临时对象data显示
-	        /*
-	        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
-	        */
+	                        _context.next = 3;
+	                        return _this._getCompositeView();
 
-	        if (selector) {
-	            if (typeof selector == "string") {
-	                var el = document.querySelector(selector);
-	                el.appendChild(compositeCanvas);
-	            } else {
-	                selector.appendChild(compositeCanvas);
+	                    case 3:
+	                        _ref2 = _context.sent;
+	                        compositeCanvas = _ref2.compositeCanvas;
+
+
+	                        //以临时对象data显示
+	                        /*
+	                        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
+	                        */
+
+	                        if (selector) {
+	                            if (typeof selector == "string") {
+	                                el = document.querySelector(selector);
+
+	                                el.appendChild(compositeCanvas);
+	                            } else {
+	                                selector.appendChild(compositeCanvas);
+	                            }
+	                        } else {
+	                            document.body.appendChild(compositeCanvas);
+	                        }
+
+	                    case 6:
+	                    case 'end':
+	                        return _context.stop();
+	                }
 	            }
-	        } else {
-	            document.body.appendChild(compositeCanvas);
-	        }
-	    });
+	        }, _callee, _this);
+	    })));
 
 	    return this;
 	}

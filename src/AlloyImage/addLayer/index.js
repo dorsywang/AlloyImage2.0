@@ -39,8 +39,39 @@ function add(aiObj, ...args){
     //console.log("add init");
 
         //做映射转发
+    // 这里有两个异步队列
+    // 要等this完成，也要等aiObj完成
+    // 所以不能简单then, 不然then后面的内容执行的时候，aiObj已不在这个时机
+    
+
+   let readyFunc;
+
+   let p = new Promise((rs, rj) =>{
+        console.log('do addLayer');
+
+        aiObj.then(() => {
+            console.log('this will be shown before show');
+
+            let aiObjImgData = aiObj.immediatelyDo::aiObj.getImageData();
+
+            /*
+            console.log(aiObjImgData, 'imgData');
+
+            _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
+            console.log('do addLayer OK');
+            */
+
+            rs(aiObjImgData);
+        });
+
+   });
+
+
     this.then(async () => {
-        _addLayer(this.imgData, await aiObj.getImageData(), method, alpha, dx, dy, isFast, channel);
+        let aiObjImgData = await p;
+        console.log(this.imgData, 'before');
+
+        this.imgData = _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
     });
 
     return this;

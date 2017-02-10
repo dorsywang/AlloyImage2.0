@@ -1,9 +1,10 @@
-function show(selector){
-    this.then(() => {
+function show(selector, flag){
+    console.log('show invoked');
+    this.then(async () => {
 
-        console.log('show');
+        console.log('show', flag);
 
-        let {compositeCanvas}  = this._getCompositeView();
+        let {compositeCanvas}  = await this._getCompositeView();
 
 
         //以临时对象data显示

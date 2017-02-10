@@ -33,8 +33,11 @@ class AlloyImage{
             this.width = this.canvas.width;
             this.height = this.canvas.height;
 
-            this.layers = [];
 
+            this.immediatelyDo = this;
+            this.immediatelyDo.then = function(func){
+                return this::func();
+            };
         });
     }
 
@@ -109,24 +112,51 @@ class AlloyImage{
         return this;
     }
 
-  
     // 获得合成视图
-    _getCompositeView(){
-        
-        let compositeCanvas = document.createElement('canvas');
-        compositeCanvas.width = this.width;
-        compositeCanvas.height =  this.height;
+    async _getCompositeView(){
+        if(this.layers.length === 0){
+            let compositeCanvas = document.createElement('canvas');
+            compositeCanvas.width = this.width;
+            compositeCanvas.height =  this.height;
 
-        let compositeContext = compositeCanvas.getContext("2d");
+            let compositeContext = compositeCanvas.getContext("2d");
 
-        compositeContext.putImageData(this.imgData, 0, 0);
+            console.log(this.imgData, 'show');
+            compositeContext.putImageData(this.imgData, 0, 0);
 
-        return {
-            compositeCanvas,
-            compositeContext
+            return {
+                compositeCanvas,
+                compositeContext
+            }
+
+        }else{
+
+            //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
+            var tempAIObj = new AlloyImage(this.canvas.width, this.canvas.height);
+            tempAIObj.add(this, "正常", 0, 0);
+
+
+            //this.tempPsLib = tempPsLib;
+
+            //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
+            for(var i = 0; i < this.layers.length; i ++){
+                var tA = this.layers[i];
+                var layers = tA[0].layers;
+                var currLayer = tA[0];
+
+                if(layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
+                tempAIObj.add(currLayer, tA[1], tA[2], tA[3]);
+            }
+
+            await tempAIObj;
+
+            return {
+                compositeCanvas: tempAIObj.canvas,
+                compositeContext: tempAIObj.context
+            }
+
+            //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
-
-
         //如果其上无其他挂载图层，加快处理
         if(this.layers.length == 0){
             this.tempPsLib = {
@@ -160,7 +190,6 @@ class AlloyImage{
     static extend(func){
         let name = func.name;
 
-        console.log(name, 'name');
         this.prototype[name] = func;
     }
 }
