@@ -150,9 +150,11 @@ class AlloyImage{
 
             await tempAIObj;
 
+            let compositeCanvas = tempAIObj.canvas, compositeContext = tempAIObj.context;
+            compositeContext.putImageData(tempAIObj.imgData, 0, 0);
             return {
-                compositeCanvas: tempAIObj.canvas,
-                compositeContext: tempAIObj.context
+                compositeCanvas,
+                compositeContext
             }
 
             //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

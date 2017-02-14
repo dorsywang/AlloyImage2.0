@@ -8,13 +8,15 @@ import act from './act';
 import size from './size';
 import show from './show';
 import clone from './clone';
+import preview from './preview'
 
 register({
     addLayer,
     act,
     size,
     show,
-    clone
+    clone,
+    preview
 });
 
 

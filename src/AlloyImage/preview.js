@@ -8,15 +8,18 @@ function view(method, ...args){
             var n = this.layers.length;
 
             if(this.layers[n - 1] && this.layers[n - 1][0].type === 1){
-                this.cancel();
+                this.immediatelyDo::this.cancel();
             }
 
             var newLayer;
             for(var i = this.layers.length - 1; i > -1; i --){
                 var layer = this.layers[i];
 
+
+                //type = 1:预览中, 2:已保存
+
                 if(layer[0].type === 2){
-                    newLayer = layer[0].clone();
+                    newLayer = this.immediatelyDo::layer[0].clone();
 
                     break;
                 }
@@ -24,16 +27,16 @@ function view(method, ...args){
 
             if(! newLayer){
                 //克隆本图层对象
-                newLayer = this.clone();
+                newLayer = this.immediatelyDo::this.clone();
 
                 window.newLayer = newLayer;
             }
 
 
             if(method === "ps"){
-                newLayer = newLayer.ps(arg1, arg2, arg3, arg4);
+                newLayer = this.immediatelyDo::newLayer.ps(...args);
             }else{
-                newLayer.act(method, arg1, arg2, arg3, arg4);
+                this.immediatelyDo::newLayer.act(method, ...args);
             }
 
             //标记本图层的种类为预览的已合并的图层
@@ -49,6 +52,16 @@ function view(method, ...args){
 }
 
 function excute(){
+    this.then(() => {
+        var layers = this.layers;
+        var n = layers.length;
+        if(layers[n - 1] && layers[n - 1][0].type === 1){
+            let finalResult = layers.pop()[0];
+            this.imgData = finalResult.imgData;
+        }
+    });
+
+    return this;
 }
 
 //取消view的结果执行
@@ -56,9 +69,38 @@ function cancel(){
     this.then(() => {
         var layers = this.layers;
         var n = layers.length;
-        if(layers[n - 1] && layers[n - 1][0].type == 1){
+        if(layers[n - 1] && layers[n - 1][0].type === 1){
             layers.pop();
         }
+    });
+
+    return this;
+}
+
+function doView(){
+    this.then(() => {
+        var layers = this.layers;
+        var n = layers.length;
+        if(layers[n - 1] && layers[n - 1][0].type === 1){
+            layers[n - 1][0].type = 2;
+        }
+    });
+
+    return this;
+}
+
+function undoView(){
+    this.then(() => {
+        var layers = this.layers;
+        var n = layers.length;
+        if(layers[n - 1] && layers[n - 1][0].type === 1){
+            layers.pop();
+        }
+        n = layers.length;
+        if(layers[n - 1] && layers[n - 1][0].type === 2){
+            layers.pop();
+        }
+
     });
 
     return this;
@@ -68,4 +110,6 @@ export default AlloyImage => {
     AlloyImage.extend(view);
     AlloyImage.extend(excute);
     AlloyImage.extend(cancel);
+    AlloyImage.extend(doView);
+    AlloyImage.extend(undoView);
 };

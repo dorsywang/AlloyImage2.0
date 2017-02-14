@@ -4,8 +4,7 @@ function show(selector, flag){
 
         console.log('show', flag);
 
-        let {compositeCanvas}  = await this._getCompositeView();
-
+        let {compositeCanvas, compositeContext}  = await this._getCompositeView();
 
         //以临时对象data显示
         /*
