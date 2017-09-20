@@ -1,6 +1,6 @@
-import {Alteration} from "AlloyImage";
+import AlloyImage, {Alteration} from "AlloyImage";
 
-export default class Gamma extends Alteration{
+class Gamma extends Alteration{
     cname = "伽马";
     process = ({data, width, height}, {dorsyMath}) => args => {    
 
@@ -26,3 +26,5 @@ export default class Gamma extends Alteration{
         return {data, width, height};
     }
 }
+
+AlloyImage.addAlteration(Gamma);

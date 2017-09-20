@@ -1,5 +1,6 @@
-import {Filter} from "AlloyImage";
-export default class sepia extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+
+class sepia extends Filter{ 
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         for(var x = 0; x < width; x ++){
             for(var y = 0; y < height; y ++){
@@ -15,3 +16,5 @@ export default class sepia extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(sepia);

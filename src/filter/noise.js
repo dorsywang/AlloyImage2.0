@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class noise extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class noise extends Filter{ 
     cname = "添加杂色";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 100;
@@ -25,3 +25,5 @@ export default class noise extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(noise);

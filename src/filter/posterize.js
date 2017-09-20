@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class posterize extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class posterize extends Filter{ 
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var dM = dorsyMath;
 
@@ -24,3 +24,5 @@ export default class posterize extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(posterize);

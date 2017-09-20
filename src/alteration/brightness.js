@@ -1,6 +1,6 @@
-import {Alteration} from "AlloyImage";
+import AlloyImage, {Alteration} from "AlloyImage";
 
-export default class Brightness extends Alteration{
+class Brightness extends Alteration{
     cname = "亮度";
     process = ({data, width, height}, {dorsyMath}) => args => {                
         var brightness = args[0] / 50;// -1,1
@@ -18,3 +18,5 @@ export default class Brightness extends Alteration{
         return {data, width, height};
     }
 }
+
+AlloyImage.addAlteration(Brightness);

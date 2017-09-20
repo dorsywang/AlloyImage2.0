@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class sharp extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class sharp extends Filter{ 
     cname = "锐化";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var lamta = args[0] || 0.6;
@@ -24,3 +24,5 @@ export default class sharp extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(sharp);

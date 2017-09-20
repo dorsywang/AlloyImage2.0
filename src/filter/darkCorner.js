@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class darkCorner extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class darkCorner extends Filter{ 
     cname = "暗角";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         //暗角级别 分1-10级吧
@@ -58,3 +58,4 @@ export default class darkCorner extends Filter{
         return {data, width, height};
     }
 };
+AlloyImage.addFilter(darkCorner);

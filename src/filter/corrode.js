@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class corrode extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class corrode extends Filter{ 
     cname = "腐蚀";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         let R = parseInt(args[0]) || 3;
@@ -26,3 +26,5 @@ export default class corrode extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(corrode);

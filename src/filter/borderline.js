@@ -1,5 +1,6 @@
-import {Filter} from "AlloyImage";
-export default class lapOfGauss extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class borderline extends Filter{ 
+    cname = "查找边缘";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var template1 = [
             -2,-4,-4,-4,-2,
@@ -21,3 +22,5 @@ export default class lapOfGauss extends Filter{
         return dorsyMath.applyMatrix({data, width, height}, template2, 250);
     }
 }
+
+AlloyImage.addFilter(borderline);

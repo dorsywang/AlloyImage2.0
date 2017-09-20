@@ -1,6 +1,6 @@
-import {Filter} from "AlloyImage";
+import AlloyImage, {Filter} from "AlloyImage";
 
-export default class toGray extends Filter{
+class toGray extends Filter{
     cname = "灰度处理";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         for(var i = 0,n = data.length;i < n;i += 4){
@@ -11,3 +11,5 @@ export default class toGray extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(toGray);

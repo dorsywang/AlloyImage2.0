@@ -11,6 +11,10 @@ export default class LayerPixelProcesser{
         let filter = LayerPixelProcesser.filterMap[name];
         let alteration = LayerPixelProcesser.alterationMap[name];
 
+        if(! (filter || alteration)){
+            console.error('no act method registered: ', name);
+        }
+
         let doProcess;
         if(alteration){
             doProcess = alteration::alteration.doProcess;

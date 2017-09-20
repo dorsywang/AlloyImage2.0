@@ -1,6 +1,6 @@
-import {Alteration} from "AlloyImage";
+import AlloyImage, {Alteration} from "AlloyImage";
 
-export default class Curve extends Alteration{
+class Curve extends Alteration{
     cname = "曲线";
     process = ({data, width, height}, {dorsyMath}) => args => {    
         /*
@@ -43,3 +43,5 @@ export default class Curve extends Alteration{
         return {data, width, height};
     }
 }
+
+AlloyImage.addAlteration(Curve);

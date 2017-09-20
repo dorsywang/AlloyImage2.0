@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class oilPainting extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class oilPainting extends Filter{ 
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 16;
         var xLength = R * 2 + 1;
@@ -27,3 +27,5 @@ export default class oilPainting extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(oilPainting);

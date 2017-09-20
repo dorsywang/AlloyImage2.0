@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class mosaic extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class mosaic extends Filter{ 
     cname = "马赛克";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var R = parseInt(args[0]) || 3;
@@ -42,3 +42,4 @@ export default class mosaic extends Filter{
         return {data, width, height};
     }
 }
+AlloyImage.addFilter(mosaic);

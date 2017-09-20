@@ -1,4 +1,5 @@
 import _addLayer from './addLayer';
+import AlloyImage from 'AlloyImage';
 
 function add(aiObj, ...args){
     let numberArr = [], method, alpha, dx, dy, isFast, channel;
@@ -44,35 +45,32 @@ function add(aiObj, ...args){
     // 所以不能简单then, 不然then后面的内容执行的时候，aiObj已不在这个时机
     
 
-   let readyFunc;
-
-   let p = new Promise((rs, rj) =>{
-        console.log('do addLayer');
-
+    var wait = new Promise(rs => {
         aiObj.then(() => {
-            console.log('this will be shown before show');
-
-            let aiObjImgData = aiObj.immediatelyDo::aiObj.getImageData();
-
-            /*
-            console.log(aiObjImgData, 'imgData');
-
-            _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
-            console.log('do addLayer OK');
-            */
-
-            rs(aiObjImgData);
+            rs(aiObj.cloneImageData());
         });
+    });
 
-   });
-
+    console.log('add');
 
     this.then(async () => {
-        let aiObjImgData = await p;
-        console.log(this.imgData, 'before');
+        let aiObjImgData = await wait;
+        this.imgData = _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
 
+        console.log('xxxxxxx');
+    });
+
+
+    /*
+    var aiObjImgData;
+    // 等待aiObj完成后再做操作
+    this.wait(aiObj.then(() => {
+        aiObjImgData = aiObj.cloneImageData();
+    })).then(() => {
+        console.log(aiObjImgData, 'fff');
         this.imgData = _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
     });
+    */
 
     return this;
 
@@ -87,7 +85,5 @@ function addLayer(...args){
 }
 
 
-export default AlloyImage => {
-    AlloyImage.extend(add);
-    AlloyImage.extend(addLayer);
-};
+AlloyImage.extend(add);
+AlloyImage.extend(addLayer);

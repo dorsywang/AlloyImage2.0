@@ -1,6 +1,6 @@
-import {Filter} from "AlloyImage";
+import AlloyImage, {Filter} from "AlloyImage";
 
-export default class toReverse extends Filter{
+class toReverse extends Filter{
     cname = "反色";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         for(var i = 0,n = data.length;i < n;i += 4){
@@ -12,3 +12,5 @@ export default class toReverse extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(toReverse);

@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class gaussBlur extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class gaussBlur extends Filter{ 
     cname = "高斯模糊";
             /**
              * 高斯模糊
@@ -95,3 +95,5 @@ export default class gaussBlur extends Filter{
         return {data: pixes, width, height};
     }
 }
+
+AlloyImage.addFilter(gaussBlur);

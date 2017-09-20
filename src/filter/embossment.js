@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class embossment extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class embossment extends Filter{ 
     cname = "浮雕效果";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var outData = [];
@@ -26,3 +26,4 @@ export default class embossment extends Filter{
         return {data, width, height};
     }
 }
+AlloyImage.addFilter(embossment);

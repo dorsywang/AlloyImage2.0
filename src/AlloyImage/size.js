@@ -1,31 +1,31 @@
-export default AlloyImage => {
-    Object.defineProperties(AlloyImage.prototype,{
-        width:{
-            get: function(){
-                 return this.canvas.width;
-            },
+import AlloyImage from 'AlloyImage';
 
-            set: function(w){
-                this.then(() => {
-                    this.canvas.width = w;
-                });
-
-                return this;
-            }
+Object.defineProperties(AlloyImage.prototype,{
+    width:{
+        get: function(){
+             return this.canvas.width;
         },
 
-        height:{
-            get: function(){
-                return this.canvas.height; 
-            },
+        set: function(w){
+            this.then(() => {
+                this.canvas.width = w;
+            });
 
-            set: function(h){
-                this.then(() => {
-                    this.canvas.height = h;
-                });
-
-                return this;
-            }
+            return this;
         }
-    });
-};
+    },
+
+    height:{
+        get: function(){
+            return this.canvas.height; 
+        },
+
+        set: function(h){
+            this.then(() => {
+                this.canvas.height = h;
+            });
+
+            return this;
+        }
+    }
+});

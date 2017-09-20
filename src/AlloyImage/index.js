@@ -1,22 +1,15 @@
-import AlloyImage, {register} from './core';
-
-import Filter from './filter';
-import Alteration from './alteration';
-
-import addLayer from './addLayer';
+//import addLayer from './addLayer';
+/*
 import act from './act';
 import size from './size';
 import show from './show';
 import clone from './clone';
+*/
 
-register({
-    addLayer,
-    act,
-    size,
-    show,
-    clone
-});
+import Filter from './filter';
+import Alteration from './alteration';
 
+import AICore from "./core";
 
-export default AlloyImage;
-export {Filter, Alteration};
+export default AICore;
+export { Filter, Alteration };

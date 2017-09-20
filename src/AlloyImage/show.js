@@ -1,3 +1,5 @@
+import AlloyImage from 'AlloyImage';
+
 function show(selector, flag){
     console.log('show invoked');
     this.then(async () => {
@@ -28,6 +30,4 @@ function show(selector, flag){
     return this;
 }
   
-export default AlloyImage => {
-    AlloyImage.extend(show);
-};
+AlloyImage.extend(show);

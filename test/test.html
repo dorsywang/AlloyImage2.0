@@ -45,7 +45,10 @@
 
     // test clone
 /*
-let layer1 = new AlloyImage('img/7.jpg', 200, 200).act('toGray').add(new AlloyImage('img/5.jpg', 200, 200).act('mosaic', 1).clone(), 100, 100);
+let layer1 = new AlloyImage('img/7.jpg', 200, 200).act('toGray').add(
+    new AlloyImage('img/5.jpg', 200, 200).act('mosaic', 1).clone(),
+    100, 100);
+
 let layer2 = layer1.clone();
 
 layer2.act('mosaic').show();
@@ -53,16 +56,40 @@ layer2.act('mosaic').show();
 layer1.show();
 */
 
+
+/*
+ var m = new AlloyImage('img/7.jpg').act("灰度处理").add(
+        new AlloyImage(200, 200,"#808080")
+        .act("添加杂色")
+        .act("高斯模糊",4)
+        .act("色相/饱和度调节",32,19,0,true),
+        "叠加"
+      ).show();
+      */
+
+
 //test multilayers
-let layer1 = new AlloyImage('img/7.jpg', 200, 200).act('toGray');
-let layer2 = new AlloyImage('img/5.jpg', 200, 200);//layer1.clone();
+//let layer1 = new AlloyImage('img/7.jpg', 200, 200).act('toGray');
+//let layer2 = new AlloyImage('img/5.jpg', 200, 200);//layer1.clone();
 
-layer1.add(layer2, '正常', 100, 100);
+//layer1.add(layer2, '正常', 100, 100);
 
-layer2.act('toGray');
+//layer2.act('toGray');
 
-layer2.show(null, 2);
-layer1.show();
+//layer2.show(null, 2);
+//layer1.show();
+
+//new AlloyImage('img/7.jpg').effect('sketch').show();
+//new AlloyImage('img/7.jpg').effect('softenFace').show();
+//new AlloyImage('img/7.jpg').effect('purpleStyle').show();
+//new AlloyImage('img/7.jpg').effect('vintage').show();
+//new AlloyImage('img/7.jpg').effect('lomo').show();
+//new AlloyImage('img/7.jpg').effect('warmAutumn').show();
+//new AlloyImage('img/7.jpg').effect('soften').show();
+//new AlloyImage('img/7.jpg').effect('carveStyle').show();
+//new AlloyImage('img/7.jpg').effect('rough').show();
+
+new AlloyImage('img/7.jpg').act('灰度处理').show();
 
 </script>
 </body>

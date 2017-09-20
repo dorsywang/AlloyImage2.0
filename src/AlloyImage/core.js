@@ -1,14 +1,58 @@
-import 'babel-polyfill';
+import 'core-js/modules/es6.promise';
+import 'regenerator-runtime/runtime';
 
 import {loadImage, uniqueId, device} from "./util";
 import {drawImageIOS} from "./fix";
 
-class AlloyImage{
+/*
+function FakePromise(executor) {
+    var p = new Promise(function (resolve, reject) {
+        // before
+        return executor(resolve, reject);
+    });
+    // after
+
+    p.__proto__ = FakePromise.prototype;
+    return p;
+}
+
+FakePromise.__proto__ = Promise;
+FakePromise.prototype.__proto__ = Promise.prototype;
+
+FakePromise.prototype.then = function then(onFulfilled, onRejected) {
+    // before
+    var returnValue = Promise.prototype.then.call(this, onFulfilled, onRejected);
+    // after
+    return returnValue;
+}
+
+FakePromise.prototype.act = function(c){
+    return this.then(function(){
+        return new Promise(function(rs){
+            setTimeout(function(){
+                console.log(c);
+                rs();
+            }, 1000);
+        });
+    });
+};
+
+*/
+
+class AICore extends Promise{
     constructor(img, width, height){
-        this._tasker = Promise.resolve(true);
+
+        if(img instanceof Function){
+            return new Promise(img);
+        }
+
+        super(rs => rs());
+ 
+        //this._tasker = Promise.resolve(true);
 
         //记录时间 time trace
         this.startTime = + new Date();
+
 
         this.then(async () => {
             let {canvas, context} = await this.initCanvas(img, width, height);
@@ -98,19 +142,20 @@ class AlloyImage{
     }
 
     getImageData(){
-        return this.then(() => {
+        //return this.then(() => {
             return this.imgData;
-        });
+        //});
     }
 
     
 
+    /*
     then(fn){
         
         this._tasker = this._tasker.then(fn);
 
         return this;
-    }
+    }*/
 
     // 获得合成视图
     async _getCompositeView(){
@@ -192,10 +237,25 @@ class AlloyImage{
 
         this.prototype[name] = func;
     }
+
+    wait(aiObj){
+        var waitThing = new Promise((rs, rj) => {
+            aiObj.then(function(){
+                rs();
+            });
+        });
+
+        this.then(async () => {
+            await waitThing;
+        });
+
+        return this;
+    }
 }
 
 
 
+/*
 export let register = (obj) => {
     for(var i in obj){
         if(obj.hasOwnProperty(i)){
@@ -203,5 +263,6 @@ export let register = (obj) => {
         }
     }
 };
+*/
 
-export default AlloyImage;
+export default AICore;

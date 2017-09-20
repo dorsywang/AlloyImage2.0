@@ -1,6 +1,6 @@
-import {Filter} from "AlloyImage";
+import AlloyImage, {Filter} from "AlloyImage";
 
-export default class toThresh extends Filter{
+class toThresh extends Filter{
     cname = "灰度阈值";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         for(var i = 0,n = data.length;i < n;i += 4){
@@ -18,3 +18,5 @@ export default class toThresh extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(toThresh);

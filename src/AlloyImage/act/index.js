@@ -1,4 +1,5 @@
 import LayerPixelProcesser from './layerPixelProcesser';
+import AlloyImage from 'AlloyImage';
 
 function act(method, ...args){
     this.then(async () => {
@@ -17,15 +18,13 @@ async function _doAct(method, args){
     this.imgData = imgData;
 }
 
-export default AlloyImage => {
-    AlloyImage.extend(act);
-    AlloyImage.extend(_doAct);
+AlloyImage.extend(act);
+AlloyImage.extend(_doAct);
 
-    AlloyImage.addFilter = filter => {
-        LayerPixelProcesser.addFilter(filter);
-    };
+AlloyImage.addFilter = filter => {
+    LayerPixelProcesser.addFilter(filter);
+};
 
-    AlloyImage.addAlteration = alteration => {
-        LayerPixelProcesser.addFilter(alteration);
-    };
+AlloyImage.addAlteration = alteration => {
+    LayerPixelProcesser.addFilter(alteration);
 };

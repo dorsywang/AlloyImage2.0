@@ -1,6 +1,6 @@
 {
-  "presets": ["es2015", "react", "es2017"],
-  "plugins": ["syntax-async-functions", "transform-async-to-generator", "transform-class-properties", "transform-function-bind"],
+  "presets": [ "es2017"],
+  "plugins": [ "transform-class-properties", "transform-function-bind", 'transform-es2015-modules-commonjs'],
   "env": {
     "development": {
       "presets": []

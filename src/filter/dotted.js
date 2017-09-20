@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class dotted extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class dotted extends Filter{ 
     cname = "喷点";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         //矩形半径
@@ -61,4 +61,4 @@ export default class dotted extends Filter{
         return {data, width, height};
     }
 }
-
+AlloyImage.addFilter(dotted);

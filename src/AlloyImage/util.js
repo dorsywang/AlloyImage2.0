@@ -17,6 +17,7 @@ export let loadImage = src => new Promise((rs, rj) => {
     tmpImg.src = src;
 });
 
+
 export let device = (() => {
     if(window.navigator){
         let ua = window.navigator.userAgent;

@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/dorsywang/AlloyImage2.0#readme",
   "dependencies": {
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
     "webpack": "^1.13.2"
   },
   "devDependencies": {

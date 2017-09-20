@@ -6,9 +6,9 @@
  * 然后饱和度变成现在设置的饱和度，但保持明度为原来的基础上加上设置的明度
  *
  */
-import {Alteration} from "AlloyImage";
+import AlloyImage, {Alteration} from "AlloyImage";
 
-export default class SetHSI extends Alteration{
+class SetHSI extends Alteration{
     cname = "色相/饱和度调节";
     process = ({data, width, height}, {dorsyMath}) => args => {   
         args[0] = args[0] / 180 * Math.PI;
@@ -47,3 +47,5 @@ export default class SetHSI extends Alteration{
         return {data, width, height};
     }
 }
+
+AlloyImage.addAlteration(SetHSI);

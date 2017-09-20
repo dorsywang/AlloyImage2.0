@@ -1,5 +1,5 @@
-import {Filter} from "AlloyImage";
-export default class imageEnhance extends Filter{ 
+import AlloyImage, {Filter} from "AlloyImage";
+class imageEnhance extends Filter{ 
     cname = "";
     process = ({data, width, height}, {dorsyMath}) => (args) => {
         var lamta = args[0] || 0.5;
@@ -16,3 +16,5 @@ export default class imageEnhance extends Filter{
         return {data, width, height};
     }
 }
+
+AlloyImage.addFilter(imageEnhance)
