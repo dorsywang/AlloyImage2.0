@@ -39,16 +39,39 @@ FakePromise.prototype.act = function(c){
 
 */
 
-class AICore extends Promise{
+class AILayerData{
+    constructor(canvas){
+        this.canvas = canvas;
+    }
+
+    get context(){
+        return this.canvas.getContext('2d');
+    }
+
+    get width(){
+        return this.canvas.width;
+    }
+
+    get height(){
+        return this.canvas.height;
+    }
+
+    get imgData(){
+        return this.context.getImageData(0, 0, this.width, this.height);
+    }
+
+    set imgData(imgData){
+        this.context.putImageData(imgData, 0, 0);
+    }
+
+    setCanvas(canvas){
+        this.canvas = canvas;
+    }
+}
+
+class AICore{
     constructor(img, width, height){
-
-        if(img instanceof Function){
-            return new Promise(img);
-        }
-
-        super(rs => rs());
- 
-        //this._tasker = Promise.resolve(true);
+        this._tasker = Promise.resolve(true);
 
         //记录时间 time trace
         this.startTime = + new Date();
@@ -56,6 +79,8 @@ class AICore extends Promise{
 
         this.then(async () => {
             let {canvas, context} = await this.initCanvas(img, width, height);
+
+            //this.AILayerData = new AILayerData(canvas);
 
             this.canvas = canvas;
             this.context = context;
@@ -78,10 +103,12 @@ class AICore extends Promise{
             this.height = this.canvas.height;
 
 
+            /*
             this.immediatelyDo = this;
             this.immediatelyDo.then = function(func){
                 return this::func();
             };
+            */
         });
     }
 
@@ -147,15 +174,37 @@ class AICore extends Promise{
         //});
     }
 
+    /*
+    addAsyncTask(fn, pos){
+    }
+    */
+
     
 
-    /*
     then(fn){
         
-        this._tasker = this._tasker.then(fn);
+        // then内部的act等方法开一个子任务去处理
+        // 如果直接act会直接add在后面
+        var wrap = async () => {
+            var oldTask = this._tasker;
+
+            this._tasker = Promise.resolve(true);
+
+            await fn.bind(this)();
+
+            this._tasker = oldTask;
+        };
+
+
+        this._tasker = this._tasker.then(wrap);
 
         return this;
-    }*/
+
+    }
+
+    promise(){
+        return this._tasker;
+    }
 
     // 获得合成视图
     async _getCompositeView(){

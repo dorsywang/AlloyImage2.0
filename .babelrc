@@ -1,5 +1,5 @@
 {
-  "presets": [ "es2017"],
+  "presets": [ "es2015", "es2017"],
   "plugins": [ "transform-class-properties", "transform-function-bind", 'transform-es2015-modules-commonjs'],
   "env": {
     "development": {

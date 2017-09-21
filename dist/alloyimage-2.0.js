@@ -170,17 +170,30 @@
 	    value: true
 	});
 
-	var _PixelProcesser = __webpack_require__(3);
+	var _PixelProcesser2 = __webpack_require__(3);
 
-	var _PixelProcesser2 = _interopRequireDefault(_PixelProcesser);
+	var _PixelProcesser3 = _interopRequireDefault(_PixelProcesser2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class Filter extends _PixelProcesser2.default {
-	    constructor() {
-	        super();
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Filter = function (_PixelProcesser) {
+	    _inherits(Filter, _PixelProcesser);
+
+	    function Filter() {
+	        _classCallCheck(this, Filter);
+
+	        return _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this));
 	    }
-	}
+
+	    return Filter;
+	}(_PixelProcesser3.default);
+
 	exports.default = Filter;
 
 /***/ }),
@@ -193,23 +206,37 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _dorsyMath = __webpack_require__(4);
 
 	var _dorsyMath2 = _interopRequireDefault(_dorsyMath);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class PixelProcesser {
-	    constructor() {}
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	    doProcess(imgData, args) {
-	        return new Promise((rs, rj) => {
-	            let result = this.process(imgData, { dorsyMath: _dorsyMath2.default })(args);
-
-	            rs(result);
-	        });
+	var PixelProcesser = function () {
+	    function PixelProcesser() {
+	        _classCallCheck(this, PixelProcesser);
 	    }
-	}
+
+	    _createClass(PixelProcesser, [{
+	        key: "doProcess",
+	        value: function doProcess(imgData, args) {
+	            var _this = this;
+
+	            return new Promise(function (rs, rj) {
+	                var result = _this.process(imgData, { dorsyMath: _dorsyMath2.default })(args);
+
+	                rs(result);
+	            });
+	        }
+	    }]);
+
+	    return PixelProcesser;
+	}();
+
 	exports.default = PixelProcesser;
 
 /***/ }),
@@ -222,6 +249,8 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _c = __webpack_require__(5);
 
 	var _c2 = _interopRequireDefault(_c);
@@ -232,327 +261,353 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = new class DorsyMath {
-	    constructor() {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	exports.default = new (function () {
+	    function DorsyMath() {
+	        _classCallCheck(this, DorsyMath);
+
 	        this.Matrix = _matrix2.default;
 	        this.C = _c2.default;
 	    }
 
-	    FFT1(dataArr) {
-	        /*
-	         * @description:快速傅里叶变换
-	         * @按时间抽取
-	         * */
-	        var size = dataArr.length;
-	        var count = 0;
+	    _createClass(DorsyMath, [{
+	        key: 'FFT1',
+	        value: function FFT1(dataArr) {
+	            /*
+	             * @description:快速傅里叶变换
+	             * @按时间抽取
+	             * */
+	            var size = dataArr.length;
+	            var count = 0;
 
-	        //------计算权重W------------
-	        var W = [];
-	        for (var i = 0; i < size; i++) {
-	            W[i] = this.exp(-2 * Math.PI * i / size);
-	        }
-
-	        butterflyCal();
-	        return dataArr;
-
-	        //蝶形运算单元
-	        function butterflyCal() {
-	            count++;
-
-	            //蝶形单元个数
-	            var singleLength = size / Math.pow(2, count);
-	            var everyLength = size / singleLength;
-
-	            for (var i = 0; i < singleLength; i++) {
-
-	                //逐次计算蝶形单元
-	                singleButterflyCal(i * everyLength, (i + 1) * everyLength - 1, count);
+	            //------计算权重W------------
+	            var W = [];
+	            for (var i = 0; i < size; i++) {
+	                W[i] = this.exp(-2 * Math.PI * i / size);
 	            }
 
-	            //如果单元个数大于1继续运算
-	            if (singleLength > 1) {
+	            butterflyCal();
+	            return dataArr;
 
-	                //递归
-	                butterflyCal();
-	            } else {}
-	        }
+	            //蝶形运算单元
+	            function butterflyCal() {
+	                count++;
 
-	        //一个蝶形单元 n运算次数 蝶形单元的成对间隔
-	        function singleButterflyCal(start, end, n) {
+	                //蝶形单元个数
+	                var singleLength = size / Math.pow(2, count);
+	                var everyLength = size / singleLength;
 
-	            var delta = Math.pow(2, n - 1);
+	                for (var i = 0; i < singleLength; i++) {
 
-	            for (var i = start, j = 0; i <= end - delta; i++) {
+	                    //逐次计算蝶形单元
+	                    singleButterflyCal(i * everyLength, (i + 1) * everyLength - 1, count);
+	                }
 
-	                //i 的运算对
-	                var pairI = i + delta;
+	                //如果单元个数大于1继续运算
+	                if (singleLength > 1) {
 
-	                //计算i运算时的权重下标
-	                var currWeightForI = j * size / Math.pow(2, n);
-
-	                //计算i的运算对时候的权重
-	                var currWeightForPairI = currWeightForI + size / 4;
-
-	                if (!(dataArr[i] instanceof _c2.default)) dataArr[i] = new _c2.default(dataArr[i]);
-
-	                if (!(dataArr[pairI] instanceof _c2.default)) dataArr[pairI] = new _c2.default(dataArr[pairI]);
-
-	                var currResultForI = dataArr[i].plus(dataArr[pairI].mutiply(W[currWeightForI]));
-	                var currResultForPairI = dataArr[i].plus(dataArr[pairI].mutiply(W[currWeightForPairI]));
-
-	                dataArr[i] = currResultForI;
-	                dataArr[pairI] = currResultForPairI;
-
-	                j++;
+	                    //递归
+	                    butterflyCal();
+	                } else {}
 	            }
-	        }
-	    }
 
-	    DFT() {
-	        /*
-	         * @description:离散傅里叶变换
-	         * */
+	            //一个蝶形单元 n运算次数 蝶形单元的成对间隔
+	            function singleButterflyCal(start, end, n) {
 
-	    }
+	                var delta = Math.pow(2, n - 1);
 
-	    exp(theta, r) {
-	        //  r e^(i * theta) = r cos theta + r i * sin theta
+	                for (var i = start, j = 0; i <= end - delta; i++) {
 
-	        theta = theta || 0;
-	        r = r || 1;
+	                    //i 的运算对
+	                    var pairI = i + delta;
 
-	        var tempC = new _c2.default();
-	        tempC.r = r * Math.cos(theta);
-	        tempC.i = r * Math.sin(theta);
+	                    //计算i运算时的权重下标
+	                    var currWeightForI = j * size / Math.pow(2, n);
 
-	        return tempC;
-	    }
+	                    //计算i的运算对时候的权重
+	                    var currWeightForPairI = currWeightForI + size / 4;
 
-	    lagrange(xArr, yArr) {
-	        /*
-	         * Lagrange插值
-	         * @usage   M.lagrange([1,2],[2,4])(3);
-	         * */
-	        var num = xArr.length;
-	        function getLk(x, k) {
-	            //计算lk
-	            var omigaXk = 1;
-	            var omigaX = 1;
-	            for (var i = 0; i < num; i++) {
-	                if (i != k) {
-	                    omigaXk *= xArr[k] - xArr[i];
-	                    omigaX *= x - xArr[i];
+	                    if (!(dataArr[i] instanceof _c2.default)) dataArr[i] = new _c2.default(dataArr[i]);
+
+	                    if (!(dataArr[pairI] instanceof _c2.default)) dataArr[pairI] = new _c2.default(dataArr[pairI]);
+
+	                    var currResultForI = dataArr[i].plus(dataArr[pairI].mutiply(W[currWeightForI]));
+	                    var currResultForPairI = dataArr[i].plus(dataArr[pairI].mutiply(W[currWeightForPairI]));
+
+	                    dataArr[i] = currResultForI;
+	                    dataArr[pairI] = currResultForPairI;
+
+	                    j++;
 	                }
 	            }
-	            var lk = omigaX / omigaXk;
-	            return lk;
 	        }
-	        var getY = function (x) {
-	            var L = 0;
-	            for (var k = 0; k < num; k++) {
-	                var lk = getLk(x, k);
-	                L += yArr[k] * lk;
-	            }
-	            return L;
-	        };
-	        return getY;
-	    }
+	    }, {
+	        key: 'DFT',
+	        value: function DFT() {
+	            /*
+	             * @description:离散傅里叶变换
+	             * */
 
-	    applyMatrix(imgData, matrixArr, low) {
-	        //对图象信号实行掩模算子变换 low为阈值,滤波运算
+	        }
+	    }, {
+	        key: 'exp',
+	        value: function exp(theta, r) {
+	            //  r e^(i * theta) = r cos theta + r i * sin theta
 
-	        low = low || 0;
-	        var data = imgData.data;
-	        var width = imgData.width;
-	        var height = imgData.height;
-	        var matrixSize = matrixArr.length;
-	        var template = new _matrix2.default(matrixArr, matrixSize, 1);
-	        var tempData = [];
-	        var start = -(Math.sqrt(matrixSize) - 1) / 2;
+	            theta = theta || 0;
+	            r = r || 1;
 
-	        for (var i = 0, n = data.length; i < n; i += 4) {
-	            var ii = i / 4;
-	            var row = parseInt(ii / width);
-	            var col = ii % width;
-	            if (row == 0 || col == 0) continue;
+	            var tempC = new _c2.default();
+	            tempC.r = r * Math.cos(theta);
+	            tempC.i = r * Math.sin(theta);
 
-	            var pixelArr = [[], [], []];
-	            for (var k = start; k <= -start; k++) {
-	                var currRow = row + k;
-
-	                for (var kk = start; kk <= -start; kk++) {
-
-	                    var currCol = col + kk;
-	                    var currI = (currRow * width + currCol) * 4;
-
-	                    for (var j = 0; j < 3; j++) {
-	                        var tempI = currI + j;
-	                        pixelArr[j].push(data[tempI]);
+	            return tempC;
+	        }
+	    }, {
+	        key: 'lagrange',
+	        value: function lagrange(xArr, yArr) {
+	            /*
+	             * Lagrange插值
+	             * @usage   M.lagrange([1,2],[2,4])(3);
+	             * */
+	            var num = xArr.length;
+	            function getLk(x, k) {
+	                //计算lk
+	                var omigaXk = 1;
+	                var omigaX = 1;
+	                for (var i = 0; i < num; i++) {
+	                    if (i != k) {
+	                        omigaXk *= xArr[k] - xArr[i];
+	                        omigaX *= x - xArr[i];
 	                    }
 	                }
+	                var lk = omigaX / omigaXk;
+	                return lk;
+	            }
+	            var getY = function getY(x) {
+	                var L = 0;
+	                for (var k = 0; k < num; k++) {
+	                    var lk = getLk(x, k);
+	                    L += yArr[k] * lk;
+	                }
+	                return L;
+	            };
+	            return getY;
+	        }
+	    }, {
+	        key: 'applyMatrix',
+	        value: function applyMatrix(imgData, matrixArr, low) {
+	            //对图象信号实行掩模算子变换 low为阈值,滤波运算
+
+	            low = low || 0;
+	            var data = imgData.data;
+	            var width = imgData.width;
+	            var height = imgData.height;
+	            var matrixSize = matrixArr.length;
+	            var template = new _matrix2.default(matrixArr, matrixSize, 1);
+	            var tempData = [];
+	            var start = -(Math.sqrt(matrixSize) - 1) / 2;
+
+	            for (var i = 0, n = data.length; i < n; i += 4) {
+	                var ii = i / 4;
+	                var row = parseInt(ii / width);
+	                var col = ii % width;
+	                if (row == 0 || col == 0) continue;
+
+	                var pixelArr = [[], [], []];
+	                for (var k = start; k <= -start; k++) {
+	                    var currRow = row + k;
+
+	                    for (var kk = start; kk <= -start; kk++) {
+
+	                        var currCol = col + kk;
+	                        var currI = (currRow * width + currCol) * 4;
+
+	                        for (var j = 0; j < 3; j++) {
+	                            var tempI = currI + j;
+	                            pixelArr[j].push(data[tempI]);
+	                        }
+	                    }
+	                }
+
+	                var pixelMatrix = new _matrix2.default(pixelArr, 3, matrixSize);
+	                var resultMatrix = pixelMatrix.mutiply(template);
+
+	                for (var j = 0; j < 3; j++) {
+	                    tempData[i + j] = resultMatrix.data[j];
+	                }
+	                tempData[i + 4] = data[i + 4];
 	            }
 
-	            var pixelMatrix = new _matrix2.default(pixelArr, 3, matrixSize);
-	            var resultMatrix = pixelMatrix.mutiply(template);
-
-	            for (var j = 0; j < 3; j++) {
-	                tempData[i + j] = resultMatrix.data[j];
+	            for (var i = 0, n = data.length; i < n; i++) {
+	                if (tempData[i]) {
+	                    data[i] = tempData[i] < low ? tempData[i] : data[i];
+	                }
 	            }
-	            tempData[i + 4] = data[i + 4];
-	        }
 
-	        for (var i = 0, n = data.length; i < n; i++) {
-	            if (tempData[i]) {
-	                data[i] = tempData[i] < low ? tempData[i] : data[i];
+	            return imgData;
+	        }
+	    }, {
+	        key: 'RGBToHSI',
+	        value: function RGBToHSI(R, G, B) {
+	            var theta = (R - G + R - B) / 2 / Math.sqrt((R - G) * (R - G) + (R - B) * (G - B)) || 0;
+	            theta = Math.acos(theta);
+	            var H = B > G ? 2 * Math.PI - theta : theta;
+
+	            if (R + G + B > 0) {
+	                var S = 1 - 3 * Math.min(R, G, B) / (R + G + B);
+	            } else {
+	                var S = 0;
+	            }
+
+	            var I = (R + G + B) / 3;
+
+	            if (H > 2 * Math.PI) H = 2 * Math.PI;
+	            if (H < 0) H = 0;
+
+	            return {
+	                H: H,
+	                S: S,
+	                I: I
+	            };
+	        }
+	    }, {
+	        key: 'HSIToRGB',
+	        value: function HSIToRGB(H, S, I) {
+	            //H为弧度值
+	            //H (-Math.PI , Math.PI)  S (-1,1) I (-255,255)
+	            if (H < 0) {
+	                H %= 2 * Math.PI;
+	                H += 2 * Math.PI;
+	            } else {
+	                H %= 2 * Math.PI;
+	            }
+
+	            if (H <= Math.PI * 2 / 3) {
+	                var B = I * (1 - S);
+	                var R = I * (1 + S * Math.cos(H) / Math.cos(Math.PI / 3 - H));
+	                var G = 3 * I - (R + B);
+	            } else if (H <= Math.PI * 4 / 3) {
+	                H = H - Math.PI * 2 / 3;
+
+	                var R = I * (1 - S);
+	                var G = I * (1 + S * Math.cos(H) / Math.cos(Math.PI / 3 - H));
+	                var B = 3 * I - (G + R);
+	            } else {
+	                H = H - Math.PI * 4 / 3;
+
+	                var G = I * (1 - S);
+	                var B = I * (1 + S * Math.cos(H) / Math.cos(Math.PI / 3 - H));
+	                var R = 3 * I - (G + B);
+	            }
+
+	            return {
+	                R: R,
+	                G: G,
+	                B: B
+	            };
+	        }
+	    }, {
+	        key: 'applyInHSI',
+	        value: function applyInHSI(imgData, func) {
+	            //在hsi空间上应用func
+	            /*
+	             * function(i){
+	             *      i.H += 3;
+	             * }
+	             * H (-2*Math.PI , 2 * Math.PI)  S (-1,1) I (-255,255)
+	             * */
+	            var colorMap = ["R", "Y", "G", "C", "B", "M"];
+	            var data = imgData.data;
+
+	            var d30 = Math.PI / 6;
+	            var d60 = Math.PI / 3;
+	            for (var i = 0, n = data.length; i < n; i += 4) {
+	                var hsiObj = this.RGBToHSI(data[i], data[i + 1], data[i + 2]);
+
+	                //得到颜色属性
+	                var h = hsiObj.H + d30;
+	                var color = ~~(h / d60);
+	                var rColor = colorMap[color % 6];
+
+	                func(hsiObj, rColor, data[i + 3]);
+
+	                if (hsiObj.S > 1) hsiObj.S = 1;
+	                if (hsiObj.S < 0) hsiObj.S = 0;
+
+	                var rgbObj = this.HSIToRGB(hsiObj.H, hsiObj.S, hsiObj.I);
+	                data[i] = rgbObj.R;
+	                data[i + 1] = rgbObj.G;
+	                data[i + 2] = rgbObj.B;
 	            }
 	        }
-
-	        return imgData;
-	    }
-
-	    RGBToHSI(R, G, B) {
-	        var theta = (R - G + R - B) / 2 / Math.sqrt((R - G) * (R - G) + (R - B) * (G - B)) || 0;
-	        theta = Math.acos(theta);
-	        var H = B > G ? 2 * Math.PI - theta : theta;
-
-	        if (R + G + B > 0) {
-	            var S = 1 - 3 * Math.min(R, G, B) / (R + G + B);
-	        } else {
-	            var S = 0;
-	        }
-
-	        var I = (R + G + B) / 3;
-
-	        if (H > 2 * Math.PI) H = 2 * Math.PI;
-	        if (H < 0) H = 0;
-
-	        return {
-	            H: H,
-	            S: S,
-	            I: I
-	        };
-	    }
-
-	    HSIToRGB(H, S, I) {
-	        //H为弧度值
-	        //H (-Math.PI , Math.PI)  S (-1,1) I (-255,255)
-	        if (H < 0) {
-	            H %= 2 * Math.PI;
-	            H += 2 * Math.PI;
-	        } else {
-	            H %= 2 * Math.PI;
-	        }
-
-	        if (H <= Math.PI * 2 / 3) {
-	            var B = I * (1 - S);
-	            var R = I * (1 + S * Math.cos(H) / Math.cos(Math.PI / 3 - H));
-	            var G = 3 * I - (R + B);
-	        } else if (H <= Math.PI * 4 / 3) {
-	            H = H - Math.PI * 2 / 3;
-
-	            var R = I * (1 - S);
-	            var G = I * (1 + S * Math.cos(H) / Math.cos(Math.PI / 3 - H));
-	            var B = 3 * I - (G + R);
-	        } else {
-	            H = H - Math.PI * 4 / 3;
-
-	            var G = I * (1 - S);
-	            var B = I * (1 + S * Math.cos(H) / Math.cos(Math.PI / 3 - H));
-	            var R = 3 * I - (G + B);
-	        }
-
-	        return {
-	            R: R,
-	            G: G,
-	            B: B
-	        };
-	    }
-
-	    applyInHSI(imgData, func) {
-	        //在hsi空间上应用func
+	    }, {
+	        key: 'applyInCoordinate',
+	        value: function applyInCoordinate(imgData, func) {} //在坐标空间上应用func
 	        /*
-	         * function(i){
-	         *      i.H += 3;
+	         * function(dot){
+	         *      
 	         * }
-	         * H (-2*Math.PI , 2 * Math.PI)  S (-1,1) I (-255,255)
 	         * */
-	        var colorMap = ["R", "Y", "G", "C", "B", "M"];
-	        var data = imgData.data;
-
-	        var d30 = Math.PI / 6;
-	        var d60 = Math.PI / 3;
-	        for (var i = 0, n = data.length; i < n; i += 4) {
-	            var hsiObj = this.RGBToHSI(data[i], data[i + 1], data[i + 2]);
-
-	            //得到颜色属性
-	            var h = hsiObj.H + d30;
-	            var color = ~~(h / d60);
-	            var rColor = colorMap[color % 6];
-
-	            func(hsiObj, rColor, data[i + 3]);
-
-	            if (hsiObj.S > 1) hsiObj.S = 1;
-	            if (hsiObj.S < 0) hsiObj.S = 0;
-
-	            var rgbObj = this.HSIToRGB(hsiObj.H, hsiObj.S, hsiObj.I);
-	            data[i] = rgbObj.R;
-	            data[i + 1] = rgbObj.G;
-	            data[i + 2] = rgbObj.B;
-	        }
-	    }
-
-	    applyInCoordinate(imgData, func) {} //在坐标空间上应用func
-	    /*
-	     * function(dot){
-	     *      
-	     * }
-	     * */
 
 
-	    //计算两个点之间的距离
-	    //p1   array
-	    //p2   array
-	    distance(p1, p2) {
-	        p2 = p2 || [0, 0];
+	        //计算两个点之间的距离
+	        //p1   array
+	        //p2   array
 
-	        p1 = new _c2.default(p1[0], p1[1]);
-	        p2 = new _c2.default(p2[0], p2[1]);
+	    }, {
+	        key: 'distance',
+	        value: function distance(p1, p2) {
+	            p2 = p2 || [0, 0];
 
-	        var p3 = p1.minus(p2);
-	        return p3.distance();
-	    }
+	            p1 = new _c2.default(p1[0], p1[1]);
+	            p2 = new _c2.default(p2[0], p2[1]);
 
-	    //将(x,y)的坐标转为单维的i
-	    xyToIFun(width) {
-	        return function (x, y, z) {
-	            z = z || 0;
-	            return (y * width + x) * 4 + z;
-	        };
-	    }
-
-	    //在(x,y)进行运算
-	    //rgbfun 在rgb三个上进行的操作 aFun在alpha进行的操作
-	    //rgbFun:   function(r, g, b){
-	    //      return [r, g, b]
-	    //     
-	    //}
-	    xyCal(imgData, x, y, rgbFun, aFun) {
-	        var xyToIFun = this.xyToIFun(imgData.width);
-	        var j = xyToIFun(x, y, 0);
-	        var data = imgData.data;
-	        var processedData = rgbFun(data[j], data[j + 1], data[j + 2]);
-
-	        if (processedData) {
-	            data[j] = processedData[0];
-	            data[j + 1] = processedData[1];
-	            data[j + 2] = processedData[2];
+	            var p3 = p1.minus(p2);
+	            return p3.distance();
 	        }
 
-	        if (aFun) {
-	            data[j + 3] = aFun(data[j + 3]);
+	        //将(x,y)的坐标转为单维的i
+
+	    }, {
+	        key: 'xyToIFun',
+	        value: function xyToIFun(width) {
+	            return function (x, y, z) {
+	                z = z || 0;
+	                return (y * width + x) * 4 + z;
+	            };
 	        }
-	    }
-	}();
+
+	        //在(x,y)进行运算
+	        //rgbfun 在rgb三个上进行的操作 aFun在alpha进行的操作
+	        //rgbFun:   function(r, g, b){
+	        //      return [r, g, b]
+	        //     
+	        //}
+
+	    }, {
+	        key: 'xyCal',
+	        value: function xyCal(imgData, x, y, rgbFun, aFun) {
+	            var xyToIFun = this.xyToIFun(imgData.width);
+	            var j = xyToIFun(x, y, 0);
+	            var data = imgData.data;
+	            var processedData = rgbFun(data[j], data[j + 1], data[j + 2]);
+
+	            if (processedData) {
+	                data[j] = processedData[0];
+	                data[j + 1] = processedData[1];
+	                data[j + 2] = processedData[2];
+	            }
+
+	            if (aFun) {
+	                data[j + 3] = aFun(data[j + 3]);
+	            }
+	        }
+	    }]);
+
+	    return DorsyMath;
+	}())();
 
 /***/ }),
 /* 5 */
@@ -563,8 +618,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	class C {
-	    constructor(r, i) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var C = function () {
+	    function C(r, i) {
+	        _classCallCheck(this, C);
+
 	        /*
 	         * @description:复数对象
 	         *
@@ -573,54 +635,66 @@
 	        this.i = i || 0; //虚部
 	    }
 
-	    plus(c) {
-	        var tempC = new C();
-	        tempC.r = this.r + c.r;
-	        tempC.i = this.i + c.i;
+	    _createClass(C, [{
+	        key: "plus",
+	        value: function plus(c) {
+	            var tempC = new C();
+	            tempC.r = this.r + c.r;
+	            tempC.i = this.i + c.i;
 
-	        return tempC;
-	    }
+	            return tempC;
+	        }
+	    }, {
+	        key: "minus",
+	        value: function minus(c) {
+	            var tempC = new C();
+	            tempC.r = this.r - c.r;
+	            tempC.i = this.i - c.i;
 
-	    minus(c) {
-	        var tempC = new C();
-	        tempC.r = this.r - c.r;
-	        tempC.i = this.i - c.i;
+	            return tempC;
+	        }
+	    }, {
+	        key: "mutiply",
+	        value: function mutiply(c) {
+	            var tempC = new C();
+	            tempC.r = this.r * c.r - this.i * c.i;
+	            tempC.i = this.r * c.i + this.i * c.r;
 
-	        return tempC;
-	    }
+	            return tempC;
+	        }
+	    }, {
+	        key: "divide",
+	        value: function divide(c) {
 
-	    mutiply(c) {
-	        var tempC = new C();
-	        tempC.r = this.r * c.r - this.i * c.i;
-	        tempC.i = this.r * c.i + this.i * c.r;
+	            var tempC = new C();
 
-	        return tempC;
-	    }
+	            var m = c.mutiply(c.conjugated());
+	            var f = this.mutiply(c.conjugated());
+	            tempC.r = f.r / m.r;
+	            tempC.i = f.i / m.r;
 
-	    divide(c) {
+	            return tempC;
+	        }
+	    }, {
+	        key: "conjugated",
+	        value: function conjugated() {
+	            //取共轭
+	            var tempC = new C(this.r, -this.i);
+	            return tempC;
+	        }
 
-	        var tempC = new C();
+	        //取模
 
-	        var m = c.mutiply(c.conjugated());
-	        var f = this.mutiply(c.conjugated());
-	        tempC.r = f.r / m.r;
-	        tempC.i = f.i / m.r;
+	    }, {
+	        key: "distance",
+	        value: function distance() {
+	            return Math.sqrt(this.r * this.r + this.i * this.i);
+	        }
+	    }]);
 
-	        return tempC;
-	    }
+	    return C;
+	}();
 
-	    conjugated() {
-	        //取共轭
-	        var tempC = new C(this.r, -this.i);
-	        return tempC;
-	    }
-
-	    //取模
-	    distance() {
-	        return Math.sqrt(this.r * this.r + this.i * this.i);
-	    }
-
-	}
 	exports.default = C;
 
 /***/ }),
@@ -632,8 +706,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	class Matrix {
-	    constructor(arr, arg, arg2) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Matrix = function () {
+	    function Matrix(arr, arg, arg2) {
+	        _classCallCheck(this, Matrix);
+
 	        /*
 	        * @descriptiont:矩阵类
 	        * 构造一个矩阵,当然从原始的数据构造,但具有矩阵的所有基本运算方法
@@ -682,54 +763,62 @@
 	        this.data = resultArr;
 	    }
 
-	    plus(matrix) {
-	        if (this.m != matrix.m || this.n != matrix.n) {
-	            throw new Error("矩阵加法行列不匹配");
-	        }
-
-	        var tempM = new Matrix([], this.m, this.n);
-	        for (var i = 0; i < this.m; i++) {
-	            for (var j = 0; j < this.n; j++) {
-	                tempM.data[i][j] = this.data[i][j] + matrix.data[i][j];
+	    _createClass(Matrix, [{
+	        key: "plus",
+	        value: function plus(matrix) {
+	            if (this.m != matrix.m || this.n != matrix.n) {
+	                throw new Error("矩阵加法行列不匹配");
 	            }
-	        }
-	        return tempM;
-	    }
 
-	    minus(matrix) {
-	        if (this.m != matrix.m || this.n != matrix.n) {
-	            throw new Error("矩阵减法法行列不匹配");
-	        }
-
-	        var tempM = new Matrix([], this.m, this.n);
-	        for (var i = 0; i < this.m; i++) {
-	            for (var j = 0; j < this.n; j++) {
-	                tempM.data[i][j] = this.data[i][j] - matrix.data[i][j];
-	            }
-	        }
-	        return tempM;
-	    }
-
-	    mutiply(matrix) {
-	        //左乘另一矩阵
-	        if (this.n != matrix.m) {
-	            throw new Error("矩阵乘法行列不匹配");
-	        }
-
-	        var tempM = new Matrix([], this.m, matrix.n);
-	        for (var i = 0; i < this.m; i++) {
-	            for (var j = 0; j < matrix.n; j++) {
-
-	                var sum = 0;
-	                for (var ii = 0; ii < this.n; ii++) {
-	                    sum += this.data[i][ii] * matrix.data[ii][j];
+	            var tempM = new Matrix([], this.m, this.n);
+	            for (var i = 0; i < this.m; i++) {
+	                for (var j = 0; j < this.n; j++) {
+	                    tempM.data[i][j] = this.data[i][j] + matrix.data[i][j];
 	                }
-	                tempM.data[i][j] = sum;
 	            }
+	            return tempM;
 	        }
-	        return tempM;
-	    }
-	}
+	    }, {
+	        key: "minus",
+	        value: function minus(matrix) {
+	            if (this.m != matrix.m || this.n != matrix.n) {
+	                throw new Error("矩阵减法法行列不匹配");
+	            }
+
+	            var tempM = new Matrix([], this.m, this.n);
+	            for (var i = 0; i < this.m; i++) {
+	                for (var j = 0; j < this.n; j++) {
+	                    tempM.data[i][j] = this.data[i][j] - matrix.data[i][j];
+	                }
+	            }
+	            return tempM;
+	        }
+	    }, {
+	        key: "mutiply",
+	        value: function mutiply(matrix) {
+	            //左乘另一矩阵
+	            if (this.n != matrix.m) {
+	                throw new Error("矩阵乘法行列不匹配");
+	            }
+
+	            var tempM = new Matrix([], this.m, matrix.n);
+	            for (var i = 0; i < this.m; i++) {
+	                for (var j = 0; j < matrix.n; j++) {
+
+	                    var sum = 0;
+	                    for (var ii = 0; ii < this.n; ii++) {
+	                        sum += this.data[i][ii] * matrix.data[ii][j];
+	                    }
+	                    tempM.data[i][j] = sum;
+	                }
+	            }
+	            return tempM;
+	        }
+	    }]);
+
+	    return Matrix;
+	}();
+
 	exports.default = Matrix;
 
 /***/ }),
@@ -746,17 +835,30 @@
 
 	var _dorsyMath2 = _interopRequireDefault(_dorsyMath);
 
-	var _PixelProcesser = __webpack_require__(3);
+	var _PixelProcesser2 = __webpack_require__(3);
 
-	var _PixelProcesser2 = _interopRequireDefault(_PixelProcesser);
+	var _PixelProcesser3 = _interopRequireDefault(_PixelProcesser2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class Alteration extends _PixelProcesser2.default {
-	    constructor() {
-	        super();
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Alteration = function (_PixelProcesser) {
+	    _inherits(Alteration, _PixelProcesser);
+
+	    function Alteration() {
+	        _classCallCheck(this, Alteration);
+
+	        return _possibleConstructorReturn(this, (Alteration.__proto__ || Object.getPrototypeOf(Alteration)).call(this));
 	    }
-	}
+
+	    return Alteration;
+	}(_PixelProcesser3.default);
+
 	exports.default = Alteration;
 
 /***/ }),
@@ -769,6 +871,8 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	__webpack_require__(9);
 
 	__webpack_require__(53);
@@ -778,6 +882,8 @@
 	var _fix = __webpack_require__(55);
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/*
 	function FakePromise(executor) {
@@ -814,218 +920,409 @@
 
 	*/
 
-	class AICore extends Promise {
-	    constructor(img, width, height) {
-	        var _this;
+	var AILayerData = function () {
+	    function AILayerData(canvas) {
+	        _classCallCheck(this, AILayerData);
 
-	        if (img instanceof Function) {
-	            return new Promise(img);
+	        this.canvas = canvas;
+	    }
+
+	    _createClass(AILayerData, [{
+	        key: 'setCanvas',
+	        value: function setCanvas(canvas) {
+	            this.canvas = canvas;
 	        }
+	    }, {
+	        key: 'context',
+	        get: function get() {
+	            return this.canvas.getContext('2d');
+	        }
+	    }, {
+	        key: 'width',
+	        get: function get() {
+	            return this.canvas.width;
+	        }
+	    }, {
+	        key: 'height',
+	        get: function get() {
+	            return this.canvas.height;
+	        }
+	    }, {
+	        key: 'imgData',
+	        get: function get() {
+	            return this.context.getImageData(0, 0, this.width, this.height);
+	        },
+	        set: function set(imgData) {
+	            this.context.putImageData(imgData, 0, 0);
+	        }
+	    }]);
 
-	        _this = super(rs => rs());
+	    return AILayerData;
+	}();
 
-	        //this._tasker = Promise.resolve(true);
+	var AICore = function () {
+	    function AICore(img, width, height) {
+	        var _this = this;
+
+	        _classCallCheck(this, AICore);
+
+	        this._tasker = Promise.resolve(true);
 
 	        //记录时间 time trace
 	        this.startTime = +new Date();
 
-	        this.then(_asyncToGenerator(function* () {
-	            let { canvas, context } = yield _this.initCanvas(img, width, height);
+	        this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	            var _ref2, canvas, context, ctxCanvas;
 
-	            _this.canvas = canvas;
-	            _this.context = context;
+	            return regeneratorRuntime.wrap(function _callee$(_context) {
+	                while (1) {
+	                    switch (_context.prev = _context.next) {
+	                        case 0:
+	                            _context.next = 2;
+	                            return _this.initCanvas(img, width, height);
 
-	            _this.imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+	                        case 2:
+	                            _ref2 = _context.sent;
+	                            canvas = _ref2.canvas;
+	                            context = _ref2.context;
 
-	            _this.name = `AlloyImage_${(0, _util.uniqueId)()}`;
-	            _this.canvas.id = _this.name;
 
-	            _this.layers = [];
+	                            //this.AILayerData = new AILayerData(canvas);
 
-	            var ctxCanvas = document.createElement("canvas");
-	            ctxCanvas.width = canvas.width;
-	            ctxCanvas.height = canvas.height;
+	                            _this.canvas = canvas;
+	                            _this.context = context;
 
-	            _this.ctxCanvas = ctxCanvas;
-	            _this.ctxContext = ctxCanvas.getContext("2d");
+	                            _this.imgData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-	            _this.width = _this.canvas.width;
-	            _this.height = _this.canvas.height;
+	                            _this.name = 'AlloyImage_' + (0, _util.uniqueId)();
+	                            _this.canvas.id = _this.name;
 
-	            _this.immediatelyDo = _this;
-	            _this.immediatelyDo.then = function (func) {
-	                return func.call(this);
-	            };
-	        }));
-	    }
+	                            _this.layers = [];
 
-	    initCanvas(img, width, height) {
-	        var _this2 = this;
+	                            ctxCanvas = document.createElement("canvas");
 
-	        return _asyncToGenerator(function* () {
-	            let canvas = document.createElement("canvas");
-	            let context = canvas.getContext("2d");
+	                            ctxCanvas.width = canvas.width;
+	                            ctxCanvas.height = canvas.height;
 
-	            //var l = psLib(20,30);构造适配
-	            if (!isNaN(img)) {
-	                canvas.width = img;
-	                canvas.height = width;
+	                            _this.ctxCanvas = ctxCanvas;
+	                            _this.ctxContext = ctxCanvas.getContext("2d");
 
-	                height = height || "#fff";
+	                            _this.width = _this.canvas.width;
+	                            _this.height = _this.canvas.height;
 
-	                context.fillStyle = height;
-	                context.fillRect(0, 0, img, width);
+	                            /*
+	                            this.immediatelyDo = this;
+	                            this.immediatelyDo.then = function(func){
+	                                return this::func();
+	                            };
+	                            */
 
-	                _this2.srcImg = "";
-	            } else {
-	                if (typeof img == "string") {
-	                    img = yield (0, _util.loadImage)(img);
-	                }
-
-	                let dw = width,
-	                    dh = height;
-
-	                let sw = img.width,
-	                    sh = img.height;
-	                let ratio = sw / sh;
-
-	                if (width || height) {
-	                    if (!height) {
-	                        dh = ~~(dw / ratio);
-	                    } else if (!width) {
-	                        dw = dh * ratio;
+	                        case 18:
+	                        case 'end':
+	                            return _context.stop();
 	                    }
-	                } else {
-	                    dw = sw;
-	                    dh = sh;
 	                }
+	            }, _callee, _this);
+	        })));
+	    }
 
-	                canvas.width = dw;
-	                canvas.height = dh;
+	    _createClass(AICore, [{
+	        key: 'initCanvas',
+	        value: function () {
+	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(img, width, height) {
+	                var canvas, context, dw, dh, sw, sh, ratio;
+	                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	                    while (1) {
+	                        switch (_context2.prev = _context2.next) {
+	                            case 0:
+	                                canvas = document.createElement("canvas");
+	                                context = canvas.getContext("2d");
 
-	                if (!isNaN(dw)) {
-	                    if (_util.device == "ios") {
-	                        (0, _fix.drawImageIOS)(context, img, dw, dh);
-	                    } else {
-	                        context.drawImage(img, 0, 0, dw, dh);
+	                                //var l = psLib(20,30);构造适配
+
+	                                if (isNaN(img)) {
+	                                    _context2.next = 11;
+	                                    break;
+	                                }
+
+	                                canvas.width = img;
+	                                canvas.height = width;
+
+	                                height = height || "#fff";
+
+	                                context.fillStyle = height;
+	                                context.fillRect(0, 0, img, width);
+
+	                                this.srcImg = "";
+	                                _context2.next = 23;
+	                                break;
+
+	                            case 11:
+	                                if (!(typeof img == "string")) {
+	                                    _context2.next = 15;
+	                                    break;
+	                                }
+
+	                                _context2.next = 14;
+	                                return (0, _util.loadImage)(img);
+
+	                            case 14:
+	                                img = _context2.sent;
+
+	                            case 15:
+	                                dw = width, dh = height;
+	                                sw = img.width, sh = img.height;
+	                                ratio = sw / sh;
+
+
+	                                if (width || height) {
+	                                    if (!height) {
+	                                        dh = ~~(dw / ratio);
+	                                    } else if (!width) {
+	                                        dw = dh * ratio;
+	                                    }
+	                                } else {
+	                                    dw = sw;
+	                                    dh = sh;
+	                                }
+
+	                                canvas.width = dw;
+	                                canvas.height = dh;
+
+	                                if (!isNaN(dw)) {
+	                                    if (_util.device == "ios") {
+	                                        (0, _fix.drawImageIOS)(context, img, dw, dh);
+	                                    } else {
+	                                        context.drawImage(img, 0, 0, dw, dh);
+	                                    }
+	                                } else {
+	                                    context.drawImage(img, 0, 0);
+	                                }
+
+	                                this.srcImg = img;
+
+	                            case 23:
+	                                return _context2.abrupt('return', { canvas: canvas, context: context });
+
+	                            case 24:
+	                            case 'end':
+	                                return _context2.stop();
+	                        }
 	                    }
-	                } else {
-	                    context.drawImage(img, 0, 0);
-	                }
+	                }, _callee2, this);
+	            }));
 
-	                _this2.srcImg = img;
+	            function initCanvas(_x, _x2, _x3) {
+	                return _ref3.apply(this, arguments);
 	            }
 
-	            return { canvas, context };
-	        })();
-	    }
+	            return initCanvas;
+	        }()
+	    }, {
+	        key: 'getImageData',
+	        value: function getImageData() {
+	            //return this.then(() => {
+	            return this.imgData;
+	            //});
+	        }
 
-	    getImageData() {
-	        //return this.then(() => {
-	        return this.imgData;
-	        //});
-	    }
+	        /*
+	        addAsyncTask(fn, pos){
+	        }
+	        */
 
-	    /*
-	    then(fn){
-	        
-	        this._tasker = this._tasker.then(fn);
-	          return this;
-	    }*/
+	    }, {
+	        key: 'then',
+	        value: function then(fn) {
+	            var _this2 = this;
 
-	    // 获得合成视图
-	    _getCompositeView() {
-	        var _this3 = this;
+	            // then内部的act等方法开一个子任务去处理
+	            // 如果直接act会直接add在后面
+	            var wrap = function () {
+	                var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	                    var oldTask;
+	                    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+	                        while (1) {
+	                            switch (_context3.prev = _context3.next) {
+	                                case 0:
+	                                    oldTask = _this2._tasker;
 
-	        return _asyncToGenerator(function* () {
-	            if (_this3.layers.length === 0) {
-	                let compositeCanvas = document.createElement('canvas');
-	                compositeCanvas.width = _this3.width;
-	                compositeCanvas.height = _this3.height;
 
-	                let compositeContext = compositeCanvas.getContext("2d");
+	                                    _this2._tasker = Promise.resolve(true);
 
-	                console.log(_this3.imgData, 'show');
-	                compositeContext.putImageData(_this3.imgData, 0, 0);
+	                                    _context3.next = 4;
+	                                    return fn.bind(_this2)();
 
-	                return {
-	                    compositeCanvas,
-	                    compositeContext
+	                                case 4:
+
+	                                    _this2._tasker = oldTask;
+
+	                                case 5:
+	                                case 'end':
+	                                    return _context3.stop();
+	                            }
+	                        }
+	                    }, _callee3, _this2);
+	                }));
+
+	                return function wrap() {
+	                    return _ref4.apply(this, arguments);
 	                };
-	            } else {
+	            }();
 
-	                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
-	                var tempAIObj = new AlloyImage(_this3.canvas.width, _this3.canvas.height);
-	                tempAIObj.add(_this3, "正常", 0, 0);
+	            this._tasker = this._tasker.then(wrap);
 
-	                //this.tempPsLib = tempPsLib;
+	            return this;
+	        }
+	    }, {
+	        key: 'promise',
+	        value: function promise() {
+	            return this._tasker;
+	        }
 
-	                //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
-	                for (var i = 0; i < _this3.layers.length; i++) {
-	                    var tA = _this3.layers[i];
-	                    var layers = tA[0].layers;
-	                    var currLayer = tA[0];
+	        // 获得合成视图
 
-	                    if (layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
-	                    tempAIObj.add(currLayer, tA[1], tA[2], tA[3]);
-	                }
+	    }, {
+	        key: '_getCompositeView',
+	        value: function () {
+	            var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+	                var compositeCanvas, compositeContext, tempAIObj, i, tA, layers, currLayer, tempPsLib;
+	                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	                    while (1) {
+	                        switch (_context4.prev = _context4.next) {
+	                            case 0:
+	                                if (!(this.layers.length === 0)) {
+	                                    _context4.next = 10;
+	                                    break;
+	                                }
 
-	                yield tempAIObj;
+	                                compositeCanvas = document.createElement('canvas');
 
-	                return {
-	                    compositeCanvas: tempAIObj.canvas,
-	                    compositeContext: tempAIObj.context
+	                                compositeCanvas.width = this.width;
+	                                compositeCanvas.height = this.height;
 
-	                    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	                };
+	                                compositeContext = compositeCanvas.getContext("2d");
+
+
+	                                console.log(this.imgData, 'show');
+	                                compositeContext.putImageData(this.imgData, 0, 0);
+
+	                                return _context4.abrupt('return', {
+	                                    compositeCanvas: compositeCanvas,
+	                                    compositeContext: compositeContext
+	                                });
+
+	                            case 10:
+
+	                                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
+	                                tempAIObj = new AlloyImage(this.canvas.width, this.canvas.height);
+
+	                                tempAIObj.add(this, "正常", 0, 0);
+
+	                                //this.tempPsLib = tempPsLib;
+
+	                                //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
+	                                for (i = 0; i < this.layers.length; i++) {
+	                                    tA = this.layers[i];
+	                                    layers = tA[0].layers;
+	                                    currLayer = tA[0];
+
+
+	                                    if (layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
+	                                    tempAIObj.add(currLayer, tA[1], tA[2], tA[3]);
+	                                }
+
+	                                _context4.next = 15;
+	                                return tempAIObj;
+
+	                            case 15:
+	                                return _context4.abrupt('return', {
+	                                    compositeCanvas: tempAIObj.canvas,
+	                                    compositeContext: tempAIObj.context
+
+	                                    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	                                });
+
+	                            case 16:
+	                                //如果其上无其他挂载图层，加快处理
+	                                if (this.layers.length == 0) {
+	                                    this.tempPsLib = {
+	                                        imgData: this.imgData
+	                                    };
+	                                } else {
+
+	                                    //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
+	                                    tempPsLib = new AlloyImage(this.canvas.width, this.canvas.height);
+	                                    /*
+	                                    tempPsLib.add(this, "正常", 0, 0, isFast);
+	                                    this.tempPsLib = tempPsLib;
+	                                      //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
+	                                    for(var i = 0; i < this.layers.length; i ++){
+	                                        var tA = this.layers[i];
+	                                        var layers = tA[0].layers;
+	                                        var currLayer = tA[0];
+	                                          if(layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
+	                                        tempPsLib.add(currLayer, tA[1], tA[2], tA[3], isFast);
+	                                    }
+	                                    */
+
+	                                    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	                                }
+
+	                            case 17:
+	                            case 'end':
+	                                return _context4.stop();
+	                        }
+	                    }
+	                }, _callee4, this);
+	            }));
+
+	            function _getCompositeView() {
+	                return _ref5.apply(this, arguments);
 	            }
-	            //如果其上无其他挂载图层，加快处理
-	            if (_this3.layers.length == 0) {
-	                _this3.tempPsLib = {
-	                    imgData: _this3.imgData
-	                };
-	            } else {
 
-	                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
-	                var tempPsLib = new AlloyImage(_this3.canvas.width, _this3.canvas.height);
-	                /*
-	                tempPsLib.add(this, "正常", 0, 0, isFast);
-	                this.tempPsLib = tempPsLib;
-	                  //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
-	                for(var i = 0; i < this.layers.length; i ++){
-	                    var tA = this.layers[i];
-	                    var layers = tA[0].layers;
-	                    var currLayer = tA[0];
-	                      if(layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
-	                    tempPsLib.add(currLayer, tA[1], tA[2], tA[3], isFast);
-	                }
-	                */
+	            return _getCompositeView;
+	        }()
+	    }, {
+	        key: 'wait',
+	        value: function wait(aiObj) {
+	            var _this3 = this;
 
-	                //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	            }
-	        })();
-	    }
-
-	    static extend(func) {
-	        let name = func.name;
-
-	        this.prototype[name] = func;
-	    }
-
-	    wait(aiObj) {
-	        var waitThing = new Promise((rs, rj) => {
-	            aiObj.then(function () {
-	                rs();
+	            var waitThing = new Promise(function (rs, rj) {
+	                aiObj.then(function () {
+	                    rs();
+	                });
 	            });
-	        });
 
-	        this.then(_asyncToGenerator(function* () {
-	            yield waitThing;
-	        }));
+	            this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
+	                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+	                    while (1) {
+	                        switch (_context5.prev = _context5.next) {
+	                            case 0:
+	                                _context5.next = 2;
+	                                return waitThing;
 
-	        return this;
-	    }
-	}
+	                            case 2:
+	                            case 'end':
+	                                return _context5.stop();
+	                        }
+	                    }
+	                }, _callee5, _this3);
+	            })));
+
+	            return this;
+	        }
+	    }], [{
+	        key: 'extend',
+	        value: function extend(func) {
+	            var name = func.name;
+
+	            this.prototype[name] = func;
+	        }
+	    }]);
+
+	    return AICore;
+	}();
 
 	/*
 	export let register = (obj) => {
@@ -2896,27 +3193,29 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	let loadImage = exports.loadImage = src => new Promise((rs, rj) => {
-	    let tmpImg = new Image();
-	    tmpImg.onload = () => {
-	        rs(tmpImg);
-	        /*
-	        canvas.width = parseInt(this.width);
-	        canvas.height = parseInt(this.height);
-	          context.drawImage(this, 0, 0, this.width, this.height);
-	        */
-	    };
+	var loadImage = exports.loadImage = function loadImage(src) {
+	    return new Promise(function (rs, rj) {
+	        var tmpImg = new Image();
+	        tmpImg.onload = function () {
+	            rs(tmpImg);
+	            /*
+	            canvas.width = parseInt(this.width);
+	            canvas.height = parseInt(this.height);
+	              context.drawImage(this, 0, 0, this.width, this.height);
+	            */
+	        };
 
-	    tmpImg.onerror = e => {
-	        rj(`${src} load error`);
-	    };
+	        tmpImg.onerror = function (e) {
+	            rj(src + ' load error');
+	        };
 
-	    tmpImg.src = src;
-	});
+	        tmpImg.src = src;
+	    });
+	};
 
-	let device = exports.device = (() => {
+	var device = exports.device = function () {
 	    if (window.navigator) {
-	        let ua = window.navigator.userAgent;
+	        var ua = window.navigator.userAgent;
 
 	        if (/Android|android/.test(ua)) {
 	            return 'android';
@@ -2928,9 +3227,9 @@
 	    } else {
 	        return "sandBox";
 	    }
-	})();
+	}();
 
-	let uniqueId = exports.uniqueId = () => {
+	var uniqueId = exports.uniqueId = function uniqueId() {
 	    return ~~(Math.random() * 1e6);
 	};
 
@@ -2999,6 +3298,8 @@
 
 	'use strict';
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _addLayer2 = __webpack_require__(57);
 
 	var _addLayer3 = _interopRequireDefault(_addLayer2);
@@ -3011,22 +3312,26 @@
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-	function add(aiObj, ...args) {
+	function add(aiObj) {
 	    var _this = this;
 
-	    let numberArr = [],
-	        method,
-	        alpha,
-	        dx,
-	        dy,
-	        isFast,
-	        channel;
+	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	    }
+
+	    var numberArr = [],
+	        method = void 0,
+	        alpha = void 0,
+	        dx = void 0,
+	        dy = void 0,
+	        isFast = void 0,
+	        channel = void 0;
 
 	    //做重载
-	    for (let i = 0; i < arguments.length; i++) {
+	    for (var i = 0; i < arguments.length; i++) {
 	        if (!i) continue;
 
-	        switch (typeof arguments[i]) {
+	        switch (_typeof(arguments[i])) {
 	            case "string":
 	                if (/\d+%/.test(arguments[i])) {
 	                    //alpha
@@ -3066,20 +3371,37 @@
 	    // 所以不能简单then, 不然then后面的内容执行的时候，aiObj已不在这个时机
 
 
-	    var wait = new Promise(rs => {
-	        aiObj.then(() => {
+	    var wait = new Promise(function (rs) {
+	        aiObj.then(function () {
 	            rs(aiObj.cloneImageData());
 	        });
 	    });
 
 	    console.log('add');
 
-	    this.then(_asyncToGenerator(function* () {
-	        let aiObjImgData = yield wait;
-	        _this.imgData = (0, _addLayer3.default)(_this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
+	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        var aiObjImgData;
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
+	                        _context.next = 2;
+	                        return wait;
 
-	        console.log('xxxxxxx');
-	    }));
+	                    case 2:
+	                        aiObjImgData = _context.sent;
+
+	                        _this.imgData = (0, _addLayer3.default)(_this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
+
+	                        console.log('xxxxxxx');
+
+	                    case 5:
+	                    case 'end':
+	                        return _context.stop();
+	                }
+	            }
+	        }, _callee, _this);
+	    })));
 
 	    /*
 	    var aiObjImgData;
@@ -3095,9 +3417,15 @@
 	    return this;
 	}
 
-	function addLayer(...args) {
-	    this.then(() => {
-	        this.layers.push(args);
+	function addLayer() {
+	    var _this2 = this;
+
+	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	        args[_key2] = arguments[_key2];
+	    }
+
+	    this.then(function () {
+	        _this2.layers.push(args);
 	    });
 
 	    return this;
@@ -3124,7 +3452,7 @@
 
 	//isFast用于快速，适用于中间处理
 	function addLayer(lowerData, upperData, method, alpha, dx, dy, isFast, channel) {
-	    let l = lowerData.data,
+	    var l = lowerData.data,
 	        u = upperData.data;
 
 	    dx = dx || 0;
@@ -3137,9 +3465,9 @@
 	        channel = "RGB";
 	    }
 
-	    let channelString = channel.replace("R", "0").replace("G", "1").replace("B", "2"),
+	    var channelString = channel.replace("R", "0").replace("G", "1").replace("B", "2"),
 	        jump = 1,
-	        result,
+	        result = void 0,
 	        width = lowerData.width,
 	        height = lowerData.height,
 	        upperLength = u.length,
@@ -3154,15 +3482,24 @@
 	    }
 	    */
 
-	    let ii, row, col, uRow, uCol, uIi, uI;
+	    var ii = void 0,
+	        row = void 0,
+	        col = void 0,
+	        uRow = void 0,
+	        uCol = void 0,
+	        uIi = void 0,
+	        uI = void 0;
 
 	    //计算重叠部分x ,y范围
-	    let xMin, yMin, xMax, yMax;
+	    var xMin = void 0,
+	        yMin = void 0,
+	        xMax = void 0,
+	        yMax = void 0;
 
-	    let uXMin = dx;
-	    let uXMax = dx + upperWidth;
-	    let uYMin = dy;
-	    let uYMax = dy + upperHeight;
+	    var uXMin = dx;
+	    var uXMax = dx + upperWidth;
+	    var uYMin = dy;
+	    var uYMax = dy + upperHeight;
 
 	    if (uXMin > width) {
 	        return;
@@ -3188,21 +3525,23 @@
 	        uYMax = height;
 	    }
 
-	    let currRow, upperY, upperRow;
-	    for (let y = uYMin; y < uYMax; y++) {
+	    var currRow = void 0,
+	        upperY = void 0,
+	        upperRow = void 0;
+	    for (var y = uYMin; y < uYMax; y++) {
 	        currRow = y * width;
 	        upperY = y - dy;
 	        upperRow = upperY * upperWidth;
 
-	        for (let x = uXMin; x < uXMax; x++) {
+	        for (var x = uXMin; x < uXMax; x++) {
 	            //计算此时对应的upperX,Y
-	            let upperX = x - dx;
+	            var upperX = x - dx;
 
 	            //计算此时的i
-	            let i = (currRow + x) * 4;
+	            var i = (currRow + x) * 4;
 
 	            //计算此时的upperI
-	            let uI = (upperRow + upperX) * 4;
+	            var _uI = (upperRow + upperX) * 4;
 
 	            //for(var i = 0, n = l.length; i < n; i += everyJump){
 
@@ -3221,43 +3560,43 @@
 	            //if(uI >= 0 && uI < (upperLength - 4) && uCol < upperWidth && uCol >= 0){
 
 	            //l[i + 3] = u[uI + 3];//透明度
-	            for (let j = 0; j < 3; j++) {
+	            for (var j = 0; j < 3; j++) {
 
 	                //若此点透明则不计算
-	                if (u[uI + 3] == 0) break;else l[i + 3] = u[uI + 3];
+	                if (u[_uI + 3] == 0) break;else l[i + 3] = u[_uI + 3];
 
 	                switch (method) {
 	                    case "颜色减淡":
 	                        if (indexOfArr[j]) {
-	                            result = l[i + j] + l[i + j] * u[uI + j] / (255 - u[uI + j]);
+	                            result = l[i + j] + l[i + j] * u[_uI + j] / (255 - u[_uI + j]);
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "变暗":
 	                        if (indexOfArr[j]) {
-	                            result = l[i + j] < u[uI + j] ? l[i + j] : u[uI + j];
+	                            result = l[i + j] < u[_uI + j] ? l[i + j] : u[_uI + j];
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "变亮":
 	                        if (indexOfArr[j]) {
-	                            result = l[i + j] > u[uI + j] ? l[i + j] : u[uI + j];
+	                            result = l[i + j] > u[_uI + j] ? l[i + j] : u[_uI + j];
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "正片叠底":
 	                        if (indexOfArr[j]) {
-	                            result = ~~(l[i + j] * u[uI + j] / 255);
+	                            result = ~~(l[i + j] * u[_uI + j] / 255);
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "滤色":
 	                        if (indexOfArr[j]) {
-	                            result = ~~(255 - (255 - l[i + j]) * (255 - u[uI + j]) / 255);
+	                            result = ~~(255 - (255 - l[i + j]) * (255 - u[_uI + j]) / 255);
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
@@ -3265,9 +3604,9 @@
 	                    case "叠加":
 	                        if (indexOfArr[j]) {
 	                            if (l[i + j] <= 127.5) {
-	                                result = l[i + j] * u[uI + j] / 127.5;
+	                                result = l[i + j] * u[_uI + j] / 127.5;
 	                            } else {
-	                                result = 255 - (255 - l[i + j]) * (255 - u[uI + j]) / 127.5;
+	                                result = 255 - (255 - l[i + j]) * (255 - u[_uI + j]) / 127.5;
 	                            }
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3275,10 +3614,10 @@
 
 	                    case "强光":
 	                        if (indexOfArr[j]) {
-	                            if (u[uI + j] <= 127.5) {
-	                                result = l[i + j] * u[uI + j] / 127.5;
+	                            if (u[_uI + j] <= 127.5) {
+	                                result = l[i + j] * u[_uI + j] / 127.5;
 	                            } else {
-	                                result = l[i + j] + (255 - l[i + j]) * (u[uI + j] - 127.5) / 127.5;
+	                                result = l[i + j] + (255 - l[i + j]) * (u[_uI + j] - 127.5) / 127.5;
 	                            }
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3286,26 +3625,26 @@
 
 	                    case "差值":
 	                        if (indexOfArr[j]) {
-	                            result = l[i + j] > u[uI + j] ? l[i + j] - u[uI + j] : u[uI + j] - l[i + j];
+	                            result = l[i + j] > u[_uI + j] ? l[i + j] - u[_uI + j] : u[_uI + j] - l[i + j];
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "排除":
 	                        if (indexOfArr[j]) {
-	                            result = l[i + j] + u[uI + j] - l[i + j] * u[uI + j] / 127.5;
+	                            result = l[i + j] + u[_uI + j] - l[i + j] * u[_uI + j] / 127.5;
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "点光":
 	                        if (indexOfArr[j]) {
-	                            if (l[i + j] < 2 * u[uI + j] - 255) {
-	                                result = 2 * u[uI + j] - 255;
-	                            } else if (l[i + j] < 2 * u[uI + j]) {
+	                            if (l[i + j] < 2 * u[_uI + j] - 255) {
+	                                result = 2 * u[_uI + j] - 255;
+	                            } else if (l[i + j] < 2 * u[_uI + j]) {
 	                                result = l[i + j];
 	                            } else {
-	                                result = 2 * u[uI + j];
+	                                result = 2 * u[_uI + j];
 	                            }
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3313,14 +3652,14 @@
 
 	                    case "颜色加深":
 	                        if (indexOfArr[j]) {
-	                            result = 255 - 255 * (255 - l[i + j]) / u[uI + j];
+	                            result = 255 - 255 * (255 - l[i + j]) / u[_uI + j];
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                        break;
 
 	                    case "线性加深":
 	                        if (indexOfArr[j]) {
-	                            var tempR = l[i + j] + u[uI + j];
+	                            var tempR = l[i + j] + u[_uI + j];
 	                            result = tempR > 255 ? tempR - 255 : 0;
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3328,7 +3667,7 @@
 
 	                    case "线性减淡":
 	                        if (indexOfArr[j]) {
-	                            var tempR = l[i + j] + u[uI + j];
+	                            var tempR = l[i + j] + u[_uI + j];
 	                            result = tempR > 255 ? 255 : tempR;
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3336,10 +3675,10 @@
 
 	                    case "柔光":
 	                        if (indexOfArr[j]) {
-	                            if (u[uI + j] < 127.5) {
-	                                result = ((2 * u[uI + j] - 255) * (255 - l[i + j]) / (255 * 255) + 1) * l[i + j];
+	                            if (u[_uI + j] < 127.5) {
+	                                result = ((2 * u[_uI + j] - 255) * (255 - l[i + j]) / (255 * 255) + 1) * l[i + j];
 	                            } else {
-	                                result = (2 * u[uI + j] - 255) * (Math.sqrt(l[i + j] / 255) - l[i + j] / 255) + l[i + j];
+	                                result = (2 * u[_uI + j] - 255) * (Math.sqrt(l[i + j] / 255) - l[i + j] / 255) + l[i + j];
 	                            }
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3347,10 +3686,10 @@
 
 	                    case "亮光":
 	                        if (indexOfArr[j]) {
-	                            if (u[uI + j] < 127.5) {
-	                                result = (1 - (255 - l[i + j]) / (2 * u[uI + j])) * 255;
+	                            if (u[_uI + j] < 127.5) {
+	                                result = (1 - (255 - l[i + j]) / (2 * u[_uI + j])) * 255;
 	                            } else {
-	                                result = l[i + j] / (2 * (1 - u[uI + j] / 255));
+	                                result = l[i + j] / (2 * (1 - u[_uI + j] / 255));
 	                            }
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3358,7 +3697,7 @@
 
 	                    case "线性光":
 	                        if (indexOfArr[j]) {
-	                            var tempR = l[i + j] + 2 * u[uI + j] - 255;
+	                            var tempR = l[i + j] + 2 * u[_uI + j] - 255;
 	                            result = tempR > 255 ? 255 : tempR;
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
@@ -3366,7 +3705,7 @@
 
 	                    case "实色混合":
 	                        if (indexOfArr[j]) {
-	                            if (u[uI + j] < 255 - l[i + j]) {
+	                            if (u[_uI + j] < 255 - l[i + j]) {
 	                                result = 0;
 	                            } else {
 	                                result = 255;
@@ -3377,7 +3716,7 @@
 
 	                    default:
 	                        if (indexOfArr[j]) {
-	                            result = u[uI + j];
+	                            result = u[_uI + j];
 	                            l[i + j] = (1 - alpha) * l[i + j] + alpha * result;
 	                        }
 	                } //end switch
@@ -3394,19 +3733,35 @@
 
 	'use strict';
 
-	let _doAct = (() => {
-	    var _ref2 = _asyncToGenerator(function* (method, args) {
-	        let layerPixelProcesser = new _layerPixelProcesser2.default(this.imgData);
+	var _doAct = function () {
+	    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(method, args) {
+	        var layerPixelProcesser, imgData;
+	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	            while (1) {
+	                switch (_context2.prev = _context2.next) {
+	                    case 0:
+	                        layerPixelProcesser = new _layerPixelProcesser2.default(this.imgData);
+	                        _context2.next = 3;
+	                        return layerPixelProcesser.process(method, args);
 
-	        let imgData = yield layerPixelProcesser.process(method, args);
+	                    case 3:
+	                        imgData = _context2.sent;
 
-	        this.imgData = imgData;
-	    });
+
+	                        this.imgData = imgData;
+
+	                    case 5:
+	                    case 'end':
+	                        return _context2.stop();
+	                }
+	            }
+	        }, _callee2, this);
+	    }));
 
 	    return function _doAct(_x, _x2) {
 	        return _ref2.apply(this, arguments);
 	    };
-	})();
+	}();
 
 	var _layerPixelProcesser = __webpack_require__(59);
 
@@ -3420,13 +3775,29 @@
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-	function act(method, ...args) {
+	function act(method) {
 	    var _this = this;
 
-	    this.then(_asyncToGenerator(function* () {
-	        console.log('act', method);
-	        yield _this._doAct(method, args);
-	    }));
+	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	    }
+
+	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
+	                        console.log('act', method);
+	                        _context.next = 3;
+	                        return _this._doAct(method, args);
+
+	                    case 3:
+	                    case 'end':
+	                        return _context.stop();
+	                }
+	            }
+	        }, _callee, _this);
+	    })));
 
 	    return this;
 	}
@@ -3434,11 +3805,11 @@
 	_AlloyImage2.default.extend(act);
 	_AlloyImage2.default.extend(_doAct);
 
-	_AlloyImage2.default.addFilter = filter => {
+	_AlloyImage2.default.addFilter = function (filter) {
 	    _layerPixelProcesser2.default.addFilter(filter);
 	};
 
-	_AlloyImage2.default.addAlteration = alteration => {
+	_AlloyImage2.default.addAlteration = function (alteration) {
 	    _layerPixelProcesser2.default.addFilter(alteration);
 	};
 
@@ -3452,78 +3823,118 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-	class LayerPixelProcesser {
-	    constructor(imgData) {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var LayerPixelProcesser = function () {
+	    function LayerPixelProcesser(imgData) {
+	        _classCallCheck(this, LayerPixelProcesser);
+
 	        this.imgData = imgData;
 	    }
 
-	    process(name, args) {
-	        var _this = this;
+	    _createClass(LayerPixelProcesser, [{
+	        key: 'process',
+	        value: function () {
+	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(name, args) {
+	                var filter, alteration, doProcess, _ref2, data, width, height;
 
-	        return _asyncToGenerator(function* () {
-	            name = name.toLocaleLowerCase();
+	                return regeneratorRuntime.wrap(function _callee$(_context) {
+	                    while (1) {
+	                        switch (_context.prev = _context.next) {
+	                            case 0:
+	                                name = name.toLocaleLowerCase();
 
-	            let filter = LayerPixelProcesser.filterMap[name];
-	            let alteration = LayerPixelProcesser.alterationMap[name];
+	                                filter = LayerPixelProcesser.filterMap[name];
+	                                alteration = LayerPixelProcesser.alterationMap[name];
 
-	            if (!(filter || alteration)) {
-	                console.error('no act method registered: ', name);
+
+	                                if (!(filter || alteration)) {
+	                                    console.error('no act method registered: ', name);
+	                                }
+
+	                                doProcess = void 0;
+
+	                                if (alteration) {
+	                                    doProcess = alteration.doProcess.bind(alteration);
+	                                } else {
+	                                    doProcess = filter.doProcess.bind(filter);
+	                                }
+
+	                                _context.next = 8;
+	                                return doProcess(this.imgData, args);
+
+	                            case 8:
+	                                _ref2 = _context.sent;
+	                                data = _ref2.data;
+	                                width = _ref2.width;
+	                                height = _ref2.height;
+	                                return _context.abrupt('return', new ImageData(data, width, height));
+
+	                            case 13:
+	                            case 'end':
+	                                return _context.stop();
+	                        }
+	                    }
+	                }, _callee, this);
+	            }));
+
+	            function process(_x, _x2) {
+	                return _ref.apply(this, arguments);
 	            }
 
-	            let doProcess;
-	            if (alteration) {
-	                doProcess = alteration.doProcess.bind(alteration);
-	            } else {
-	                doProcess = filter.doProcess.bind(filter);
+	            return process;
+	        }()
+	    }], [{
+	        key: 'addFilter',
+	        value: function addFilter(Filter) {
+	            var filter = new Filter();
+	            var filterName = Filter.name.toLocaleLowerCase();
+	            var filterCName = filter.cname;
+
+	            LayerPixelProcesser.filterMap[filterName] = filter;
+
+	            if (filterCName) {
+	                LayerPixelProcesser.filterMap[filterCName] = filter;
 	            }
-
-	            let { data, width, height } = yield doProcess(_this.imgData, args);
-
-	            return new ImageData(data, width, height);
-	        })();
-	    }
-
-	    static addFilter(Filter) {
-	        let filter = new Filter();
-	        let filterName = Filter.name.toLocaleLowerCase();
-	        let filterCName = filter.cname;
-
-	        LayerPixelProcesser.filterMap[filterName] = filter;
-
-	        if (filterCName) {
-	            LayerPixelProcesser.filterMap[filterCName] = filter;
 	        }
-	    }
+	    }, {
+	        key: 'addAlteration',
+	        value: function addAlteration(Alteration) {
+	            var alteration = new Alteration();
+	            var alterationName = Alteration.name.toLocaleLowerCase();
+	            var alterationCName = alteration.cname;
 
-	    static addAlteration(Alteration) {
-	        let alteration = new Alteration();
-	        let alterationName = Alteration.name.toLocaleLowerCase();
-	        let alterationCName = alteration.cname;
+	            LayerPixelProcesser.alterationMap[alterationName] = alteration;
 
-	        LayerPixelProcesser.alterationMap[alterationName] = alteration;
-
-	        if (alterationCName) {
-	            LayerPixelProcesser.alterationMap[alterationCName] = alteration;
+	            if (alterationCName) {
+	                LayerPixelProcesser.alterationMap[alterationCName] = alteration;
+	            }
 	        }
-	    }
-	}
+	    }]);
 
-	exports.default = LayerPixelProcesser; /*
-	                                       export default AlloyImage => {
-	                                           AlloyImage.addFilter = filter => {
-	                                               LayerPixelProcesser.addFilter(filter);
-	                                           };
-	                                       
-	                                           AlloyImage.addAlteration = alteration => {
-	                                               LayerPixelProcesser.addAlteration(alteration);
-	                                           };
-	                                       };
-	                                       */
+	    return LayerPixelProcesser;
+	}();
+
+	/*
+	export default AlloyImage => {
+	    AlloyImage.addFilter = filter => {
+	        LayerPixelProcesser.addFilter(filter);
+	    };
+
+	    AlloyImage.addAlteration = alteration => {
+	        LayerPixelProcesser.addAlteration(alteration);
+	    };
+	};
+	*/
+
 
 	LayerPixelProcesser.filterMap = {};
 	LayerPixelProcesser.alterationMap = {};
+	exports.default = LayerPixelProcesser;
 
 /***/ }),
 /* 60 */
@@ -3539,13 +3950,15 @@
 
 	Object.defineProperties(_AlloyImage2.default.prototype, {
 	    width: {
-	        get: function () {
+	        get: function get() {
 	            return this.canvas.width;
 	        },
 
-	        set: function (w) {
-	            this.then(() => {
-	                this.canvas.width = w;
+	        set: function set(w) {
+	            var _this = this;
+
+	            this.then(function () {
+	                _this.canvas.width = w;
 	            });
 
 	            return this;
@@ -3553,13 +3966,15 @@
 	    },
 
 	    height: {
-	        get: function () {
+	        get: function get() {
 	            return this.canvas.height;
 	        },
 
-	        set: function (h) {
-	            this.then(() => {
-	                this.canvas.height = h;
+	        set: function set(h) {
+	            var _this2 = this;
+
+	            this.then(function () {
+	                _this2.canvas.height = h;
 	            });
 
 	            return this;
@@ -3585,28 +4000,48 @@
 	    var _this = this;
 
 	    console.log('show invoked');
-	    this.then(_asyncToGenerator(function* () {
+	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        var _ref2, compositeCanvas, el;
 
-	        console.log('show', flag);
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
 
-	        let { compositeCanvas } = yield _this._getCompositeView();
+	                        console.log('show', flag);
 
-	        //以临时对象data显示
-	        /*
-	        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
-	        */
+	                        _context.next = 3;
+	                        return _this._getCompositeView();
 
-	        if (selector) {
-	            if (typeof selector == "string") {
-	                var el = document.querySelector(selector);
-	                el.appendChild(compositeCanvas);
-	            } else {
-	                selector.appendChild(compositeCanvas);
+	                    case 3:
+	                        _ref2 = _context.sent;
+	                        compositeCanvas = _ref2.compositeCanvas;
+
+
+	                        //以临时对象data显示
+	                        /*
+	                        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
+	                        */
+
+	                        if (selector) {
+	                            if (typeof selector == "string") {
+	                                el = document.querySelector(selector);
+
+	                                el.appendChild(compositeCanvas);
+	                            } else {
+	                                selector.appendChild(compositeCanvas);
+	                            }
+	                        } else {
+	                            document.body.appendChild(compositeCanvas);
+	                        }
+
+	                    case 6:
+	                    case 'end':
+	                        return _context.stop();
+	                }
 	            }
-	        } else {
-	            document.body.appendChild(compositeCanvas);
-	        }
-	    }));
+	        }, _callee, _this);
+	    })));
 
 	    return this;
 	}
@@ -3627,15 +4062,16 @@
 
 	// clone只对单图层有效
 	function clone() {
+	    var _this = this;
 
-	    let newAIObj = new _AlloyImage2.default(1, 1); //this.width, this.height); //this.width, this.height);
+	    var newAIObj = new _AlloyImage2.default(1, 1); //this.width, this.height); //this.width, this.height);
 
-	    newAIObj.wait(this).then(() => {
+	    newAIObj.wait(this).then(function () {
 	        // 这里直接取 立即生效
-	        newAIObj.canvas.width = this.width;
-	        newAIObj.canvas.height = this.height;
+	        newAIObj.canvas.width = _this.width;
+	        newAIObj.canvas.height = _this.height;
 
-	        newAIObj.imgData = this.cloneImageData();
+	        newAIObj.imgData = _this.cloneImageData();
 	    });
 
 	    return newAIObj;
@@ -3670,15 +4106,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	let effectsMap = {};
-	let define = function (name, func) {
+	var effectsMap = {};
+	var define = function define(name, func) {
 	    effectsMap[name] = func;
 	};
 
-	let effect = function (name, ...args) {
-	    let func = effectsMap[name];
+	var effect = function effect(name) {
+	    var func = effectsMap[name];
 	    if (!func) {
 	        console.error('no method, please define');
+	    }
+
+	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
 	    }
 
 	    return func.apply(this, args);
@@ -3700,21 +4140,44 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class toGray extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), this.cname = "灰度处理", this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	            for (var i = 0, n = data.length; i < n; i += 4) {
-	                var gray = parseInt(0.299 * data[i] + 0.578 * data[i + 1] + 0.114 * data[i + 2]);
-	                data[i + 2] = data[i + 1] = data[i] = gray;
-	            }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	            return { data, width, height };
-	        }, _temp;
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var toGray = function (_Filter) {
+	    _inherits(toGray, _Filter);
+
+	    function toGray() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, toGray);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toGray.__proto__ || Object.getPrototypeOf(toGray)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "灰度处理", _this.process = function (_ref2, _ref3) {
+	            var data = _ref2.data,
+	                width = _ref2.width,
+	                height = _ref2.height;
+	            var dorsyMath = _ref3.dorsyMath;
+	            return function (args) {
+	                for (var i = 0, n = data.length; i < n; i += 4) {
+	                    var gray = parseInt(0.299 * data[i] + 0.578 * data[i + 1] + 0.114 * data[i + 2]);
+	                    data[i + 2] = data[i + 1] = data[i] = gray;
+	                }
+
+	                return { data: data, width: width, height: height };
+	            };
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return toGray;
+	}(_AlloyImage.Filter);
 
 	_AlloyImage2.default.addFilter(toGray);
 
@@ -3730,39 +4193,62 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class corrode extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
-	    }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _initialiseProps = function () {
-	    this.cname = "腐蚀";
+	var corrode = function (_Filter) {
+	    _inherits(corrode, _Filter);
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        let R = parseInt(args[0]) || 3;
-	        let xLength = R * 2 + 1;
+	    function corrode() {
+	        var _ref;
 
-	        //区块
-	        for (var x = 0; x < width; x++) {
+	        var _temp, _this, _ret;
 
-	            for (var y = 0; y < height; y++) {
+	        _classCallCheck(this, corrode);
 
-	                var randomI = parseInt(Math.random() * R * 2) - R; //区块随机代表
-	                var randomJ = parseInt(Math.random() * R * 2) - R; //区块随机代表
-	                var realI = y * width + x;
-	                var realJ = (y + randomI) * width + x + randomJ;
-
-	                for (var j = 0; j < 3; j++) {
-	                    data[realI * 4 + j] = data[realJ * 4 + j];
-	                }
-	            }
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
 	        }
 
-	        return { data, width, height };
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = corrode.__proto__ || Object.getPrototypeOf(corrode)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return corrode;
+	}(_AlloyImage.Filter);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "腐蚀";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 3;
+	            var xLength = R * 2 + 1;
+
+	            //区块
+	            for (var x = 0; x < width; x++) {
+
+	                for (var y = 0; y < height; y++) {
+
+	                    var randomI = parseInt(Math.random() * R * 2) - R; //区块随机代表
+	                    var randomJ = parseInt(Math.random() * R * 2) - R; //区块随机代表
+	                    var realI = y * width + x;
+	                    var realJ = (y + randomI) * width + x + randomJ;
+
+	                    for (var j = 0; j < 3; j++) {
+	                        data[realI * 4 + j] = data[realJ * 4 + j];
+	                    }
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -3780,69 +4266,93 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class darkCorner extends _AlloyImage.Filter {
-	        constructor(...args) {
-	                var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	                return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var darkCorner = function (_Filter) {
+	        _inherits(darkCorner, _Filter);
+
+	        function darkCorner() {
+	                var _ref;
+
+	                var _temp, _this, _ret;
+
+	                _classCallCheck(this, darkCorner);
+
+	                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	                        args[_key] = arguments[_key];
+	                }
+
+	                return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = darkCorner.__proto__ || Object.getPrototypeOf(darkCorner)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	        }
 
-	}
-	var _initialiseProps = function () {
+	        return darkCorner;
+	}(_AlloyImage.Filter);
+
+	var _initialiseProps = function _initialiseProps() {
 	        this.cname = "暗角";
 
-	        this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	                //暗角级别 分1-10级吧
-	                var R = parseInt(args[0]) || 3;
+	        this.process = function (_ref2, _ref3) {
+	                var data = _ref2.data,
+	                    width = _ref2.width,
+	                    height = _ref2.height;
+	                var dorsyMath = _ref3.dorsyMath;
+	                return function (args) {
+	                        //暗角级别 分1-10级吧
+	                        var R = parseInt(args[0]) || 3;
 
-	                //暗角的形状
-	                var type = args[2] || "round";
+	                        //暗角的形状
+	                        var type = args[2] || "round";
 
-	                //暗角最终的级别 0 - 255
-	                var lastLevel = args[1] || 30;
+	                        //暗角最终的级别 0 - 255
+	                        var lastLevel = args[1] || 30;
 
-	                var xLength = R * 2 + 1;
+	                        var xLength = R * 2 + 1;
 
-	                //计算中心点
-	                var middleX = width * 2 / 3;
-	                var middleY = height * 1 / 2;
+	                        //计算中心点
+	                        var middleX = width * 2 / 3;
+	                        var middleY = height * 1 / 2;
 
-	                //计算距中心点最长距离
-	                var maxDistance = dorsyMath.distance([middleX, middleY]);
-	                //开始产生暗角的距离
-	                var startDistance = maxDistance * (1 - R / 10);
+	                        //计算距中心点最长距离
+	                        var maxDistance = dorsyMath.distance([middleX, middleY]);
+	                        //开始产生暗角的距离
+	                        var startDistance = maxDistance * (1 - R / 10);
 
-	                var f = function (x, p0, p1, p2, p3) {
+	                        var f = function f(x, p0, p1, p2, p3) {
 
-	                        //基于三次贝塞尔曲线 
-	                        return p0 * Math.pow(1 - x, 3) + 3 * p1 * x * Math.pow(1 - x, 2) + 3 * p2 * x * x * (1 - x) + p3 * Math.pow(x, 3);
-	                };
+	                                //基于三次贝塞尔曲线 
+	                                return p0 * Math.pow(1 - x, 3) + 3 * p1 * x * Math.pow(1 - x, 2) + 3 * p2 * x * x * (1 - x) + p3 * Math.pow(x, 3);
+	                        };
 
-	                //计算当前点应增加的暗度
-	                function calDark(x, y, p) {
-	                        //计算距中心点距离
-	                        var distance = dorsyMath.distance([x, y], [middleX, middleY]);
-	                        var currBilv = (distance - startDistance) / (maxDistance - startDistance);
-	                        if (currBilv < 0) currBilv = 0;
+	                        //计算当前点应增加的暗度
+	                        function calDark(x, y, p) {
+	                                //计算距中心点距离
+	                                var distance = dorsyMath.distance([x, y], [middleX, middleY]);
+	                                var currBilv = (distance - startDistance) / (maxDistance - startDistance);
+	                                if (currBilv < 0) currBilv = 0;
 
-	                        //应该增加暗度
-	                        return f(currBilv, 0, 0.02, 0.3, 1) * p * lastLevel / 255;
-	                }
+	                                //应该增加暗度
+	                                return f(currBilv, 0, 0.02, 0.3, 1) * p * lastLevel / 255;
+	                        }
 
-	                //区块
-	                for (var x = 0; x < width; x++) {
+	                        //区块
+	                        for (var x = 0; x < width; x++) {
 
-	                        for (var y = 0; y < height; y++) {
+	                                for (var y = 0; y < height; y++) {
 
-	                                var realI = y * width + x;
-	                                for (var j = 0; j < 3; j++) {
-	                                        var dDarkness = calDark(x, y, data[realI * 4 + j]);
-	                                        data[realI * 4 + j] -= dDarkness;
+	                                        var realI = y * width + x;
+	                                        for (var j = 0; j < 3; j++) {
+	                                                var dDarkness = calDark(x, y, data[realI * 4 + j]);
+	                                                data[realI * 4 + j] -= dDarkness;
+	                                        }
 	                                }
 	                        }
-	                }
 
-	                return { data, width, height };
+	                        return { data: data, width: width, height: height };
+	                };
 	        };
 	};
 
@@ -3861,71 +4371,94 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class dotted extends _AlloyImage.Filter {
-	        constructor(...args) {
-	                var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	                return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var dotted = function (_Filter) {
+	        _inherits(dotted, _Filter);
+
+	        function dotted() {
+	                var _ref;
+
+	                var _temp, _this, _ret;
+
+	                _classCallCheck(this, dotted);
+
+	                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	                        args[_key] = arguments[_key];
+	                }
+
+	                return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = dotted.__proto__ || Object.getPrototypeOf(dotted)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	        }
 
-	}
+	        return dotted;
+	}(_AlloyImage.Filter);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	        this.cname = "喷点";
 
-	        this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	                //矩形半径
-	                var R = parseInt(args[0]) || 1;
+	        this.process = function (_ref2, _ref3) {
+	                var data = _ref2.data,
+	                    width = _ref2.width,
+	                    height = _ref2.height;
+	                var dorsyMath = _ref3.dorsyMath;
+	                return function (args) {
+	                        //矩形半径
+	                        var R = parseInt(args[0]) || 1;
 
-	                //内小圆半径
-	                var r = parseInt(args[1]) || 1;
+	                        //内小圆半径
+	                        var r = parseInt(args[1]) || 1;
 
-	                var xLength = R * 2 + 1;
+	                        var xLength = R * 2 + 1;
 
-	                //构造距离模板
-	                var disTmlMatrix = [];
+	                        //构造距离模板
+	                        var disTmlMatrix = [];
 
-	                var r2 = r * r;
-	                for (var x = -R; x < R; x++) {
+	                        var r2 = r * r;
+	                        for (var x = -R; x < R; x++) {
 
-	                        for (var y = -R; y < R; y++) {
-	                                if (x * x + y * y > r2) {
-	                                        disTmlMatrix.push([x, y]);
+	                                for (var y = -R; y < R; y++) {
+	                                        if (x * x + y * y > r2) {
+	                                                disTmlMatrix.push([x, y]);
+	                                        }
 	                                }
 	                        }
-	                }
 
-	                var xyToIFun = dorsyMath.xyToIFun(width);
+	                        var xyToIFun = dorsyMath.xyToIFun(width);
 
-	                //将大于距离外面的透明度置为0
-	                for (var x = 0, n = parseInt(width / xLength); x < n; x++) {
+	                        //将大于距离外面的透明度置为0
+	                        for (var x = 0, n = parseInt(width / xLength); x < n; x++) {
 
-	                        for (var y = 0, m = parseInt(height / xLength); y < m; y++) {
-	                                var middleX = parseInt((x + 0.5) * xLength);
-	                                var middleY = parseInt((y + 0.5) * xLength);
+	                                for (var y = 0, m = parseInt(height / xLength); y < m; y++) {
+	                                        var middleX = parseInt((x + 0.5) * xLength);
+	                                        var middleY = parseInt((y + 0.5) * xLength);
 
-	                                for (var i = 0; i < disTmlMatrix.length; i++) {
-	                                        var dotX = middleX + disTmlMatrix[i][0];
-	                                        var dotY = middleY + disTmlMatrix[i][1];
+	                                        for (var i = 0; i < disTmlMatrix.length; i++) {
+	                                                var dotX = middleX + disTmlMatrix[i][0];
+	                                                var dotY = middleY + disTmlMatrix[i][1];
 
-	                                        //data[(dotY * width + dotX) * 4 + 3] = 0;
-	                                        data[xyToIFun(dotX, dotY, 3)] = 225;
-	                                        data[xyToIFun(dotX, dotY, 2)] = 225;
-	                                        data[xyToIFun(dotX, dotY, 0)] = 225;
-	                                        data[xyToIFun(dotX, dotY, 1)] = 225;
+	                                                //data[(dotY * width + dotX) * 4 + 3] = 0;
+	                                                data[xyToIFun(dotX, dotY, 3)] = 225;
+	                                                data[xyToIFun(dotX, dotY, 2)] = 225;
+	                                                data[xyToIFun(dotX, dotY, 0)] = 225;
+	                                                data[xyToIFun(dotX, dotY, 1)] = 225;
+	                                        }
 	                                }
 	                        }
-	                }
 
-	                /*
-	                for(var x = 0; x < width; x ++){
-	                    for(var y = 0; y < height; y ++){
-	                        data[(y * width + x) * 4 + 3] = 0;
-	                    }
-	                }
-	                */
+	                        /*
+	                        for(var x = 0; x < width; x ++){
+	                            for(var y = 0; y < height; y ++){
+	                                data[(y * width + x) * 4 + 3] = 0;
+	                            }
+	                        }
+	                        */
 
-	                return { data, width, height };
+	                        return { data: data, width: width, height: height };
+	                };
 	        };
 	};
 
@@ -3943,36 +4476,60 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class embossment extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), this.cname = "浮雕效果", this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	            var outData = [];
-	            for (var i = 0, n = data.length; i < n; i += 4) {
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	                var ii = i / 4;
-	                var row = parseInt(ii / width);
-	                var col = ii % width;
-	                var A = ((row - 1) * width + (col - 1)) * 4;
-	                var G = (row + 1) * width * 4 + (col + 1) * 4;
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	                if (row == 0 || col == 0) continue;
-	                for (var j = 0; j < 3; j++) {
-	                    outData[i + j] = data[A + j] - data[G + j] + 127.5;
+	var embossment = function (_Filter) {
+	    _inherits(embossment, _Filter);
+
+	    function embossment() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, embossment);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = embossment.__proto__ || Object.getPrototypeOf(embossment)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "浮雕效果", _this.process = function (_ref2, _ref3) {
+	            var data = _ref2.data,
+	                width = _ref2.width,
+	                height = _ref2.height;
+	            var dorsyMath = _ref3.dorsyMath;
+	            return function (args) {
+	                var outData = [];
+	                for (var i = 0, n = data.length; i < n; i += 4) {
+
+	                    var ii = i / 4;
+	                    var row = parseInt(ii / width);
+	                    var col = ii % width;
+	                    var A = ((row - 1) * width + (col - 1)) * 4;
+	                    var G = (row + 1) * width * 4 + (col + 1) * 4;
+
+	                    if (row == 0 || col == 0) continue;
+	                    for (var j = 0; j < 3; j++) {
+	                        outData[i + j] = data[A + j] - data[G + j] + 127.5;
+	                    }
+	                    outData[i + 4] = data[i + 4];
 	                }
-	                outData[i + 4] = data[i + 4];
-	            }
 
-	            for (var i = 0, n = data.length; i < n; i++) {
-	                data[i] = outData[i] || data[i];
-	            }
+	                for (var i = 0, n = data.length; i < n; i++) {
+	                    data[i] = outData[i] || data[i];
+	                }
 
-	            return { data, width, height };
-	        }, _temp;
+	                return { data: data, width: width, height: height };
+	            };
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return embossment;
+	}(_AlloyImage.Filter);
+
 	_AlloyImage2.default.addFilter(embossment);
 
 /***/ }),
@@ -3987,11 +4544,27 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class gaussBlur extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var gaussBlur = function (_Filter) {
+	    _inherits(gaussBlur, _Filter);
+
+	    function gaussBlur() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, gaussBlur);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = gaussBlur.__proto__ || Object.getPrototypeOf(gaussBlur)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 	    /**
 	     * 高斯模糊
@@ -4004,101 +4577,108 @@
 	     */
 
 
-	}
+	    return gaussBlur;
+	}(_AlloyImage.Filter);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "高斯模糊";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var pixes = data;
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var pixes = data;
 
-	        var gaussMatrix = [],
-	            gaussSum = 0,
-	            x,
-	            y,
-	            r,
-	            g,
-	            b,
-	            a,
-	            i,
-	            j,
-	            k,
-	            len;
+	            var gaussMatrix = [],
+	                gaussSum = 0,
+	                x,
+	                y,
+	                r,
+	                g,
+	                b,
+	                a,
+	                i,
+	                j,
+	                k,
+	                len;
 
-	        var radius = args[0];
-	        var sigma = args[1];
+	            var radius = args[0];
+	            var sigma = args[1];
 
-	        radius = Math.floor(radius) || 3;
-	        sigma = sigma || radius / 3;
+	            radius = Math.floor(radius) || 3;
+	            sigma = sigma || radius / 3;
 
-	        a = 1 / (Math.sqrt(2 * Math.PI) * sigma);
-	        b = -1 / (2 * sigma * sigma);
-	        //生成高斯矩阵
-	        for (i = 0, x = -radius; x <= radius; x++, i++) {
-	            g = a * Math.exp(b * x * x);
-	            gaussMatrix[i] = g;
-	            gaussSum += g;
-	        }
-	        //归一化, 保证高斯矩阵的值在[0,1]之间
-	        for (i = 0, len = gaussMatrix.length; i < len; i++) {
-	            gaussMatrix[i] /= gaussSum;
-	        }
-	        //x 方向一维高斯运算
-	        for (y = 0; y < height; y++) {
-	            for (x = 0; x < width; x++) {
-	                r = g = b = a = 0;
-	                gaussSum = 0;
-	                for (j = -radius; j <= radius; j++) {
-	                    k = x + j;
-	                    if (k >= 0 && k < width) {
-	                        //确保 k 没超出 x 的范围
-	                        //r,g,b,a 四个一组
-	                        i = (y * width + k) * 4;
-	                        r += pixes[i] * gaussMatrix[j + radius];
-	                        g += pixes[i + 1] * gaussMatrix[j + radius];
-	                        b += pixes[i + 2] * gaussMatrix[j + radius];
-	                        // a += pixes[i + 3] * gaussMatrix[j];
-	                        gaussSum += gaussMatrix[j + radius];
-	                    }
-	                }
-	                i = (y * width + x) * 4;
-	                // 除以 gaussSum 是为了消除处于边缘的像素, 高斯运算不足的问题
-	                // console.log(gaussSum)
-	                pixes[i] = r / gaussSum;
-	                pixes[i + 1] = g / gaussSum;
-	                pixes[i + 2] = b / gaussSum;
-	                // pixes[i + 3] = a ;
+	            a = 1 / (Math.sqrt(2 * Math.PI) * sigma);
+	            b = -1 / (2 * sigma * sigma);
+	            //生成高斯矩阵
+	            for (i = 0, x = -radius; x <= radius; x++, i++) {
+	                g = a * Math.exp(b * x * x);
+	                gaussMatrix[i] = g;
+	                gaussSum += g;
 	            }
-	        }
-	        //y 方向一维高斯运算
-	        for (x = 0; x < width; x++) {
+	            //归一化, 保证高斯矩阵的值在[0,1]之间
+	            for (i = 0, len = gaussMatrix.length; i < len; i++) {
+	                gaussMatrix[i] /= gaussSum;
+	            }
+	            //x 方向一维高斯运算
 	            for (y = 0; y < height; y++) {
-	                r = g = b = a = 0;
-	                gaussSum = 0;
-	                for (j = -radius; j <= radius; j++) {
-	                    k = y + j;
-	                    if (k >= 0 && k < height) {
-	                        //确保 k 没超出 y 的范围
-	                        i = (k * width + x) * 4;
-	                        r += pixes[i] * gaussMatrix[j + radius];
-	                        g += pixes[i + 1] * gaussMatrix[j + radius];
-	                        b += pixes[i + 2] * gaussMatrix[j + radius];
-	                        // a += pixes[i + 3] * gaussMatrix[j];
-	                        gaussSum += gaussMatrix[j + radius];
+	                for (x = 0; x < width; x++) {
+	                    r = g = b = a = 0;
+	                    gaussSum = 0;
+	                    for (j = -radius; j <= radius; j++) {
+	                        k = x + j;
+	                        if (k >= 0 && k < width) {
+	                            //确保 k 没超出 x 的范围
+	                            //r,g,b,a 四个一组
+	                            i = (y * width + k) * 4;
+	                            r += pixes[i] * gaussMatrix[j + radius];
+	                            g += pixes[i + 1] * gaussMatrix[j + radius];
+	                            b += pixes[i + 2] * gaussMatrix[j + radius];
+	                            // a += pixes[i + 3] * gaussMatrix[j];
+	                            gaussSum += gaussMatrix[j + radius];
+	                        }
 	                    }
+	                    i = (y * width + x) * 4;
+	                    // 除以 gaussSum 是为了消除处于边缘的像素, 高斯运算不足的问题
+	                    // console.log(gaussSum)
+	                    pixes[i] = r / gaussSum;
+	                    pixes[i + 1] = g / gaussSum;
+	                    pixes[i + 2] = b / gaussSum;
+	                    // pixes[i + 3] = a ;
 	                }
-	                i = (y * width + x) * 4;
-	                pixes[i] = r / gaussSum;
-	                pixes[i + 1] = g / gaussSum;
-	                pixes[i + 2] = b / gaussSum;
-	                // pixes[i] = r ;
-	                // pixes[i + 1] = g ;
-	                // pixes[i + 2] = b ;
-	                // pixes[i + 3] = a ;
 	            }
-	        }
-	        //end
-	        return { data: pixes, width, height };
+	            //y 方向一维高斯运算
+	            for (x = 0; x < width; x++) {
+	                for (y = 0; y < height; y++) {
+	                    r = g = b = a = 0;
+	                    gaussSum = 0;
+	                    for (j = -radius; j <= radius; j++) {
+	                        k = y + j;
+	                        if (k >= 0 && k < height) {
+	                            //确保 k 没超出 y 的范围
+	                            i = (k * width + x) * 4;
+	                            r += pixes[i] * gaussMatrix[j + radius];
+	                            g += pixes[i + 1] * gaussMatrix[j + radius];
+	                            b += pixes[i + 2] * gaussMatrix[j + radius];
+	                            // a += pixes[i + 3] * gaussMatrix[j];
+	                            gaussSum += gaussMatrix[j + radius];
+	                        }
+	                    }
+	                    i = (y * width + x) * 4;
+	                    pixes[i] = r / gaussSum;
+	                    pixes[i + 1] = g / gaussSum;
+	                    pixes[i + 2] = b / gaussSum;
+	                    // pixes[i] = r ;
+	                    // pixes[i + 1] = g ;
+	                    // pixes[i + 2] = b ;
+	                    // pixes[i + 3] = a ;
+	                }
+	            }
+	            //end
+	            return { data: pixes, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4116,22 +4696,45 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class borderline extends _AlloyImage.Filter {
-	        constructor(...args) {
-	                var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	                return _temp = super(...args), this.cname = "查找边缘", this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	                        var template1 = [-2, -4, -4, -4, -2, -4, 0, 8, 0, -4, -4, 8, 24, 8, -4, -4, 0, 8, 0, -4, -2, -4, -4, -4, -2];
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	                        var template2 = [0, 1, 0, 1, -4, 1, 0, 1, 0];
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	                        var template3 = [];
+	var borderline = function (_Filter) {
+	        _inherits(borderline, _Filter);
 
-	                        return dorsyMath.applyMatrix({ data, width, height }, template2, 250);
-	                }, _temp;
+	        function borderline() {
+	                var _ref;
+
+	                var _temp, _this, _ret;
+
+	                _classCallCheck(this, borderline);
+
+	                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	                        args[_key] = arguments[_key];
+	                }
+
+	                return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = borderline.__proto__ || Object.getPrototypeOf(borderline)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "查找边缘", _this.process = function (_ref2, _ref3) {
+	                        var data = _ref2.data,
+	                            width = _ref2.width,
+	                            height = _ref2.height;
+	                        var dorsyMath = _ref3.dorsyMath;
+	                        return function (args) {
+	                                var template1 = [-2, -4, -4, -4, -2, -4, 0, 8, 0, -4, -4, 8, 24, 8, -4, -4, 0, 8, 0, -4, -2, -4, -4, -4, -2];
+
+	                                var template2 = [0, 1, 0, 1, -4, 1, 0, 1, 0];
+
+	                                var template3 = [];
+
+	                                return dorsyMath.applyMatrix({ data: data, width: width, height: height }, template2, 250);
+	                        };
+	                }, _temp), _possibleConstructorReturn(_this, _ret);
 	        }
 
-	}
+	        return borderline;
+	}(_AlloyImage.Filter);
 
 	_AlloyImage2.default.addFilter(borderline);
 
@@ -4147,54 +4750,77 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class mosaic extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var mosaic = function (_Filter) {
+	    _inherits(mosaic, _Filter);
+
+	    function mosaic() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, mosaic);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = mosaic.__proto__ || Object.getPrototypeOf(mosaic)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return mosaic;
+	}(_AlloyImage.Filter);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "马赛克";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var R = parseInt(args[0]) || 3;
-	        var xLength = R * 2 + 1;
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 3;
+	            var xLength = R * 2 + 1;
 
-	        for (var x = 0, n = parseInt(width / xLength); x < n; x++) {
+	            for (var x = 0, n = parseInt(width / xLength); x < n; x++) {
 
-	            for (var y = 0, m = parseInt(height / xLength); y < m; y++) {
+	                for (var y = 0, m = parseInt(height / xLength); y < m; y++) {
 
-	                var average = [],
-	                    sum = [0, 0, 0];
-	                for (var i = 0; i < xLength; i++) {
+	                    var average = [],
+	                        sum = [0, 0, 0];
+	                    for (var i = 0; i < xLength; i++) {
 
-	                    for (var j = 0; j < xLength; j++) {
-	                        var realI = (y * xLength + i) * width + x * xLength + j;
-	                        sum[0] += data[realI * 4];
-	                        sum[1] += data[realI * 4 + 1];
-	                        sum[2] += data[realI * 4 + 2];
+	                        for (var j = 0; j < xLength; j++) {
+	                            var realI = (y * xLength + i) * width + x * xLength + j;
+	                            sum[0] += data[realI * 4];
+	                            sum[1] += data[realI * 4 + 1];
+	                            sum[2] += data[realI * 4 + 2];
+	                        }
 	                    }
-	                }
-	                average[0] = sum[0] / (xLength * xLength);
-	                average[1] = sum[1] / (xLength * xLength);
-	                average[2] = sum[2] / (xLength * xLength);
+	                    average[0] = sum[0] / (xLength * xLength);
+	                    average[1] = sum[1] / (xLength * xLength);
+	                    average[2] = sum[2] / (xLength * xLength);
 
-	                for (var i = 0; i < xLength; i++) {
+	                    for (var i = 0; i < xLength; i++) {
 
-	                    for (var j = 0; j < xLength; j++) {
-	                        var realI = (y * xLength + i) * width + x * xLength + j;
-	                        data[realI * 4] = average[0];
-	                        data[realI * 4 + 1] = average[1];
-	                        data[realI * 4 + 2] = average[2];
+	                        for (var j = 0; j < xLength; j++) {
+	                            var realI = (y * xLength + i) * width + x * xLength + j;
+	                            data[realI * 4] = average[0];
+	                            data[realI * 4 + 1] = average[1];
+	                            data[realI * 4 + 2] = average[2];
+	                        }
 	                    }
 	                }
 	            }
-	        }
 
-	        return { data, width, height };
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4212,37 +4838,60 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class noise extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
-	    }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _initialiseProps = function () {
-	    this.cname = "添加杂色";
+	var noise = function (_Filter) {
+	    _inherits(noise, _Filter);
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var R = parseInt(args[0]) || 100;
+	    function noise() {
+	        var _ref;
 
-	        var xLength = R * 2 + 1;
+	        var _temp, _this, _ret;
 
-	        //区块
-	        for (var x = 0; x < width; x++) {
+	        _classCallCheck(this, noise);
 
-	            for (var y = 0; y < height; y++) {
-
-	                var realI = y * width + x;
-	                for (var j = 0; j < 3; j++) {
-	                    var rand = parseInt(Math.random() * R * 2) - R;
-	                    data[realI * 4 + j] += rand;
-	                }
-	            }
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
 	        }
 
-	        return { data, width, height };
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = noise.__proto__ || Object.getPrototypeOf(noise)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return noise;
+	}(_AlloyImage.Filter);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "添加杂色";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 100;
+
+	            var xLength = R * 2 + 1;
+
+	            //区块
+	            for (var x = 0; x < width; x++) {
+
+	                for (var y = 0; y < height; y++) {
+
+	                    var realI = y * width + x;
+	                    for (var j = 0; j < 3; j++) {
+	                        var rand = parseInt(Math.random() * R * 2) - R;
+	                        data[realI * 4 + j] += rand;
+	                    }
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4260,39 +4909,62 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class oilPainting extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
-	    }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _initialiseProps = function () {
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var R = parseInt(args[0]) || 16;
-	        var xLength = R * 2 + 1;
+	var oilPainting = function (_Filter) {
+	    _inherits(oilPainting, _Filter);
 
-	        //区块
-	        for (var x = 0; x < width; x++) {
+	    function oilPainting() {
+	        var _ref;
 
-	            for (var y = 0; y < height; y++) {
+	        var _temp, _this, _ret;
 
-	                var realI = y * width + x;
-	                var gray = 0;
-	                for (var j = 0; j < 3; j++) {
-	                    gray += data[realI * 4 + j];
-	                }
-	                gray = gray / 3;
-	                var every = parseInt(gray / R) * R;
-	                for (var j = 0; j < 3; j++) {
-	                    data[realI * 4 + j] = every;
-	                }
-	            }
+	        _classCallCheck(this, oilPainting);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
 	        }
 
-	        return { data, width, height };
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = oilPainting.__proto__ || Object.getPrototypeOf(oilPainting)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return oilPainting;
+	}(_AlloyImage.Filter);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var R = parseInt(args[0]) || 16;
+	            var xLength = R * 2 + 1;
+
+	            //区块
+	            for (var x = 0; x < width; x++) {
+
+	                for (var y = 0; y < height; y++) {
+
+	                    var realI = y * width + x;
+	                    var gray = 0;
+	                    for (var j = 0; j < 3; j++) {
+	                        gray += data[realI * 4 + j];
+	                    }
+	                    gray = gray / 3;
+	                    var every = parseInt(gray / R) * R;
+	                    for (var j = 0; j < 3; j++) {
+	                        data[realI * 4 + j] = every;
+	                    }
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4310,34 +4982,57 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class posterize extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var posterize = function (_Filter) {
+	    _inherits(posterize, _Filter);
+
+	    function posterize() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, posterize);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = posterize.__proto__ || Object.getPrototypeOf(posterize)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return posterize;
+	}(_AlloyImage.Filter);
 
-	var _initialiseProps = function () {
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var dM = dorsyMath;
+	var _initialiseProps = function _initialiseProps() {
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var dM = dorsyMath;
 
-	        //灰度阶数
-	        //由原来的255阶映射为现在的阶数
-	        var step = args[0] || 20;
+	            //灰度阶数
+	            //由原来的255阶映射为现在的阶数
+	            var step = args[0] || 20;
 
-	        step = step < 1 ? 1 : step > 255 ? 255 : step;
-	        var level = Math.floor(255 / step);
+	            step = step < 1 ? 1 : step > 255 ? 255 : step;
+	            var level = Math.floor(255 / step);
 
-	        for (var x = 0; x < width; x++) {
-	            for (var y = 0; y < height; y++) {
-	                dM.xyCal({ data, width, height }, x, y, function (r, g, b) {
-	                    return [Math.floor(r / level) * level, Math.floor(g / level) * level, Math.floor(b / level) * level];
-	                });
+	            for (var x = 0; x < width; x++) {
+	                for (var y = 0; y < height; y++) {
+	                    dM.xyCal({ data: data, width: width, height: height }, x, y, function (r, g, b) {
+	                        return [Math.floor(r / level) * level, Math.floor(g / level) * level, Math.floor(b / level) * level];
+	                    });
+	                }
 	            }
-	        }
-	        return { data, width, height };
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4355,23 +5050,46 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class sepia extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	            for (var x = 0; x < width; x++) {
-	                for (var y = 0; y < height; y++) {
-	                    dorsyMath.xyCal({ data, width, height }, x, y, function (r, g, b) {
-	                        return [r * 0.393 + g * 0.769 + b * 0.189, r * 0.349 + g * 0.686 + b * 0.168, r * 0.272 + g * 0.534 + b * 0.131];
-	                    });
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var sepia = function (_Filter) {
+	    _inherits(sepia, _Filter);
+
+	    function sepia() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, sepia);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = sepia.__proto__ || Object.getPrototypeOf(sepia)).call.apply(_ref, [this].concat(args))), _this), _this.process = function (_ref2, _ref3) {
+	            var data = _ref2.data,
+	                width = _ref2.width,
+	                height = _ref2.height;
+	            var dorsyMath = _ref3.dorsyMath;
+	            return function (args) {
+	                for (var x = 0; x < width; x++) {
+	                    for (var y = 0; y < height; y++) {
+	                        dorsyMath.xyCal({ data: data, width: width, height: height }, x, y, function (r, g, b) {
+	                            return [r * 0.393 + g * 0.769 + b * 0.189, r * 0.349 + g * 0.686 + b * 0.168, r * 0.272 + g * 0.534 + b * 0.131];
+	                        });
+	                    }
 	                }
-	            }
-	            return { data, width, height };
-	        }, _temp;
+	                return { data: data, width: width, height: height };
+	            };
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return sepia;
+	}(_AlloyImage.Filter);
 
 	_AlloyImage2.default.addFilter(sepia);
 
@@ -4387,38 +5105,61 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class sharp extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
-	    }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _initialiseProps = function () {
-	    this.cname = "锐化";
+	var sharp = function (_Filter) {
+	    _inherits(sharp, _Filter);
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var lamta = args[0] || 0.6;
+	    function sharp() {
+	        var _ref;
 
-	        for (var i = 0, n = data.length; i < n; i += 4) {
-	            var ii = i / 4;
-	            var row = parseInt(ii / width);
-	            var col = ii % width;
-	            if (row == 0 || col == 0) continue;
+	        var _temp, _this, _ret;
 
-	            var A = ((row - 1) * width + (col - 1)) * 4;
-	            var B = ((row - 1) * width + col) * 4;
-	            var E = (ii - 1) * 4;
+	        _classCallCheck(this, sharp);
 
-	            for (var j = 0; j < 3; j++) {
-	                var delta = data[i + j] - (data[B + j] + data[E + j] + data[A + j]) / 3;
-	                data[i + j] += delta * lamta;
-	            }
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
 	        }
 
-	        return { data, width, height };
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = sharp.__proto__ || Object.getPrototypeOf(sharp)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return sharp;
+	}(_AlloyImage.Filter);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "锐化";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var lamta = args[0] || 0.6;
+
+	            for (var i = 0, n = data.length; i < n; i += 4) {
+	                var ii = i / 4;
+	                var row = parseInt(ii / width);
+	                var col = ii % width;
+	                if (row == 0 || col == 0) continue;
+
+	                var A = ((row - 1) * width + (col - 1)) * 4;
+	                var B = ((row - 1) * width + col) * 4;
+	                var E = (ii - 1) * 4;
+
+	                for (var j = 0; j < 3; j++) {
+	                    var delta = data[i + j] - (data[B + j] + data[E + j] + data[A + j]) / 3;
+	                    data[i + j] += delta * lamta;
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4436,22 +5177,45 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class toReverse extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), this.cname = "反色", this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	            for (var i = 0, n = data.length; i < n; i += 4) {
-	                data[i] = 255 - data[i];
-	                data[i + 1] = 255 - data[i + 1];
-	                data[i + 2] = 255 - data[i + 2];
-	            }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	            return { data, width, height };
-	        }, _temp;
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var toReverse = function (_Filter) {
+	    _inherits(toReverse, _Filter);
+
+	    function toReverse() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, toReverse);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toReverse.__proto__ || Object.getPrototypeOf(toReverse)).call.apply(_ref, [this].concat(args))), _this), _this.cname = "反色", _this.process = function (_ref2, _ref3) {
+	            var data = _ref2.data,
+	                width = _ref2.width,
+	                height = _ref2.height;
+	            var dorsyMath = _ref3.dorsyMath;
+	            return function (args) {
+	                for (var i = 0, n = data.length; i < n; i += 4) {
+	                    data[i] = 255 - data[i];
+	                    data[i + 1] = 255 - data[i + 1];
+	                    data[i + 2] = 255 - data[i + 2];
+	                }
+
+	                return { data: data, width: width, height: height };
+	            };
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return toReverse;
+	}(_AlloyImage.Filter);
 
 	_AlloyImage2.default.addFilter(toReverse);
 
@@ -4467,32 +5231,55 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class toThresh extends _AlloyImage.Filter {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var toThresh = function (_Filter) {
+	    _inherits(toThresh, _Filter);
+
+	    function toThresh() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, toThresh);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = toThresh.__proto__ || Object.getPrototypeOf(toThresh)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return toThresh;
+	}(_AlloyImage.Filter);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "灰度阈值";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        for (var i = 0, n = data.length; i < n; i += 4) {
-	            var gray = parseInt(0.299 * data[i] + 0.578 * data[i + 1] + 0.114 * data[i + 2]);
-	            data[i + 2] = data[i + 1] = data[i] = gray;
-	        }
-
-	        var arg = args[0] || 128;
-	        for (var i = 0, n = data.length; i < n; i++) {
-	            if ((i + 1) % 4) {
-	                data[i] = data[i] > arg ? 255 : 0;
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            for (var i = 0, n = data.length; i < n; i += 4) {
+	                var gray = parseInt(0.299 * data[i] + 0.578 * data[i + 1] + 0.114 * data[i + 2]);
+	                data[i + 2] = data[i + 1] = data[i] = gray;
 	            }
-	        }
 
-	        return { data, width, height };
+	            var arg = args[0] || 128;
+	            for (var i = 0, n = data.length; i < n; i++) {
+	                if ((i + 1) % 4) {
+	                    data[i] = data[i] > arg ? 255 : 0;
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4510,32 +5297,55 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class Brightness extends _AlloyImage.Alteration {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
-	    }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _initialiseProps = function () {
-	    this.cname = "亮度";
+	var Brightness = function (_Alteration) {
+	    _inherits(Brightness, _Alteration);
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        var brightness = args[0] / 50; // -1,1
-	        var arg2 = args[1] || 0;
+	    function Brightness() {
+	        var _ref;
 
-	        var c = arg2 / 50; // -1,1
-	        var k = Math.tan((45 + 44 * c) * Math.PI / 180);
+	        var _temp, _this, _ret;
 
-	        for (var i = 0, n = data.length; i < n; i += 4) {
-	            for (var j = 0; j < 3; j++) {
-	                data[i + j] = (data[i + j] - 127.5 * (1 - brightness)) * k + 127.5 * (1 + brightness);
-	            }
+	        _classCallCheck(this, Brightness);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
 	        }
 
-	        return { data, width, height };
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Brightness.__proto__ || Object.getPrototypeOf(Brightness)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    return Brightness;
+	}(_AlloyImage.Alteration);
+
+	var _initialiseProps = function _initialiseProps() {
+	    this.cname = "亮度";
+
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            var brightness = args[0] / 50; // -1,1
+	            var arg2 = args[1] || 0;
+
+	            var c = arg2 / 50; // -1,1
+	            var k = Math.tan((45 + 44 * c) * Math.PI / 180);
+
+	            for (var i = 0, n = data.length; i < n; i += 4) {
+	                for (var j = 0; j < 3; j++) {
+	                    data[i + j] = (data[i + j] - 127.5 * (1 - brightness)) * k + 127.5 * (1 + brightness);
+	                }
+	            }
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4553,51 +5363,74 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class Curve extends _AlloyImage.Alteration {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Curve = function (_Alteration) {
+	    _inherits(Curve, _Alteration);
+
+	    function Curve() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, Curve);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Curve.__proto__ || Object.getPrototypeOf(Curve)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return Curve;
+	}(_AlloyImage.Alteration);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "曲线";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        /*
-	         * arg   arg[0] = [3,3] ,arg[1]  = [2,2]
-	         * */
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            /*
+	             * arg   arg[0] = [3,3] ,arg[1]  = [2,2]
+	             * */
 
-	        //获得插值函数
-	        var f = dorsyMath.lagrange(args[0], args[1]);
+	            //获得插值函数
+	            var f = dorsyMath.lagrange(args[0], args[1]);
 
-	        //调节通道
-	        var channel = args[2];
-	        if (!/[RGB]+/.test(channel)) {
-	            channel = "RGB";
-	        }
+	            //调节通道
+	            var channel = args[2];
+	            if (!/[RGB]+/.test(channel)) {
+	                channel = "RGB";
+	            }
 
-	        var channelString = channel.replace("R", "0").replace("G", "1").replace("B", "2");
+	            var channelString = channel.replace("R", "0").replace("G", "1").replace("B", "2");
 
-	        var indexOfArr = [channelString.indexOf("0") > -1, channelString.indexOf("1") > -1, channelString.indexOf("2") > -1];
+	            var indexOfArr = [channelString.indexOf("0") > -1, channelString.indexOf("1") > -1, channelString.indexOf("2") > -1];
 
-	        //区块
-	        for (var x = 0; x < width; x++) {
+	            //区块
+	            for (var x = 0; x < width; x++) {
 
-	            for (var y = 0; y < height; y++) {
+	                for (var y = 0; y < height; y++) {
 
-	                var realI = y * width + x;
+	                    var realI = y * width + x;
 
-	                for (var j = 0; j < 3; j++) {
-	                    if (!indexOfArr[j]) continue;
-	                    data[realI * 4 + j] = f(data[realI * 4 + j]);
+	                    for (var j = 0; j < 3; j++) {
+	                        if (!indexOfArr[j]) continue;
+	                        data[realI * 4 + j] = f(data[realI * 4 + j]);
+	                    }
 	                }
 	            }
-	        }
 
-	        return { data, width, height };
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4615,35 +5448,58 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class Gamma extends _AlloyImage.Alteration {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Gamma = function (_Alteration) {
+	    _inherits(Gamma, _Alteration);
+
+	    function Gamma() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, Gamma);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Gamma.__proto__ || Object.getPrototypeOf(Gamma)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}
+	    return Gamma;
+	}(_AlloyImage.Alteration);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "伽马";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
 
-	        //gamma阶-100， 100
-	        var gamma;
+	            //gamma阶-100， 100
+	            var gamma;
 
-	        if (args[0] == undefined) gamma = 10;else gamma = args[0];
+	            if (args[0] == undefined) gamma = 10;else gamma = args[0];
 
-	        var normalizedArg = (gamma + 100) / 200 * 2;
+	            var normalizedArg = (gamma + 100) / 200 * 2;
 
-	        for (var x = 0; x < width; x++) {
-	            for (var y = 0; y < height; y++) {
-	                dorsyMath.xyCal({ data, width, height }, x, y, function (r, g, b) {
-	                    return [Math.pow(r, normalizedArg), Math.pow(g, normalizedArg), Math.pow(b, normalizedArg)];
-	                });
+	            for (var x = 0; x < width; x++) {
+	                for (var y = 0; y < height; y++) {
+	                    dorsyMath.xyCal({ data: data, width: width, height: height }, x, y, function (r, g, b) {
+	                        return [Math.pow(r, normalizedArg), Math.pow(g, normalizedArg), Math.pow(b, normalizedArg)];
+	                    });
+	                }
 	            }
-	        }
-	        return { data, width, height };
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4665,175 +5521,198 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class SeletiveColor extends _AlloyImage.Alteration {
-	    //end process Method
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author: Bin Wang
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @description:  可选颜色 
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @参考：http://wenku.baidu.com/view/e32d41ea856a561252d36f0b.html
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var SeletiveColor = function (_Alteration) {
+	    _inherits(SeletiveColor, _Alteration);
+
+	    //end process Method
+	    function SeletiveColor() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, SeletiveColor);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SeletiveColor.__proto__ || Object.getPrototypeOf(SeletiveColor)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	}exports.default = SeletiveColor; //end M defination
+	    return SeletiveColor;
+	}(_AlloyImage.Alteration); //end M defination
 
-	/**
-	 * @author: Bin Wang
-	 * @description:  可选颜色 
-	 * @参考：http://wenku.baidu.com/view/e32d41ea856a561252d36f0b.html
-	 *
-	 */
-
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "可选颜色";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        //选择的颜色
-	        var color = args[0];
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            //选择的颜色
+	            var color = args[0];
 
-	        //百分数
-	        var C = args[1];
-	        var M = args[2];
-	        var Y = args[3];
-	        var K = args[4];
+	            //百分数
+	            var C = args[1];
+	            var M = args[2];
+	            var Y = args[3];
+	            var K = args[4];
 
-	        //是否相对
-	        var isRelative = args[5] || 0;
+	            //是否相对
+	            var isRelative = args[5] || 0;
 
-	        var maxColorMap = {
-	            red: "R",
-	            green: "G",
-	            blue: "B",
-	            "红色": "R",
-	            "绿色": "G",
-	            "蓝色": "B"
-	        };
+	            var maxColorMap = {
+	                red: "R",
+	                green: "G",
+	                blue: "B",
+	                "红色": "R",
+	                "绿色": "G",
+	                "蓝色": "B"
+	            };
 
-	        var minColorMap = {
-	            cyan: "R",
-	            magenta: "G",
-	            yellow: "B",
-	            "青色": "R",
-	            "洋红": "G",
-	            "黄色": "B"
-	        };
+	            var minColorMap = {
+	                cyan: "R",
+	                magenta: "G",
+	                yellow: "B",
+	                "青色": "R",
+	                "洋红": "G",
+	                "黄色": "B"
+	            };
 
-	        //检查是否是被选中的颜色
-	        var checkSelectedColor = function (colorObj) {
-	            if (maxColorMap[color]) {
-	                return Math.max(colorObj.R, colorObj.G, colorObj.B) == colorObj[maxColorMap[color]];
-	            } else if (minColorMap[color]) {
-	                return Math.min(colorObj.R, colorObj.G, colorObj.B) == colorObj[minColorMap[color]];
-	            } else if (color == "black" || color == "黑色") {
-	                return Math.min(colorObj.R, colorObj.G, colorObj.B) < 128;
-	            } else if (color == "white" || color == "白色") {
-	                return Math.max(colorObj.R, colorObj.G, colorObj.B) > 128;
-	            } else if (color == "中性色") {
-	                return !(Math.max(colorObj.R, colorObj.G, colorObj.B) < 1 || Math.min(colorObj.R, colorObj.G, colorObj.B) > 224);
-	            }
-	        };
+	            //检查是否是被选中的颜色
+	            var checkSelectedColor = function checkSelectedColor(colorObj) {
+	                if (maxColorMap[color]) {
+	                    return Math.max(colorObj.R, colorObj.G, colorObj.B) == colorObj[maxColorMap[color]];
+	                } else if (minColorMap[color]) {
+	                    return Math.min(colorObj.R, colorObj.G, colorObj.B) == colorObj[minColorMap[color]];
+	                } else if (color == "black" || color == "黑色") {
+	                    return Math.min(colorObj.R, colorObj.G, colorObj.B) < 128;
+	                } else if (color == "white" || color == "白色") {
+	                    return Math.max(colorObj.R, colorObj.G, colorObj.B) > 128;
+	                } else if (color == "中性色") {
+	                    return !(Math.max(colorObj.R, colorObj.G, colorObj.B) < 1 || Math.min(colorObj.R, colorObj.G, colorObj.B) > 224);
+	                }
+	            };
 
-	        var upLimit = 0;
-	        var lowLimit = 0;
-	        var limit = 0;
+	            var upLimit = 0;
+	            var lowLimit = 0;
+	            var limit = 0;
 
-	        var alterNum = [C, M, Y, K];
-	        for (var x = 0, w = width; x < w; x++) {
-	            for (var y = 0, h = height; y < h; y++) {
-	                dorsyMath.xyCal({ data, width, height }, x, y, function (R, G, B) {
-	                    var colorObj = {
-	                        R: R,
-	                        G: G,
-	                        B: B
-	                    };
+	            var alterNum = [C, M, Y, K];
+	            for (var x = 0, w = width; x < w; x++) {
+	                for (var y = 0, h = height; y < h; y++) {
+	                    dorsyMath.xyCal({ data: data, width: width, height: height }, x, y, function (R, G, B) {
+	                        var colorObj = {
+	                            R: R,
+	                            G: G,
+	                            B: B
+	                        };
 
-	                    var colorArr = [R, G, B];
-	                    var resultArr = [];
+	                        var colorArr = [R, G, B];
+	                        var resultArr = [];
 
-	                    if (checkSelectedColor(colorObj)) {
-	                        if (maxColorMap[color]) {
-	                            var maxColor = maxColorMap[color];
+	                        if (checkSelectedColor(colorObj)) {
+	                            if (maxColorMap[color]) {
+	                                var maxColor = maxColorMap[color];
 
-	                            var middleValue = R + G + B - Math.max(R, G, B) - Math.min(R, G, B);
-	                            limit = colorObj[maxColor] - middleValue;
-	                        } else if (minColorMap[color]) {
-	                            var minColor = minColorMap[color];
+	                                var middleValue = R + G + B - Math.max(R, G, B) - Math.min(R, G, B);
+	                                limit = colorObj[maxColor] - middleValue;
+	                            } else if (minColorMap[color]) {
+	                                var minColor = minColorMap[color];
 
-	                            var middleValue = R + G + B - Math.max(R, G, B) - Math.min(R, G, B);
-	                            limit = middleValue - colorObj[minColor];
-	                        } else if (color == "black" || color == "黑色") {
-	                            limit = parseInt(127.5 - Math.max(R, G, B)) * 2;
-	                        } else if (color == "white" || color == "白色") {
-	                            limit = parseInt(Math.min(R, G, B) - 127.5) * 2;
-	                        } else if (color == "中性色") {
-	                            limit = 255 - (Math.abs(Math.max(R, G, B) - 127.5) + Math.abs(Math.min(R, G, B) - 127.5));
-	                        } else {
-	                            return;
-	                        }
+	                                var middleValue = R + G + B - Math.max(R, G, B) - Math.min(R, G, B);
+	                                limit = middleValue - colorObj[minColor];
+	                            } else if (color == "black" || color == "黑色") {
+	                                limit = parseInt(127.5 - Math.max(R, G, B)) * 2;
+	                            } else if (color == "white" || color == "白色") {
+	                                limit = parseInt(Math.min(R, G, B) - 127.5) * 2;
+	                            } else if (color == "中性色") {
+	                                limit = 255 - (Math.abs(Math.max(R, G, B) - 127.5) + Math.abs(Math.min(R, G, B) - 127.5));
+	                            } else {
+	                                return;
+	                            }
 
-	                        for (var i = 0; i < 3; i++) {
-	                            //可减少到的量
-	                            var lowLimitDelta = parseInt(limit * (colorArr[i] / 255));
-	                            var lowLimit = colorArr[i] - lowLimitDelta;
+	                            for (var i = 0; i < 3; i++) {
+	                                //可减少到的量
+	                                var lowLimitDelta = parseInt(limit * (colorArr[i] / 255));
+	                                var lowLimit = colorArr[i] - lowLimitDelta;
 
-	                            //可增加到的量
-	                            var upLimitDelta = parseInt(limit * (1 - colorArr[i] / 255));
-	                            var upLimit = colorArr[i] + upLimitDelta;
+	                                //可增加到的量
+	                                var upLimitDelta = parseInt(limit * (1 - colorArr[i] / 255));
+	                                var upLimit = colorArr[i] + upLimitDelta;
 
-	                            //将黑色算进去 得到影响百分比因子
-	                            var factor = alterNum[i] + K + alterNum[i] * K;
+	                                //将黑色算进去 得到影响百分比因子
+	                                var factor = alterNum[i] + K + alterNum[i] * K;
 
-	                            //相对调节
-	                            if (isRelative) {
-	                                //如果分量大于128  减少量=增加量
-	                                if (colorArr[i] > 128) {
-	                                    lowLimitDelta = upLimitDelta;
-	                                }
+	                                //相对调节
+	                                if (isRelative) {
+	                                    //如果分量大于128  减少量=增加量
+	                                    if (colorArr[i] > 128) {
+	                                        lowLimitDelta = upLimitDelta;
+	                                    }
 
-	                                //先算出黑色导致的原始增量
-	                                if (K > 0) {
-	                                    var realUpLimit = colorArr[i] - K * lowLimitDelta;
+	                                    //先算出黑色导致的原始增量
+	                                    if (K > 0) {
+	                                        var realUpLimit = colorArr[i] - K * lowLimitDelta;
+	                                    } else {
+	                                        var realUpLimit = colorArr[i] - K * upLimitDelta;
+	                                    }
+
+	                                    //标准化
+	                                    if (realUpLimit > upLimit) realUpLimit = upLimit;
+	                                    if (realUpLimit < lowLimit) realUpLimit = lowLimit;
+
+	                                    upLimitDelta = upLimit - realUpLimit;
+	                                    lowLimitDelta = realUpLimit - lowLimit;
+
+	                                    if (K < 0) {
+	                                        lowLimitDelta = upLimitDelta;
+	                                    } else {}
+
+	                                    //> 0表明在减少
+	                                    if (alterNum[i] > 0) {
+	                                        realUpLimit -= alterNum[i] * lowLimitDelta;
+	                                    } else {
+	                                        realUpLimit -= alterNum[i] * upLimitDelta;
+	                                    }
 	                                } else {
-	                                    var realUpLimit = colorArr[i] - K * upLimitDelta;
+
+	                                    //现在量
+	                                    var realUpLimit = limit * -factor + colorArr[i];
 	                                }
 
-	                                //标准化
 	                                if (realUpLimit > upLimit) realUpLimit = upLimit;
 	                                if (realUpLimit < lowLimit) realUpLimit = lowLimit;
 
-	                                upLimitDelta = upLimit - realUpLimit;
-	                                lowLimitDelta = realUpLimit - lowLimit;
-
-	                                if (K < 0) {
-	                                    lowLimitDelta = upLimitDelta;
-	                                } else {}
-
-	                                //> 0表明在减少
-	                                if (alterNum[i] > 0) {
-	                                    realUpLimit -= alterNum[i] * lowLimitDelta;
-	                                } else {
-	                                    realUpLimit -= alterNum[i] * upLimitDelta;
-	                                }
-	                            } else {
-
-	                                //现在量
-	                                var realUpLimit = limit * -factor + colorArr[i];
+	                                resultArr[i] = realUpLimit;
 	                            }
 
-	                            if (realUpLimit > upLimit) realUpLimit = upLimit;
-	                            if (realUpLimit < lowLimit) realUpLimit = lowLimit;
-
-	                            resultArr[i] = realUpLimit;
+	                            return resultArr;
 	                        }
+	                    }); //end xyCal
+	                } //end forY
+	            } //end forX
 
-	                        return resultArr;
-	                    }
-	                }); //end xyCal
-	            } //end forY
-	        } //end forX
-
-	        return { data, width, height };
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
+	exports.default = SeletiveColor;
 	_AlloyImage2.default.addAlteration(SeletiveColor);
 
 /***/ }),
@@ -4848,59 +5727,83 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class SetHSI extends _AlloyImage.Alteration {
-	    constructor(...args) {
-	        var _temp;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	        return _temp = super(...args), _initialiseProps.call(this), _temp;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author: Bin Wang
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @description: 调整RGB 饱和和度  
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * H (-2*Math.PI , 2 * Math.PI)  S (-100,100) I (-100,100)
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 着色原理  勾选着色后，所有的像素不管之前是什么色相，都变成当前设置的色相，
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 然后饱和度变成现在设置的饱和度，但保持明度为原来的基础上加上设置的明度
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var SetHSI = function (_Alteration) {
+	    _inherits(SetHSI, _Alteration);
+
+	    function SetHSI() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
+	        _classCallCheck(this, SetHSI);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SetHSI.__proto__ || Object.getPrototypeOf(SetHSI)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	} /**
-	   * @author: Bin Wang
-	   * @description: 调整RGB 饱和和度  
-	   * H (-2*Math.PI , 2 * Math.PI)  S (-100,100) I (-100,100)
-	   * 着色原理  勾选着色后，所有的像素不管之前是什么色相，都变成当前设置的色相，
-	   * 然后饱和度变成现在设置的饱和度，但保持明度为原来的基础上加上设置的明度
-	   *
-	   */
+	    return SetHSI;
+	}(_AlloyImage.Alteration);
 
-	var _initialiseProps = function () {
+	var _initialiseProps = function _initialiseProps() {
 	    this.cname = "色相/饱和度调节";
 
-	    this.process = ({ data, width, height }, { dorsyMath }) => args => {
-	        args[0] = args[0] / 180 * Math.PI;
-	        args[1] = args[1] / 100 || 0;
-	        args[2] = args[2] / 100 * 255 || 0;
-	        args[3] = args[3] || false; //着色
+	    this.process = function (_ref2, _ref3) {
+	        var data = _ref2.data,
+	            width = _ref2.width,
+	            height = _ref2.height;
+	        var dorsyMath = _ref3.dorsyMath;
+	        return function (args) {
+	            args[0] = args[0] / 180 * Math.PI;
+	            args[1] = args[1] / 100 || 0;
+	            args[2] = args[2] / 100 * 255 || 0;
+	            args[3] = args[3] || false; //着色
 
-	        //调节通道
-	        var channel = args[4];
-	        if (!/[RGBCMY]+/.test(channel)) {
-	            channel = "RGBCMY";
-	        }
-
-	        var letters = channel.split("");
-	        var indexOf = {};
-
-	        for (var i = 0; i < letters.length; i++) {
-	            indexOf[letters[i]] = 1;
-	        }
-
-	        dorsyMath.applyInHSI({ data, width, height }, function (i, color) {
-	            if (!indexOf[color]) return;
-
-	            if (args[3]) {
-	                i.H = args[0];
-	                i.S = args[1];
-	                i.I += args[2];
-	            } else {
-	                i.H += args[0];
-	                i.S += args[1];
-	                i.I += args[2];
+	            //调节通道
+	            var channel = args[4];
+	            if (!/[RGBCMY]+/.test(channel)) {
+	                channel = "RGBCMY";
 	            }
-	        });
 
-	        return { data, width, height };
+	            var letters = channel.split("");
+	            var indexOf = {};
+
+	            for (var i = 0; i < letters.length; i++) {
+	                indexOf[letters[i]] = 1;
+	            }
+
+	            dorsyMath.applyInHSI({ data: data, width: width, height: height }, function (i, color) {
+	                if (!indexOf[color]) return;
+
+	                if (args[3]) {
+	                    i.H = args[0];
+	                    i.S = args[1];
+	                    i.I += args[2];
+	                } else {
+	                    i.H += args[0];
+	                    i.S += args[1];
+	                    i.I += args[2];
+	                }
+	            });
+
+	            return { data: data, width: width, height: height };
+	        };
 	    };
 	};
 
@@ -4971,8 +5874,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	_AlloyImage2.default.define('vintage', function () {
-	    return this.act("灰度处理").then(() => {
-	        return this.add(new _AlloyImage2.default(this.width, this.height, "#808080").act("添加杂色").act("高斯模糊", 4).act("色相/饱和度调节", 32, 19, 0, true), "叠加");
+	    var _this = this;
+
+	    return this.act("灰度处理").then(function () {
+	        return _this.add(new _AlloyImage2.default(_this.width, _this.height, "#808080").act("添加杂色").act("高斯模糊", 4).act("色相/饱和度调节", 32, 19, 0, true), "叠加").promise();
 	    });
 	});
 
@@ -5057,18 +5962,26 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 	_AlloyImage2.default.define('rough', function () {
-	    /*
-	    return this.act('灰度处理').then(() => {
-	               this.add(
-	                   new AlloyImage(700, 800, "#000")//.act("喷点").act("反色").act("浮雕效果")
-	                   ,"叠加"
-	               ).then(function(){
-	                    console.log('111');
-	                    rs();
-	               });
-	      }).show();
-	    */
+	    var _this = this;
+
+	    return this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
+	                        _context.next = 2;
+	                        return _this.add(new _AlloyImage2.default(_this.width, _this.height, "#000").act("喷点").act("反色").act("浮雕效果"), "叠加").promise();
+
+	                    case 2:
+	                    case 'end':
+	                        return _context.stop();
+	                }
+	            }
+	        }, _callee, _this);
+	    })));
 	});
 
 /***/ })
