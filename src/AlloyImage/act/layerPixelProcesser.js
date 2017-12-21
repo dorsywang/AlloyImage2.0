@@ -5,7 +5,7 @@ export default class LayerPixelProcesser{
         this.imgData = imgData;
     }
 
-    async process(name, args){
+    process(name, args){
         name = name.toLocaleLowerCase();
 
         let filter = LayerPixelProcesser.filterMap[name];
@@ -22,7 +22,7 @@ export default class LayerPixelProcesser{
             doProcess = filter::filter.doProcess;
         }
 
-        let {data, width, height} = await doProcess(this.imgData, args);
+        let {data, width, height} = doProcess(this.imgData, args);
 
         return new ImageData(data, width, height);
     }

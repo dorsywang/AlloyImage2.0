@@ -3,17 +3,10 @@ import AlloyImage from 'AlloyImage';
   // clone只对单图层有效
 function clone(){
 
-    let newAIObj = new AlloyImage(1, 1);//this.width, this.height); //this.width, this.height);
+    let newAIObj = new AlloyImage(this.width, this.height); //this.width, this.height);
 
-    newAIObj
-        .wait(this)
-        .then(() => {
-            // 这里直接取 立即生效
-            newAIObj.canvas.width = this.width;
-            newAIObj.canvas.height = this.height;
-
-            newAIObj.imgData = this.cloneImageData();
-        });
+    // 这里直接取 立即生效
+    newAIObj.imgData = this.cloneImageData();
 
     return newAIObj;
 }

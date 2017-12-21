@@ -5,26 +5,25 @@ function add(aiObj, ...args){
     let numberArr = [], method, alpha, dx, dy, isFast, channel;
 
     //做重载
-    for(let i = 0; i < arguments.length; i ++){
-        if(!i) continue;
+    for(let i = 0; i < args.length; i ++){
 
-        switch(typeof(arguments[i])){
+        switch(typeof(args[i])){
             case "string":
-                if(/\d+%/.test(arguments[i])){//alpha
-                    alpha = arguments[i].replace("%", "");
-                }else if(/[RGB]+/.test(arguments[i])){//channel
-                    channel = arguments[i];
+                if(/\d+%/.test(args[i])){//alpha
+                    alpha = args[i].replace("%", "");
+                }else if(/[RGB]+/.test(args[i])){//channel
+                    channel = args[i];
                 }else{//method
-                    method = arguments[i];
+                    method = args[i];
                 }
             break;
 
             case "number":
-                numberArr.push(arguments[i]);
+                numberArr.push(args[i]);
             break;
 
             case "boolean":
-               isFast = arguments[i];
+               isFast = args[i];
             break;
         }
     }
@@ -45,20 +44,9 @@ function add(aiObj, ...args){
     // 所以不能简单then, 不然then后面的内容执行的时候，aiObj已不在这个时机
     
 
-    var wait = new Promise(rs => {
-        aiObj.then(() => {
-            rs(aiObj.cloneImageData());
-        });
-    });
 
-    console.log('add');
+    this.imgData = _addLayer(this.imgData, aiObj.cloneImageData(), method, alpha, dx, dy, isFast, channel);
 
-    this.then(async () => {
-        let aiObjImgData = await wait;
-        this.imgData = _addLayer(this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
-
-        console.log('xxxxxxx');
-    });
 
 
     /*
@@ -77,9 +65,7 @@ function add(aiObj, ...args){
 }
 
 function addLayer(...args){
-    this.then(() => {
-        this.layers.push(args);
-    });
+    this.layers.push(args);
 
     return this;
 }

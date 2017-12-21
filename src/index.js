@@ -1,11 +1,14 @@
 import AlloyImage from './AlloyImage';
 
+import "./AlloyImage/loader";
 import "./AlloyImage/addLayer";
 import './AlloyImage/act';
 import './AlloyImage/size';
 import './AlloyImage/show';
 import './AlloyImage/clone';
 import './AlloyImage/effect';
+import './AlloyImage/drawrect';
+import './AlloyImage/multilayer';
 
 import "./filter/toGray";
 import "./filter/corrode";
@@ -38,5 +41,7 @@ import './effect/warmAutumn';
 import './effect/soften';
 import './effect/carveStyle';
 import './effect/rough';
+
+import './tool/text';
 
 window.AlloyImage = AlloyImage;

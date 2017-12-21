@@ -44,7 +44,7 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _AlloyImage = __webpack_require__(1);
 
@@ -52,9 +52,9 @@
 
 	__webpack_require__(56);
 
-	__webpack_require__(58);
+	__webpack_require__(57);
 
-	__webpack_require__(60);
+	__webpack_require__(59);
 
 	__webpack_require__(61);
 
@@ -119,6 +119,12 @@
 	__webpack_require__(91);
 
 	__webpack_require__(92);
+
+	__webpack_require__(93);
+
+	__webpack_require__(94);
+
+	__webpack_require__(95);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -224,13 +230,9 @@
 	    _createClass(PixelProcesser, [{
 	        key: "doProcess",
 	        value: function doProcess(imgData, args) {
-	            var _this = this;
+	            var result = this.process(imgData, { dorsyMath: _dorsyMath2.default })(args);
 
-	            return new Promise(function (rs, rj) {
-	                var result = _this.process(imgData, { dorsyMath: _dorsyMath2.default })(args);
-
-	                rs(result);
-	            });
+	            return result;
 	        }
 	    }]);
 
@@ -881,458 +883,204 @@
 
 	var _fix = __webpack_require__(55);
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/*
-	function FakePromise(executor) {
-	    var p = new Promise(function (resolve, reject) {
-	        // before
-	        return executor(resolve, reject);
-	    });
-	    // after
-
-	    p.__proto__ = FakePromise.prototype;
-	    return p;
-	}
-
-	FakePromise.__proto__ = Promise;
-	FakePromise.prototype.__proto__ = Promise.prototype;
-
-	FakePromise.prototype.then = function then(onFulfilled, onRejected) {
-	    // before
-	    var returnValue = Promise.prototype.then.call(this, onFulfilled, onRejected);
-	    // after
-	    return returnValue;
-	}
-
-	FakePromise.prototype.act = function(c){
-	    return this.then(function(){
-	        return new Promise(function(rs){
-	            setTimeout(function(){
-	                console.log(c);
-	                rs();
-	            }, 1000);
-	        });
-	    });
-	};
-
-	*/
-
-	var AILayerData = function () {
-	    function AILayerData(canvas) {
-	        _classCallCheck(this, AILayerData);
-
-	        this.canvas = canvas;
-	    }
-
-	    _createClass(AILayerData, [{
-	        key: 'setCanvas',
-	        value: function setCanvas(canvas) {
-	            this.canvas = canvas;
-	        }
-	    }, {
-	        key: 'context',
-	        get: function get() {
-	            return this.canvas.getContext('2d');
-	        }
-	    }, {
-	        key: 'width',
-	        get: function get() {
-	            return this.canvas.width;
-	        }
-	    }, {
-	        key: 'height',
-	        get: function get() {
-	            return this.canvas.height;
-	        }
-	    }, {
-	        key: 'imgData',
-	        get: function get() {
-	            return this.context.getImageData(0, 0, this.width, this.height);
-	        },
-	        set: function set(imgData) {
-	            this.context.putImageData(imgData, 0, 0);
-	        }
-	    }]);
-
-	    return AILayerData;
-	}();
 
 	var AICore = function () {
 	    function AICore(img, width, height) {
-	        var _this = this;
-
 	        _classCallCheck(this, AICore);
-
-	        this._tasker = Promise.resolve(true);
 
 	        //记录时间 time trace
 	        this.startTime = +new Date();
 
-	        this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	            var _ref2, canvas, context, ctxCanvas;
+	        var orientation = 0;
+	        if (img.exifdata && typeof img.exifdata['Orientation'] !== 'undefined') {
+	            orientation = img.exifdata['Orientation'];
+	        }
 
-	            return regeneratorRuntime.wrap(function _callee$(_context) {
-	                while (1) {
-	                    switch (_context.prev = _context.next) {
-	                        case 0:
-	                            _context.next = 2;
-	                            return _this.initCanvas(img, width, height);
+	        var _initCanvas = this.initCanvas(img, width, height, orientation),
+	            canvas = _initCanvas.canvas,
+	            context = _initCanvas.context;
 
-	                        case 2:
-	                            _ref2 = _context.sent;
-	                            canvas = _ref2.canvas;
-	                            context = _ref2.context;
+	        //this.AILayerData = new AILayerData(canvas);
+
+	        this.layers = [];
+
+	        // this.canvas = canvas;
+	        // this.context = context;
+
+	        this.imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+	        this.name = 'AlloyImage_' + (0, _util.uniqueId)();
+
+	        // this.canvas.id = this.name;
 
 
-	                            //this.AILayerData = new AILayerData(canvas);
+	        /*
+	        var ctxCanvas = document.createElement("canvas");
+	        ctxCanvas.width = canvas.width;
+	        ctxCanvas.height = canvas.height;
+	          this.ctxCanvas = ctxCanvas;
+	        this.ctxContext = ctxCanvas.getContext("2d");
+	        */
 
-	                            _this.canvas = canvas;
-	                            _this.context = context;
-
-	                            _this.imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-	                            _this.name = 'AlloyImage_' + (0, _util.uniqueId)();
-	                            _this.canvas.id = _this.name;
-
-	                            _this.layers = [];
-
-	                            ctxCanvas = document.createElement("canvas");
-
-	                            ctxCanvas.width = canvas.width;
-	                            ctxCanvas.height = canvas.height;
-
-	                            _this.ctxCanvas = ctxCanvas;
-	                            _this.ctxContext = ctxCanvas.getContext("2d");
-
-	                            _this.width = _this.canvas.width;
-	                            _this.height = _this.canvas.height;
-
-	                            /*
-	                            this.immediatelyDo = this;
-	                            this.immediatelyDo.then = function(func){
-	                                return this::func();
-	                            };
-	                            */
-
-	                        case 18:
-	                        case 'end':
-	                            return _context.stop();
-	                    }
-	                }
-	            }, _callee, _this);
-	        })));
+	        this.width = canvas.width;
+	        this.height = canvas.height;
 	    }
 
 	    _createClass(AICore, [{
 	        key: 'initCanvas',
-	        value: function () {
-	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(img, width, height) {
-	                var canvas, context, dw, dh, sw, sh, ratio;
-	                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	                    while (1) {
-	                        switch (_context2.prev = _context2.next) {
-	                            case 0:
-	                                canvas = document.createElement("canvas");
-	                                context = canvas.getContext("2d");
+	        value: function initCanvas(img, width, height, orientation) {
+	            var canvas = document.createElement("canvas");
+	            var context = canvas.getContext("2d");
 
-	                                //var l = psLib(20,30);构造适配
+	            //var l = psLib(20,30);构造适配
+	            if (!isNaN(img)) {
+	                canvas.width = img;
+	                canvas.height = width;
 
-	                                if (isNaN(img)) {
-	                                    _context2.next = 11;
-	                                    break;
-	                                }
+	                height = height || "#fff";
 
-	                                canvas.width = img;
-	                                canvas.height = width;
+	                context.fillStyle = height;
+	                context.fillRect(0, 0, img, width);
 
-	                                height = height || "#fff";
+	                this.srcImg = "";
+	            } else {
+	                var dw = width,
+	                    dh = height;
 
-	                                context.fillStyle = height;
-	                                context.fillRect(0, 0, img, width);
+	                var sw = img.width,
+	                    sh = img.height;
 
-	                                this.srcImg = "";
-	                                _context2.next = 23;
-	                                break;
+	                if (orientation === 6 || orientation === 8) {
+	                    sw = img.height;
+	                    sh = img.width;
+	                }
 
-	                            case 11:
-	                                if (!(typeof img == "string")) {
-	                                    _context2.next = 15;
-	                                    break;
-	                                }
+	                var ratio = sw / sh;
 
-	                                _context2.next = 14;
-	                                return (0, _util.loadImage)(img);
-
-	                            case 14:
-	                                img = _context2.sent;
-
-	                            case 15:
-	                                dw = width, dh = height;
-	                                sw = img.width, sh = img.height;
-	                                ratio = sw / sh;
-
-
-	                                if (width || height) {
-	                                    if (!height) {
-	                                        dh = ~~(dw / ratio);
-	                                    } else if (!width) {
-	                                        dw = dh * ratio;
-	                                    }
-	                                } else {
-	                                    dw = sw;
-	                                    dh = sh;
-	                                }
-
-	                                canvas.width = dw;
-	                                canvas.height = dh;
-
-	                                if (!isNaN(dw)) {
-	                                    if (_util.device == "ios") {
-	                                        (0, _fix.drawImageIOS)(context, img, dw, dh);
-	                                    } else {
-	                                        context.drawImage(img, 0, 0, dw, dh);
-	                                    }
-	                                } else {
-	                                    context.drawImage(img, 0, 0);
-	                                }
-
-	                                this.srcImg = img;
-
-	                            case 23:
-	                                return _context2.abrupt('return', { canvas: canvas, context: context });
-
-	                            case 24:
-	                            case 'end':
-	                                return _context2.stop();
-	                        }
+	                if (width || height) {
+	                    if (!height) {
+	                        dh = ~~(dw / ratio);
+	                    } else if (!width) {
+	                        dw = dh * ratio;
 	                    }
-	                }, _callee2, this);
-	            }));
+	                } else {
+	                    dw = sw;
+	                    dh = sh;
+	                }
 
-	            function initCanvas(_x, _x2, _x3) {
-	                return _ref3.apply(this, arguments);
+	                canvas.width = dw;
+	                canvas.height = dh;
+
+	                context.save();
+
+	                var temp = void 0;
+	                switch (orientation) {
+	                    case 6:
+	                        context.transform(0, 1, -1, 0, dw, 0);
+
+	                        // 坐标变换后dw dh也要变化
+	                        temp = dh;
+	                        dh = dw;
+	                        dw = temp;
+	                        break;
+
+	                    case 8:
+	                        context.transform(0, -1, 1, 0, 0, dh);
+
+	                        // 坐标变换后dw dh也要变化
+	                        temp = dh;
+	                        dh = dw;
+	                        dw = temp;
+
+	                        break;
+
+	                    case 3:
+	                        context.transform(-1, 0, 0, -1, dw, dh);
+
+	                        break;
+	                }
+
+	                if (!isNaN(dw)) {
+	                    if (_util.device == "ios") {
+	                        (0, _fix.drawImageIOS)(context, img, dw, dh);
+	                    } else {
+	                        context.drawImage(img, 0, 0, dw, dh);
+	                    }
+	                } else {
+	                    context.drawImage(img, 0, 0);
+	                }
+
+	                this.srcImg = img;
+
+	                context.restore();
 	            }
 
-	            return initCanvas;
-	        }()
+	            return { canvas: canvas, context: context };
+	        }
 	    }, {
 	        key: 'getImageData',
 	        value: function getImageData() {
-	            //return this.then(() => {
 	            return this.imgData;
-	            //});
-	        }
-
-	        /*
-	        addAsyncTask(fn, pos){
-	        }
-	        */
-
-	    }, {
-	        key: 'then',
-	        value: function then(fn) {
-	            var _this2 = this;
-
-	            // then内部的act等方法开一个子任务去处理
-	            // 如果直接act会直接add在后面
-	            var wrap = function () {
-	                var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-	                    var oldTask;
-	                    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-	                        while (1) {
-	                            switch (_context3.prev = _context3.next) {
-	                                case 0:
-	                                    oldTask = _this2._tasker;
-
-
-	                                    _this2._tasker = Promise.resolve(true);
-
-	                                    _context3.next = 4;
-	                                    return fn.bind(_this2)();
-
-	                                case 4:
-
-	                                    _this2._tasker = oldTask;
-
-	                                case 5:
-	                                case 'end':
-	                                    return _context3.stop();
-	                            }
-	                        }
-	                    }, _callee3, _this2);
-	                }));
-
-	                return function wrap() {
-	                    return _ref4.apply(this, arguments);
-	                };
-	            }();
-
-	            this._tasker = this._tasker.then(wrap);
-
-	            return this;
-	        }
-	    }, {
-	        key: 'promise',
-	        value: function promise() {
-	            return this._tasker;
 	        }
 
 	        // 获得合成视图
 
 	    }, {
 	        key: '_getCompositeView',
-	        value: function () {
-	            var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
-	                var compositeCanvas, compositeContext, tempAIObj, i, tA, layers, currLayer, tempPsLib;
-	                return regeneratorRuntime.wrap(function _callee4$(_context4) {
-	                    while (1) {
-	                        switch (_context4.prev = _context4.next) {
-	                            case 0:
-	                                if (!(this.layers.length === 0)) {
-	                                    _context4.next = 10;
-	                                    break;
-	                                }
+	        value: function _getCompositeView() {
+	            if (this.layers.length === 0) {
+	                var compositeCanvas = document.createElement('canvas');
+	                compositeCanvas.width = this.width;
+	                compositeCanvas.height = this.height;
 
-	                                compositeCanvas = document.createElement('canvas');
+	                var compositeContext = compositeCanvas.getContext("2d");
 
-	                                compositeCanvas.width = this.width;
-	                                compositeCanvas.height = this.height;
+	                compositeContext.putImageData(this.imgData, 0, 0);
 
-	                                compositeContext = compositeCanvas.getContext("2d");
+	                return {
+	                    compositeCanvas: compositeCanvas,
+	                    compositeContext: compositeContext
+	                };
+	            } else {
 
+	                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
+	                var tempAIObj = new AlloyImage(this.width, this.height);
 
-	                                console.log(this.imgData, 'show');
-	                                compositeContext.putImageData(this.imgData, 0, 0);
+	                tempAIObj.add(this, "正常", 0, 0);
 
-	                                return _context4.abrupt('return', {
-	                                    compositeCanvas: compositeCanvas,
-	                                    compositeContext: compositeContext
-	                                });
+	                //this.tempPsLib = tempPsLib;
 
-	                            case 10:
+	                //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
+	                for (var i = 0; i < this.layers.length; i++) {
+	                    var tA = this.layers[i];
+	                    var currLayer = tA[0];
 
-	                                //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
-	                                tempAIObj = new AlloyImage(this.canvas.width, this.canvas.height);
+	                    var layers = tA[0].layers;
 
-	                                tempAIObj.add(this, "正常", 0, 0);
+	                    if (layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
+	                    tempAIObj.add(currLayer, tA[1], tA[2], tA[3]);
+	                }
 
-	                                //this.tempPsLib = tempPsLib;
-
-	                                //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
-	                                for (i = 0; i < this.layers.length; i++) {
-	                                    tA = this.layers[i];
-	                                    layers = tA[0].layers;
-	                                    currLayer = tA[0];
-
-
-	                                    if (layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
-	                                    tempAIObj.add(currLayer, tA[1], tA[2], tA[3]);
-	                                }
-
-	                                _context4.next = 15;
-	                                return tempAIObj;
-
-	                            case 15:
-	                                return _context4.abrupt('return', {
-	                                    compositeCanvas: tempAIObj.canvas,
-	                                    compositeContext: tempAIObj.context
-
-	                                    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	                                });
-
-	                            case 16:
-	                                //如果其上无其他挂载图层，加快处理
-	                                if (this.layers.length == 0) {
-	                                    this.tempPsLib = {
-	                                        imgData: this.imgData
-	                                    };
-	                                } else {
-
-	                                    //创建一个临时的psLib对象，防止因为合并显示对本身imgData影响
-	                                    tempPsLib = new AlloyImage(this.canvas.width, this.canvas.height);
-	                                    /*
-	                                    tempPsLib.add(this, "正常", 0, 0, isFast);
-	                                    this.tempPsLib = tempPsLib;
-	                                      //将挂接到本对象上的图层对象 一起合并到临时的psLib对象上去 用于显示合并的结果，不会影响每个图层，包括本图层
-	                                    for(var i = 0; i < this.layers.length; i ++){
-	                                        var tA = this.layers[i];
-	                                        var layers = tA[0].layers;
-	                                        var currLayer = tA[0];
-	                                          if(layers[layers.length - 1] && layers[layers.length - 1][0].type == 1) currLayer = layers[layers.length - 1][0];
-	                                        tempPsLib.add(currLayer, tA[1], tA[2], tA[3], isFast);
-	                                    }
-	                                    */
-
-	                                    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	                                }
-
-	                            case 17:
-	                            case 'end':
-	                                return _context4.stop();
-	                        }
-	                    }
-	                }, _callee4, this);
-	            }));
-
-	            function _getCompositeView() {
-	                return _ref5.apply(this, arguments);
+	                return tempAIObj._getCompositeView();
 	            }
-
-	            return _getCompositeView;
-	        }()
-	    }, {
-	        key: 'wait',
-	        value: function wait(aiObj) {
-	            var _this3 = this;
-
-	            var waitThing = new Promise(function (rs, rj) {
-	                aiObj.then(function () {
-	                    rs();
-	                });
-	            });
-
-	            this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
-	                return regeneratorRuntime.wrap(function _callee5$(_context5) {
-	                    while (1) {
-	                        switch (_context5.prev = _context5.next) {
-	                            case 0:
-	                                _context5.next = 2;
-	                                return waitThing;
-
-	                            case 2:
-	                            case 'end':
-	                                return _context5.stop();
-	                        }
-	                    }
-	                }, _callee5, _this3);
-	            })));
-
-	            return this;
 	        }
 	    }], [{
 	        key: 'extend',
-	        value: function extend(func) {
-	            var name = func.name;
+	        value: function extend(funcOrName, func) {
+	            if (typeof funcOrName === 'function') {
+	                var name = funcOrName.name;
+	                this.prototype[name] = funcOrName;
 
-	            this.prototype[name] = func;
+	                return;
+	            }
+
+	            this.prototype[funcOrName] = func;
 	        }
 	    }]);
 
 	    return AICore;
 	}();
-
-	/*
-	export let register = (obj) => {
-	    for(var i in obj){
-	        if(obj.hasOwnProperty(i)){
-	            obj[i](AlloyImage);
-	        }
-	    }
-	};
-	*/
 
 	exports.default = AICore;
 
@@ -3300,7 +3048,127 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-	var _addLayer2 = __webpack_require__(57);
+	var _util = __webpack_require__(54);
+
+	var _AlloyImage = __webpack_require__(1);
+
+	var _AlloyImage2 = _interopRequireDefault(_AlloyImage);
+
+	var _exif = __webpack_require__(96);
+
+	var _exif2 = _interopRequireDefault(_exif);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+	var loader = function () {
+	    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(domOrImgString) {
+	        var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	        var _option$fixOrientatio, fixOrientation, _ret;
+
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	            while (1) {
+	                switch (_context.prev = _context.next) {
+	                    case 0:
+	                        _option$fixOrientatio = option.fixOrientation, fixOrientation = _option$fixOrientatio === undefined ? true : _option$fixOrientatio;
+
+	                        if (!(typeof domOrImgString === 'string')) {
+	                            _context.next = 7;
+	                            break;
+	                        }
+
+	                        _context.next = 4;
+	                        return (0, _util.loadImage)(domOrImgString);
+
+	                    case 4:
+	                        return _context.abrupt('return', _context.sent);
+
+	                    case 7:
+	                        if (!(domOrImgString instanceof Image)) {
+	                            _context.next = 13;
+	                            break;
+	                        }
+
+	                        if (!domOrImgString.complete) {
+	                            _context.next = 10;
+	                            break;
+	                        }
+
+	                        return _context.abrupt('return', domOrImgString);
+
+	                    case 10:
+	                        return _context.abrupt('return', new Promise(function (rs) {
+	                            var success = function success() {
+	                                rs(domOrImgString);
+
+	                                domOrImgString.removeEventListener('load', success);
+	                            };
+	                            domOrImgString.addEventListener('load', success);
+	                        }));
+
+	                    case 13:
+	                        if (!(domOrImgString instanceof File)) {
+	                            _context.next = 17;
+	                            break;
+	                        }
+
+	                        _ret = function () {
+	                            var url = URL.createObjectURL(domOrImgString);
+	                            var img = new Image();
+	                            img.src = url;
+
+	                            if (fixOrientation) {
+	                                return {
+	                                    v: Promise.all([new Promise(function (rs) {
+	                                        _exif2.default.getData(domOrImgString, function () {
+	                                            img.exifdata = this.exifdata;
+	                                            rs();
+	                                            // alert(EXIF.getTag('Orientation'));
+	                                        });
+	                                    }), loader(img)]).then(function () {
+	                                        return img;
+	                                    })
+	                                };
+	                            }
+
+	                            return {
+	                                v: loader(img)
+	                            };
+	                        }();
+
+	                        if (!((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object")) {
+	                            _context.next = 17;
+	                            break;
+	                        }
+
+	                        return _context.abrupt('return', _ret.v);
+
+	                    case 17:
+	                    case 'end':
+	                        return _context.stop();
+	                }
+	            }
+	        }, _callee, this);
+	    }));
+
+	    return function loader(_x) {
+	        return _ref.apply(this, arguments);
+	    };
+	}();
+
+	_AlloyImage2.default.loader = loader;
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _addLayer2 = __webpack_require__(58);
 
 	var _addLayer3 = _interopRequireDefault(_addLayer2);
 
@@ -3310,15 +3178,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 	function add(aiObj) {
-	    var _this = this;
-
-	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	        args[_key - 1] = arguments[_key];
-	    }
-
 	    var numberArr = [],
 	        method = void 0,
 	        alpha = void 0,
@@ -3328,29 +3188,33 @@
 	        channel = void 0;
 
 	    //做重载
-	    for (var i = 0; i < arguments.length; i++) {
-	        if (!i) continue;
 
-	        switch (_typeof(arguments[i])) {
+	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	    }
+
+	    for (var i = 0; i < args.length; i++) {
+
+	        switch (_typeof(args[i])) {
 	            case "string":
-	                if (/\d+%/.test(arguments[i])) {
+	                if (/\d+%/.test(args[i])) {
 	                    //alpha
-	                    alpha = arguments[i].replace("%", "");
-	                } else if (/[RGB]+/.test(arguments[i])) {
+	                    alpha = args[i].replace("%", "");
+	                } else if (/[RGB]+/.test(args[i])) {
 	                    //channel
-	                    channel = arguments[i];
+	                    channel = args[i];
 	                } else {
 	                    //method
-	                    method = arguments[i];
+	                    method = args[i];
 	                }
 	                break;
 
 	            case "number":
-	                numberArr.push(arguments[i]);
+	                numberArr.push(args[i]);
 	                break;
 
 	            case "boolean":
-	                isFast = arguments[i];
+	                isFast = args[i];
 	                break;
 	        }
 	    }
@@ -3371,37 +3235,7 @@
 	    // 所以不能简单then, 不然then后面的内容执行的时候，aiObj已不在这个时机
 
 
-	    var wait = new Promise(function (rs) {
-	        aiObj.then(function () {
-	            rs(aiObj.cloneImageData());
-	        });
-	    });
-
-	    console.log('add');
-
-	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	        var aiObjImgData;
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
-	            while (1) {
-	                switch (_context.prev = _context.next) {
-	                    case 0:
-	                        _context.next = 2;
-	                        return wait;
-
-	                    case 2:
-	                        aiObjImgData = _context.sent;
-
-	                        _this.imgData = (0, _addLayer3.default)(_this.imgData, aiObjImgData, method, alpha, dx, dy, isFast, channel);
-
-	                        console.log('xxxxxxx');
-
-	                    case 5:
-	                    case 'end':
-	                        return _context.stop();
-	                }
-	            }
-	        }, _callee, _this);
-	    })));
+	    this.imgData = (0, _addLayer3.default)(this.imgData, aiObj.cloneImageData(), method, alpha, dx, dy, isFast, channel);
 
 	    /*
 	    var aiObjImgData;
@@ -3418,15 +3252,11 @@
 	}
 
 	function addLayer() {
-	    var _this2 = this;
-
 	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	        args[_key2] = arguments[_key2];
 	    }
 
-	    this.then(function () {
-	        _this2.layers.push(args);
-	    });
+	    this.layers.push(args);
 
 	    return this;
 	}
@@ -3435,7 +3265,7 @@
 	_AlloyImage2.default.extend(addLayer);
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -3728,42 +3558,12 @@
 	};
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _doAct = function () {
-	    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(method, args) {
-	        var layerPixelProcesser, imgData;
-	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	            while (1) {
-	                switch (_context2.prev = _context2.next) {
-	                    case 0:
-	                        layerPixelProcesser = new _layerPixelProcesser2.default(this.imgData);
-	                        _context2.next = 3;
-	                        return layerPixelProcesser.process(method, args);
-
-	                    case 3:
-	                        imgData = _context2.sent;
-
-
-	                        this.imgData = imgData;
-
-	                    case 5:
-	                    case 'end':
-	                        return _context2.stop();
-	                }
-	            }
-	        }, _callee2, this);
-	    }));
-
-	    return function _doAct(_x, _x2) {
-	        return _ref2.apply(this, arguments);
-	    };
-	}();
-
-	var _layerPixelProcesser = __webpack_require__(59);
+	var _layerPixelProcesser = __webpack_require__(60);
 
 	var _layerPixelProcesser2 = _interopRequireDefault(_layerPixelProcesser);
 
@@ -3773,33 +3573,22 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 	function act(method) {
-	    var _this = this;
-
 	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	        args[_key - 1] = arguments[_key];
 	    }
 
-	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
-	            while (1) {
-	                switch (_context.prev = _context.next) {
-	                    case 0:
-	                        console.log('act', method);
-	                        _context.next = 3;
-	                        return _this._doAct(method, args);
-
-	                    case 3:
-	                    case 'end':
-	                        return _context.stop();
-	                }
-	            }
-	        }, _callee, _this);
-	    })));
+	    this._doAct(method, args);
 
 	    return this;
+	}
+
+	function _doAct(method, args) {
+	    var layerPixelProcesser = new _layerPixelProcesser2.default(this.imgData);
+
+	    var imgData = layerPixelProcesser.process(method, args);
+
+	    this.imgData = imgData;
 	}
 
 	_AlloyImage2.default.extend(act);
@@ -3814,7 +3603,7 @@
 	};
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -3824,8 +3613,6 @@
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3838,56 +3625,30 @@
 
 	    _createClass(LayerPixelProcesser, [{
 	        key: 'process',
-	        value: function () {
-	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(name, args) {
-	                var filter, alteration, doProcess, _ref2, data, width, height;
+	        value: function process(name, args) {
+	            name = name.toLocaleLowerCase();
 
-	                return regeneratorRuntime.wrap(function _callee$(_context) {
-	                    while (1) {
-	                        switch (_context.prev = _context.next) {
-	                            case 0:
-	                                name = name.toLocaleLowerCase();
+	            var filter = LayerPixelProcesser.filterMap[name];
+	            var alteration = LayerPixelProcesser.alterationMap[name];
 
-	                                filter = LayerPixelProcesser.filterMap[name];
-	                                alteration = LayerPixelProcesser.alterationMap[name];
-
-
-	                                if (!(filter || alteration)) {
-	                                    console.error('no act method registered: ', name);
-	                                }
-
-	                                doProcess = void 0;
-
-	                                if (alteration) {
-	                                    doProcess = alteration.doProcess.bind(alteration);
-	                                } else {
-	                                    doProcess = filter.doProcess.bind(filter);
-	                                }
-
-	                                _context.next = 8;
-	                                return doProcess(this.imgData, args);
-
-	                            case 8:
-	                                _ref2 = _context.sent;
-	                                data = _ref2.data;
-	                                width = _ref2.width;
-	                                height = _ref2.height;
-	                                return _context.abrupt('return', new ImageData(data, width, height));
-
-	                            case 13:
-	                            case 'end':
-	                                return _context.stop();
-	                        }
-	                    }
-	                }, _callee, this);
-	            }));
-
-	            function process(_x, _x2) {
-	                return _ref.apply(this, arguments);
+	            if (!(filter || alteration)) {
+	                console.error('no act method registered: ', name);
 	            }
 
-	            return process;
-	        }()
+	            var doProcess = void 0;
+	            if (alteration) {
+	                doProcess = alteration.doProcess.bind(alteration);
+	            } else {
+	                doProcess = filter.doProcess.bind(filter);
+	            }
+
+	            var _doProcess = doProcess(this.imgData, args),
+	                data = _doProcess.data,
+	                width = _doProcess.width,
+	                height = _doProcess.height;
+
+	            return new ImageData(data, width, height);
+	        }
 	    }], [{
 	        key: 'addFilter',
 	        value: function addFilter(Filter) {
@@ -3937,52 +3698,6 @@
 	exports.default = LayerPixelProcesser;
 
 /***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _AlloyImage = __webpack_require__(1);
-
-	var _AlloyImage2 = _interopRequireDefault(_AlloyImage);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	Object.defineProperties(_AlloyImage2.default.prototype, {
-	    width: {
-	        get: function get() {
-	            return this.canvas.width;
-	        },
-
-	        set: function set(w) {
-	            var _this = this;
-
-	            this.then(function () {
-	                _this.canvas.width = w;
-	            });
-
-	            return this;
-	        }
-	    },
-
-	    height: {
-	        get: function get() {
-	            return this.canvas.height;
-	        },
-
-	        set: function set(h) {
-	            var _this2 = this;
-
-	            this.then(function () {
-	                _this2.canvas.height = h;
-	            });
-
-	            return this;
-	        }
-	    }
-	});
-
-/***/ }),
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3994,54 +3709,39 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+	Object.defineProperties(_AlloyImage2.default.prototype, {});
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _AlloyImage = __webpack_require__(1);
+
+	var _AlloyImage2 = _interopRequireDefault(_AlloyImage);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function show(selector, flag) {
-	    var _this = this;
+	    var _getCompositeView = this._getCompositeView(),
+	        compositeCanvas = _getCompositeView.compositeCanvas;
 
-	    console.log('show invoked');
-	    this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	        var _ref2, compositeCanvas, el;
+	    //以临时对象data显示
+	    /*
+	    this.context.putImageData(this.tempPsLib.imgData, 0, 0);
+	    */
 
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
-	            while (1) {
-	                switch (_context.prev = _context.next) {
-	                    case 0:
-
-	                        console.log('show', flag);
-
-	                        _context.next = 3;
-	                        return _this._getCompositeView();
-
-	                    case 3:
-	                        _ref2 = _context.sent;
-	                        compositeCanvas = _ref2.compositeCanvas;
-
-
-	                        //以临时对象data显示
-	                        /*
-	                        this.context.putImageData(this.tempPsLib.imgData, 0, 0);
-	                        */
-
-	                        if (selector) {
-	                            if (typeof selector == "string") {
-	                                el = document.querySelector(selector);
-
-	                                el.appendChild(compositeCanvas);
-	                            } else {
-	                                selector.appendChild(compositeCanvas);
-	                            }
-	                        } else {
-	                            document.body.appendChild(compositeCanvas);
-	                        }
-
-	                    case 6:
-	                    case 'end':
-	                        return _context.stop();
-	                }
-	            }
-	        }, _callee, _this);
-	    })));
+	    if (selector) {
+	        if (typeof selector == "string") {
+	            var el = document.querySelector(selector);
+	            el.appendChild(compositeCanvas);
+	        } else {
+	            selector.appendChild(compositeCanvas);
+	        }
+	    } else {
+	        document.body.appendChild(compositeCanvas);
+	    }
 
 	    return this;
 	}
@@ -4049,7 +3749,7 @@
 	_AlloyImage2.default.extend(show);
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4062,17 +3762,11 @@
 
 	// clone只对单图层有效
 	function clone() {
-	    var _this = this;
 
-	    var newAIObj = new _AlloyImage2.default(1, 1); //this.width, this.height); //this.width, this.height);
+	    var newAIObj = new _AlloyImage2.default(this.width, this.height); //this.width, this.height);
 
-	    newAIObj.wait(this).then(function () {
-	        // 这里直接取 立即生效
-	        newAIObj.canvas.width = _this.width;
-	        newAIObj.canvas.height = _this.height;
-
-	        newAIObj.imgData = _this.cloneImageData();
-	    });
+	    // 这里直接取 立即生效
+	    newAIObj.imgData = this.cloneImageData();
 
 	    return newAIObj;
 	}
@@ -4095,7 +3789,7 @@
 	_AlloyImage2.default.extend(cloneImageData);
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4129,7 +3823,142 @@
 	_AlloyImage2.default.define = define;
 
 /***/ }),
-/* 64 */
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _AlloyImage = __webpack_require__(1);
+
+	var _AlloyImage2 = _interopRequireDefault(_AlloyImage);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//绘制直方图
+	var drawRect = function drawRect(selector, channel) {
+	    var canvas;
+
+	    if (!channel) {
+	        channel = 'RGB';
+	    }
+
+	    var channelString = (channel || '').replace("R", "0").replace("G", "1").replace("B", "2");
+
+	    var indexOfArr = [channelString.indexOf("0") > -1, channelString.indexOf("1") > -1, channelString.indexOf("2") > -1];
+
+	    if (canvas = document.getElementById("imgRect")) {} else {
+	        canvas = document.createElement("canvas");
+	        canvas.id = "imgRect";
+	        document.body.appendChild(canvas);
+	        canvas.width = parseInt(this.canvas.width);
+	        canvas.height = parseInt(this.canvas.height);
+	    }
+
+	    var context = canvas.getContext("2d");
+	    context.clearRect(0, 0, canvas.width, canvas.height);
+
+	    var result = [[], [], []];
+
+	    var _getCompositeView = this._getCompositeView(),
+	        compositeCanvas = _getCompositeView.compositeCanvas,
+	        compositeContext = _getCompositeView.compositeContext;
+
+	    var imgData = compositeContext.getImageData(0, 0, compositeCanvas.width, compositeCanvas.height);
+
+	    var data = imgData.data,
+	        width = imgData.width,
+	        height = imgData.height;
+
+
+	    if (channelString) {
+	        for (var y = 0; y < height; y++) {
+	            for (var x = 0; x < width; x++) {
+	                var i = y * width + x;
+	                var dot0 = i * 4;
+
+	                for (var j = 0; j < 3; j++) {
+	                    if (indexOfArr[j]) {
+	                        if (!result[j][data[dot0 + j]]) {
+	                            result[j][data[dot0 + j]] = 1;
+	                        } else {
+	                            result[j][data[dot0 + j]]++;
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    } else {
+
+	        for (var i = 0, n = data.length; i < n; i++) {
+	            if (!result[data[i]]) {
+	                result[data[i]] = 1;
+	            } else {
+	                result[data[i]]++;
+	            }
+	        }
+	    }
+
+	    var draw = function draw(result, color) {
+	        context.beginPath();
+	        context.moveTo(0, canvas.height);
+
+	        var max = 0;
+
+	        for (var i = 0; i < 255; i++) {
+	            if (result[i] > max) max = result[i];
+	        }
+
+	        for (var i = 0; i < 255; i++) {
+	            var currY = result[i] || 0;
+	            currY = canvas.height - currY / max * 0.8 * canvas.height;
+	            context.lineTo(i / 256 * canvas.width, currY);
+	        }
+
+	        context.lineTo(canvas.width + 10, canvas.height);
+	        context.closePath();
+
+	        context.fillStyle = color;
+	        context.fill();
+	    };
+
+	    if (channelString) {
+	        var colorMap = ['red', 'green', 'blue'];
+	        for (var i = 0; i < result.length; i++) {
+	            if (result[i].length) {
+	                draw(result[i], colorMap[i]);
+	            }
+	        }
+	    } else {
+	        draw(result, 'black');
+	    }
+
+	    return this;
+	};
+
+	_AlloyImage2.default.extend(drawRect);
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _AlloyImage = __webpack_require__(1);
+
+	var _AlloyImage2 = _interopRequireDefault(_AlloyImage);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var addLayer = function addLayer(aiObj, method, dx, dy) {
+	  this.layers.push([aiObj, method, dx, dy]);
+
+	  return this;
+	};
+
+	_AlloyImage2.default.extend(addLayer);
+
+/***/ }),
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4182,7 +4011,7 @@
 	_AlloyImage2.default.addFilter(toGray);
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4255,7 +4084,7 @@
 	_AlloyImage2.default.addFilter(corrode);
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4360,7 +4189,7 @@
 	_AlloyImage2.default.addFilter(darkCorner);
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4465,7 +4294,7 @@
 	_AlloyImage2.default.addFilter(dotted);
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4533,7 +4362,7 @@
 	_AlloyImage2.default.addFilter(embossment);
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4685,7 +4514,7 @@
 	_AlloyImage2.default.addFilter(gaussBlur);
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4739,7 +4568,7 @@
 	_AlloyImage2.default.addFilter(borderline);
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4827,7 +4656,7 @@
 	_AlloyImage2.default.addFilter(mosaic);
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4898,7 +4727,7 @@
 	_AlloyImage2.default.addFilter(noise);
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4971,7 +4800,7 @@
 	_AlloyImage2.default.addFilter(oilPainting);
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5039,7 +4868,7 @@
 	_AlloyImage2.default.addFilter(posterize);
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5094,7 +4923,7 @@
 	_AlloyImage2.default.addFilter(sepia);
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5166,7 +4995,7 @@
 	_AlloyImage2.default.addFilter(sharp);
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5220,7 +5049,7 @@
 	_AlloyImage2.default.addFilter(toReverse);
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5286,7 +5115,7 @@
 	_AlloyImage2.default.addFilter(toThresh);
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5352,7 +5181,7 @@
 	_AlloyImage2.default.addAlteration(Brightness);
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5437,7 +5266,7 @@
 	_AlloyImage2.default.addAlteration(Curve);
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5506,7 +5335,7 @@
 	_AlloyImage2.default.addAlteration(Gamma);
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5716,7 +5545,7 @@
 	_AlloyImage2.default.addAlteration(SeletiveColor);
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5810,7 +5639,7 @@
 	_AlloyImage2.default.addAlteration(SetHSI);
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5828,7 +5657,7 @@
 	});
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5845,7 +5674,7 @@
 	});
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5862,7 +5691,7 @@
 	});
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5874,15 +5703,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	_AlloyImage2.default.define('vintage', function () {
-	    var _this = this;
-
-	    return this.act("灰度处理").then(function () {
-	        return _this.add(new _AlloyImage2.default(_this.width, _this.height, "#808080").act("添加杂色").act("高斯模糊", 4).act("色相/饱和度调节", 32, 19, 0, true), "叠加").promise();
-	    });
+	    return this.act("灰度处理").add(new _AlloyImage2.default(this.width, this.height, "#808080").act("添加杂色").act("高斯模糊", 4).act("色相/饱和度调节", 32, 19, 0, true), "叠加");
 	});
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5900,7 +5725,7 @@
 	});
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5917,7 +5742,7 @@
 	});
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5934,7 +5759,7 @@
 	});
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5951,7 +5776,7 @@
 	});
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5962,27 +5787,1047 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 	_AlloyImage2.default.define('rough', function () {
-	    var _this = this;
+	   return this.add(new _AlloyImage2.default(this.width, this.height, "#000").act("喷点").act("反色").act("浮雕效果"), "叠加");
+	});
 
-	    return this.then(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
-	            while (1) {
-	                switch (_context.prev = _context.next) {
-	                    case 0:
-	                        _context.next = 2;
-	                        return _this.add(new _AlloyImage2.default(_this.width, _this.height, "#000").act("喷点").act("反色").act("浮雕效果"), "叠加").promise();
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	                    case 2:
-	                    case 'end':
-	                        return _context.stop();
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	(function () {
+
+	    var debug = false;
+
+	    var root = this;
+
+	    var EXIF = function EXIF(obj) {
+	        if (obj instanceof EXIF) return obj;
+	        if (!(this instanceof EXIF)) return new EXIF(obj);
+	        this.EXIFwrapped = obj;
+	    };
+
+	    if (true) {
+	        if (typeof module !== 'undefined' && module.exports) {
+	            exports = module.exports = EXIF;
+	        }
+	        exports.EXIF = EXIF;
+	    } else {
+	        root.EXIF = EXIF;
+	    }
+
+	    var ExifTags = EXIF.Tags = {
+
+	        // version tags
+	        0x9000: "ExifVersion", // EXIF version
+	        0xA000: "FlashpixVersion", // Flashpix format version
+
+	        // colorspace tags
+	        0xA001: "ColorSpace", // Color space information tag
+
+	        // image configuration
+	        0xA002: "PixelXDimension", // Valid width of meaningful image
+	        0xA003: "PixelYDimension", // Valid height of meaningful image
+	        0x9101: "ComponentsConfiguration", // Information about channels
+	        0x9102: "CompressedBitsPerPixel", // Compressed bits per pixel
+
+	        // user information
+	        0x927C: "MakerNote", // Any desired information written by the manufacturer
+	        0x9286: "UserComment", // Comments by user
+
+	        // related file
+	        0xA004: "RelatedSoundFile", // Name of related sound file
+
+	        // date and time
+	        0x9003: "DateTimeOriginal", // Date and time when the original image was generated
+	        0x9004: "DateTimeDigitized", // Date and time when the image was stored digitally
+	        0x9290: "SubsecTime", // Fractions of seconds for DateTime
+	        0x9291: "SubsecTimeOriginal", // Fractions of seconds for DateTimeOriginal
+	        0x9292: "SubsecTimeDigitized", // Fractions of seconds for DateTimeDigitized
+
+	        // picture-taking conditions
+	        0x829A: "ExposureTime", // Exposure time (in seconds)
+	        0x829D: "FNumber", // F number
+	        0x8822: "ExposureProgram", // Exposure program
+	        0x8824: "SpectralSensitivity", // Spectral sensitivity
+	        0x8827: "ISOSpeedRatings", // ISO speed rating
+	        0x8828: "OECF", // Optoelectric conversion factor
+	        0x9201: "ShutterSpeedValue", // Shutter speed
+	        0x9202: "ApertureValue", // Lens aperture
+	        0x9203: "BrightnessValue", // Value of brightness
+	        0x9204: "ExposureBias", // Exposure bias
+	        0x9205: "MaxApertureValue", // Smallest F number of lens
+	        0x9206: "SubjectDistance", // Distance to subject in meters
+	        0x9207: "MeteringMode", // Metering mode
+	        0x9208: "LightSource", // Kind of light source
+	        0x9209: "Flash", // Flash status
+	        0x9214: "SubjectArea", // Location and area of main subject
+	        0x920A: "FocalLength", // Focal length of the lens in mm
+	        0xA20B: "FlashEnergy", // Strobe energy in BCPS
+	        0xA20C: "SpatialFrequencyResponse", //
+	        0xA20E: "FocalPlaneXResolution", // Number of pixels in width direction per FocalPlaneResolutionUnit
+	        0xA20F: "FocalPlaneYResolution", // Number of pixels in height direction per FocalPlaneResolutionUnit
+	        0xA210: "FocalPlaneResolutionUnit", // Unit for measuring FocalPlaneXResolution and FocalPlaneYResolution
+	        0xA214: "SubjectLocation", // Location of subject in image
+	        0xA215: "ExposureIndex", // Exposure index selected on camera
+	        0xA217: "SensingMethod", // Image sensor type
+	        0xA300: "FileSource", // Image source (3 == DSC)
+	        0xA301: "SceneType", // Scene type (1 == directly photographed)
+	        0xA302: "CFAPattern", // Color filter array geometric pattern
+	        0xA401: "CustomRendered", // Special processing
+	        0xA402: "ExposureMode", // Exposure mode
+	        0xA403: "WhiteBalance", // 1 = auto white balance, 2 = manual
+	        0xA404: "DigitalZoomRation", // Digital zoom ratio
+	        0xA405: "FocalLengthIn35mmFilm", // Equivalent foacl length assuming 35mm film camera (in mm)
+	        0xA406: "SceneCaptureType", // Type of scene
+	        0xA407: "GainControl", // Degree of overall image gain adjustment
+	        0xA408: "Contrast", // Direction of contrast processing applied by camera
+	        0xA409: "Saturation", // Direction of saturation processing applied by camera
+	        0xA40A: "Sharpness", // Direction of sharpness processing applied by camera
+	        0xA40B: "DeviceSettingDescription", //
+	        0xA40C: "SubjectDistanceRange", // Distance to subject
+
+	        // other tags
+	        0xA005: "InteroperabilityIFDPointer",
+	        0xA420: "ImageUniqueID" // Identifier assigned uniquely to each image
+	    };
+
+	    var TiffTags = EXIF.TiffTags = {
+	        0x0100: "ImageWidth",
+	        0x0101: "ImageHeight",
+	        0x8769: "ExifIFDPointer",
+	        0x8825: "GPSInfoIFDPointer",
+	        0xA005: "InteroperabilityIFDPointer",
+	        0x0102: "BitsPerSample",
+	        0x0103: "Compression",
+	        0x0106: "PhotometricInterpretation",
+	        0x0112: "Orientation",
+	        0x0115: "SamplesPerPixel",
+	        0x011C: "PlanarConfiguration",
+	        0x0212: "YCbCrSubSampling",
+	        0x0213: "YCbCrPositioning",
+	        0x011A: "XResolution",
+	        0x011B: "YResolution",
+	        0x0128: "ResolutionUnit",
+	        0x0111: "StripOffsets",
+	        0x0116: "RowsPerStrip",
+	        0x0117: "StripByteCounts",
+	        0x0201: "JPEGInterchangeFormat",
+	        0x0202: "JPEGInterchangeFormatLength",
+	        0x012D: "TransferFunction",
+	        0x013E: "WhitePoint",
+	        0x013F: "PrimaryChromaticities",
+	        0x0211: "YCbCrCoefficients",
+	        0x0214: "ReferenceBlackWhite",
+	        0x0132: "DateTime",
+	        0x010E: "ImageDescription",
+	        0x010F: "Make",
+	        0x0110: "Model",
+	        0x0131: "Software",
+	        0x013B: "Artist",
+	        0x8298: "Copyright"
+	    };
+
+	    var GPSTags = EXIF.GPSTags = {
+	        0x0000: "GPSVersionID",
+	        0x0001: "GPSLatitudeRef",
+	        0x0002: "GPSLatitude",
+	        0x0003: "GPSLongitudeRef",
+	        0x0004: "GPSLongitude",
+	        0x0005: "GPSAltitudeRef",
+	        0x0006: "GPSAltitude",
+	        0x0007: "GPSTimeStamp",
+	        0x0008: "GPSSatellites",
+	        0x0009: "GPSStatus",
+	        0x000A: "GPSMeasureMode",
+	        0x000B: "GPSDOP",
+	        0x000C: "GPSSpeedRef",
+	        0x000D: "GPSSpeed",
+	        0x000E: "GPSTrackRef",
+	        0x000F: "GPSTrack",
+	        0x0010: "GPSImgDirectionRef",
+	        0x0011: "GPSImgDirection",
+	        0x0012: "GPSMapDatum",
+	        0x0013: "GPSDestLatitudeRef",
+	        0x0014: "GPSDestLatitude",
+	        0x0015: "GPSDestLongitudeRef",
+	        0x0016: "GPSDestLongitude",
+	        0x0017: "GPSDestBearingRef",
+	        0x0018: "GPSDestBearing",
+	        0x0019: "GPSDestDistanceRef",
+	        0x001A: "GPSDestDistance",
+	        0x001B: "GPSProcessingMethod",
+	        0x001C: "GPSAreaInformation",
+	        0x001D: "GPSDateStamp",
+	        0x001E: "GPSDifferential"
+	    };
+
+	    // EXIF 2.3 Spec
+	    var IFD1Tags = EXIF.IFD1Tags = {
+	        0x0100: "ImageWidth",
+	        0x0101: "ImageHeight",
+	        0x0102: "BitsPerSample",
+	        0x0103: "Compression",
+	        0x0106: "PhotometricInterpretation",
+	        0x0111: "StripOffsets",
+	        0x0112: "Orientation",
+	        0x0115: "SamplesPerPixel",
+	        0x0116: "RowsPerStrip",
+	        0x0117: "StripByteCounts",
+	        0x011A: "XResolution",
+	        0x011B: "YResolution",
+	        0x011C: "PlanarConfiguration",
+	        0x0128: "ResolutionUnit",
+	        0x0201: "JpegIFOffset", // When image format is JPEG, this value show offset to JPEG data stored.(aka "ThumbnailOffset" or "JPEGInterchangeFormat")
+	        0x0202: "JpegIFByteCount", // When image format is JPEG, this value shows data size of JPEG image (aka "ThumbnailLength" or "JPEGInterchangeFormatLength")
+	        0x0211: "YCbCrCoefficients",
+	        0x0212: "YCbCrSubSampling",
+	        0x0213: "YCbCrPositioning",
+	        0x0214: "ReferenceBlackWhite"
+	    };
+
+	    var StringValues = EXIF.StringValues = {
+	        ExposureProgram: {
+	            0: "Not defined",
+	            1: "Manual",
+	            2: "Normal program",
+	            3: "Aperture priority",
+	            4: "Shutter priority",
+	            5: "Creative program",
+	            6: "Action program",
+	            7: "Portrait mode",
+	            8: "Landscape mode"
+	        },
+	        MeteringMode: {
+	            0: "Unknown",
+	            1: "Average",
+	            2: "CenterWeightedAverage",
+	            3: "Spot",
+	            4: "MultiSpot",
+	            5: "Pattern",
+	            6: "Partial",
+	            255: "Other"
+	        },
+	        LightSource: {
+	            0: "Unknown",
+	            1: "Daylight",
+	            2: "Fluorescent",
+	            3: "Tungsten (incandescent light)",
+	            4: "Flash",
+	            9: "Fine weather",
+	            10: "Cloudy weather",
+	            11: "Shade",
+	            12: "Daylight fluorescent (D 5700 - 7100K)",
+	            13: "Day white fluorescent (N 4600 - 5400K)",
+	            14: "Cool white fluorescent (W 3900 - 4500K)",
+	            15: "White fluorescent (WW 3200 - 3700K)",
+	            17: "Standard light A",
+	            18: "Standard light B",
+	            19: "Standard light C",
+	            20: "D55",
+	            21: "D65",
+	            22: "D75",
+	            23: "D50",
+	            24: "ISO studio tungsten",
+	            255: "Other"
+	        },
+	        Flash: {
+	            0x0000: "Flash did not fire",
+	            0x0001: "Flash fired",
+	            0x0005: "Strobe return light not detected",
+	            0x0007: "Strobe return light detected",
+	            0x0009: "Flash fired, compulsory flash mode",
+	            0x000D: "Flash fired, compulsory flash mode, return light not detected",
+	            0x000F: "Flash fired, compulsory flash mode, return light detected",
+	            0x0010: "Flash did not fire, compulsory flash mode",
+	            0x0018: "Flash did not fire, auto mode",
+	            0x0019: "Flash fired, auto mode",
+	            0x001D: "Flash fired, auto mode, return light not detected",
+	            0x001F: "Flash fired, auto mode, return light detected",
+	            0x0020: "No flash function",
+	            0x0041: "Flash fired, red-eye reduction mode",
+	            0x0045: "Flash fired, red-eye reduction mode, return light not detected",
+	            0x0047: "Flash fired, red-eye reduction mode, return light detected",
+	            0x0049: "Flash fired, compulsory flash mode, red-eye reduction mode",
+	            0x004D: "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
+	            0x004F: "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
+	            0x0059: "Flash fired, auto mode, red-eye reduction mode",
+	            0x005D: "Flash fired, auto mode, return light not detected, red-eye reduction mode",
+	            0x005F: "Flash fired, auto mode, return light detected, red-eye reduction mode"
+	        },
+	        SensingMethod: {
+	            1: "Not defined",
+	            2: "One-chip color area sensor",
+	            3: "Two-chip color area sensor",
+	            4: "Three-chip color area sensor",
+	            5: "Color sequential area sensor",
+	            7: "Trilinear sensor",
+	            8: "Color sequential linear sensor"
+	        },
+	        SceneCaptureType: {
+	            0: "Standard",
+	            1: "Landscape",
+	            2: "Portrait",
+	            3: "Night scene"
+	        },
+	        SceneType: {
+	            1: "Directly photographed"
+	        },
+	        CustomRendered: {
+	            0: "Normal process",
+	            1: "Custom process"
+	        },
+	        WhiteBalance: {
+	            0: "Auto white balance",
+	            1: "Manual white balance"
+	        },
+	        GainControl: {
+	            0: "None",
+	            1: "Low gain up",
+	            2: "High gain up",
+	            3: "Low gain down",
+	            4: "High gain down"
+	        },
+	        Contrast: {
+	            0: "Normal",
+	            1: "Soft",
+	            2: "Hard"
+	        },
+	        Saturation: {
+	            0: "Normal",
+	            1: "Low saturation",
+	            2: "High saturation"
+	        },
+	        Sharpness: {
+	            0: "Normal",
+	            1: "Soft",
+	            2: "Hard"
+	        },
+	        SubjectDistanceRange: {
+	            0: "Unknown",
+	            1: "Macro",
+	            2: "Close view",
+	            3: "Distant view"
+	        },
+	        FileSource: {
+	            3: "DSC"
+	        },
+
+	        Components: {
+	            0: "",
+	            1: "Y",
+	            2: "Cb",
+	            3: "Cr",
+	            4: "R",
+	            5: "G",
+	            6: "B"
+	        }
+	    };
+
+	    function addEvent(element, event, handler) {
+	        if (element.addEventListener) {
+	            element.addEventListener(event, handler, false);
+	        } else if (element.attachEvent) {
+	            element.attachEvent("on" + event, handler);
+	        }
+	    }
+
+	    function imageHasData(img) {
+	        return !!img.exifdata;
+	    }
+
+	    function base64ToArrayBuffer(base64, contentType) {
+	        contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
+	        base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+	        var binary = atob(base64);
+	        var len = binary.length;
+	        var buffer = new ArrayBuffer(len);
+	        var view = new Uint8Array(buffer);
+	        for (var i = 0; i < len; i++) {
+	            view[i] = binary.charCodeAt(i);
+	        }
+	        return buffer;
+	    }
+
+	    function objectURLToBlob(url, callback) {
+	        var http = new XMLHttpRequest();
+	        http.open("GET", url, true);
+	        http.responseType = "blob";
+	        http.onload = function (e) {
+	            if (this.status == 200 || this.status === 0) {
+	                callback(this.response);
+	            }
+	        };
+	        http.send();
+	    }
+
+	    function getImageData(img, callback) {
+	        function handleBinaryFile(binFile) {
+	            var data = findEXIFinJPEG(binFile);
+	            img.exifdata = data || {};
+	            var iptcdata = findIPTCinJPEG(binFile);
+	            img.iptcdata = iptcdata || {};
+	            if (EXIF.isXmpEnabled) {
+	                var xmpdata = findXMPinJPEG(binFile);
+	                img.xmpdata = xmpdata || {};
+	            }
+	            if (callback) {
+	                callback.call(img);
+	            }
+	        }
+
+	        if (img.src) {
+	            if (/^data\:/i.test(img.src)) {
+	                // Data URI
+	                var arrayBuffer = base64ToArrayBuffer(img.src);
+	                handleBinaryFile(arrayBuffer);
+	            } else if (/^blob\:/i.test(img.src)) {
+	                // Object URL
+	                var fileReader = new FileReader();
+	                fileReader.onload = function (e) {
+	                    handleBinaryFile(e.target.result);
+	                };
+	                objectURLToBlob(img.src, function (blob) {
+	                    fileReader.readAsArrayBuffer(blob);
+	                });
+	            } else {
+	                var http = new XMLHttpRequest();
+	                http.onload = function () {
+	                    if (this.status == 200 || this.status === 0) {
+	                        handleBinaryFile(http.response);
+	                    } else {
+	                        throw "Could not load image";
+	                    }
+	                    http = null;
+	                };
+	                http.open("GET", img.src, true);
+	                http.responseType = "arraybuffer";
+	                http.send(null);
+	            }
+	        } else if (self.FileReader && (img instanceof self.Blob || img instanceof self.File)) {
+	            var fileReader = new FileReader();
+	            fileReader.onload = function (e) {
+	                if (debug) console.log("Got file of length " + e.target.result.byteLength);
+	                handleBinaryFile(e.target.result);
+	            };
+
+	            fileReader.readAsArrayBuffer(img);
+	        }
+	    }
+
+	    function findEXIFinJPEG(file) {
+	        var dataView = new DataView(file);
+
+	        if (debug) console.log("Got file of length " + file.byteLength);
+	        if (dataView.getUint8(0) != 0xFF || dataView.getUint8(1) != 0xD8) {
+	            if (debug) console.log("Not a valid JPEG");
+	            return false; // not a valid jpeg
+	        }
+
+	        var offset = 2,
+	            length = file.byteLength,
+	            marker;
+
+	        while (offset < length) {
+	            if (dataView.getUint8(offset) != 0xFF) {
+	                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
+	                return false; // not a valid marker, something is wrong
+	            }
+
+	            marker = dataView.getUint8(offset + 1);
+	            if (debug) console.log(marker);
+
+	            // we could implement handling for other markers here,
+	            // but we're only looking for 0xFFE1 for EXIF data
+
+	            if (marker == 225) {
+	                if (debug) console.log("Found 0xFFE1 marker");
+
+	                return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
+
+	                // offset += 2 + file.getShortAt(offset+2, true);
+	            } else {
+	                offset += 2 + dataView.getUint16(offset + 2);
+	            }
+	        }
+	    }
+
+	    function findIPTCinJPEG(file) {
+	        var dataView = new DataView(file);
+
+	        if (debug) console.log("Got file of length " + file.byteLength);
+	        if (dataView.getUint8(0) != 0xFF || dataView.getUint8(1) != 0xD8) {
+	            if (debug) console.log("Not a valid JPEG");
+	            return false; // not a valid jpeg
+	        }
+
+	        var offset = 2,
+	            length = file.byteLength;
+
+	        var isFieldSegmentStart = function isFieldSegmentStart(dataView, offset) {
+	            return dataView.getUint8(offset) === 0x38 && dataView.getUint8(offset + 1) === 0x42 && dataView.getUint8(offset + 2) === 0x49 && dataView.getUint8(offset + 3) === 0x4D && dataView.getUint8(offset + 4) === 0x04 && dataView.getUint8(offset + 5) === 0x04;
+	        };
+
+	        while (offset < length) {
+
+	            if (isFieldSegmentStart(dataView, offset)) {
+
+	                // Get the length of the name header (which is padded to an even number of bytes)
+	                var nameHeaderLength = dataView.getUint8(offset + 7);
+	                if (nameHeaderLength % 2 !== 0) nameHeaderLength += 1;
+	                // Check for pre photoshop 6 format
+	                if (nameHeaderLength === 0) {
+	                    // Always 4
+	                    nameHeaderLength = 4;
+	                }
+
+	                var startOffset = offset + 8 + nameHeaderLength;
+	                var sectionLength = dataView.getUint16(offset + 6 + nameHeaderLength);
+
+	                return readIPTCData(file, startOffset, sectionLength);
+
+	                break;
+	            }
+
+	            // Not the marker, continue searching
+	            offset++;
+	        }
+	    }
+	    var IptcFieldMap = {
+	        0x78: 'caption',
+	        0x6E: 'credit',
+	        0x19: 'keywords',
+	        0x37: 'dateCreated',
+	        0x50: 'byline',
+	        0x55: 'bylineTitle',
+	        0x7A: 'captionWriter',
+	        0x69: 'headline',
+	        0x74: 'copyright',
+	        0x0F: 'category'
+	    };
+	    function readIPTCData(file, startOffset, sectionLength) {
+	        var dataView = new DataView(file);
+	        var data = {};
+	        var fieldValue, fieldName, dataSize, segmentType, segmentSize;
+	        var segmentStartPos = startOffset;
+	        while (segmentStartPos < startOffset + sectionLength) {
+	            if (dataView.getUint8(segmentStartPos) === 0x1C && dataView.getUint8(segmentStartPos + 1) === 0x02) {
+	                segmentType = dataView.getUint8(segmentStartPos + 2);
+	                if (segmentType in IptcFieldMap) {
+	                    dataSize = dataView.getInt16(segmentStartPos + 3);
+	                    segmentSize = dataSize + 5;
+	                    fieldName = IptcFieldMap[segmentType];
+	                    fieldValue = getStringFromDB(dataView, segmentStartPos + 5, dataSize);
+	                    // Check if we already stored a value with this name
+	                    if (data.hasOwnProperty(fieldName)) {
+	                        // Value already stored with this name, create multivalue field
+	                        if (data[fieldName] instanceof Array) {
+	                            data[fieldName].push(fieldValue);
+	                        } else {
+	                            data[fieldName] = [data[fieldName], fieldValue];
+	                        }
+	                    } else {
+	                        data[fieldName] = fieldValue;
+	                    }
 	                }
 	            }
-	        }, _callee, _this);
-	    })));
-	});
+	            segmentStartPos++;
+	        }
+	        return data;
+	    }
+
+	    function readTags(file, tiffStart, dirStart, strings, bigEnd) {
+	        var entries = file.getUint16(dirStart, !bigEnd),
+	            tags = {},
+	            entryOffset,
+	            tag,
+	            i;
+
+	        for (i = 0; i < entries; i++) {
+	            entryOffset = dirStart + i * 12 + 2;
+	            tag = strings[file.getUint16(entryOffset, !bigEnd)];
+	            if (!tag && debug) console.log("Unknown tag: " + file.getUint16(entryOffset, !bigEnd));
+	            tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
+	        }
+	        return tags;
+	    }
+
+	    function readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd) {
+	        var type = file.getUint16(entryOffset + 2, !bigEnd),
+	            numValues = file.getUint32(entryOffset + 4, !bigEnd),
+	            valueOffset = file.getUint32(entryOffset + 8, !bigEnd) + tiffStart,
+	            offset,
+	            vals,
+	            val,
+	            n,
+	            numerator,
+	            denominator;
+
+	        switch (type) {
+	            case 1: // byte, 8-bit unsigned int
+	            case 7:
+	                // undefined, 8-bit byte, value depending on field
+	                if (numValues == 1) {
+	                    return file.getUint8(entryOffset + 8, !bigEnd);
+	                } else {
+	                    offset = numValues > 4 ? valueOffset : entryOffset + 8;
+	                    vals = [];
+	                    for (n = 0; n < numValues; n++) {
+	                        vals[n] = file.getUint8(offset + n);
+	                    }
+	                    return vals;
+	                }
+
+	            case 2:
+	                // ascii, 8-bit byte
+	                offset = numValues > 4 ? valueOffset : entryOffset + 8;
+	                return getStringFromDB(file, offset, numValues - 1);
+
+	            case 3:
+	                // short, 16 bit int
+	                if (numValues == 1) {
+	                    return file.getUint16(entryOffset + 8, !bigEnd);
+	                } else {
+	                    offset = numValues > 2 ? valueOffset : entryOffset + 8;
+	                    vals = [];
+	                    for (n = 0; n < numValues; n++) {
+	                        vals[n] = file.getUint16(offset + 2 * n, !bigEnd);
+	                    }
+	                    return vals;
+	                }
+
+	            case 4:
+	                // long, 32 bit int
+	                if (numValues == 1) {
+	                    return file.getUint32(entryOffset + 8, !bigEnd);
+	                } else {
+	                    vals = [];
+	                    for (n = 0; n < numValues; n++) {
+	                        vals[n] = file.getUint32(valueOffset + 4 * n, !bigEnd);
+	                    }
+	                    return vals;
+	                }
+
+	            case 5:
+	                // rational = two long values, first is numerator, second is denominator
+	                if (numValues == 1) {
+	                    numerator = file.getUint32(valueOffset, !bigEnd);
+	                    denominator = file.getUint32(valueOffset + 4, !bigEnd);
+	                    val = new Number(numerator / denominator);
+	                    val.numerator = numerator;
+	                    val.denominator = denominator;
+	                    return val;
+	                } else {
+	                    vals = [];
+	                    for (n = 0; n < numValues; n++) {
+	                        numerator = file.getUint32(valueOffset + 8 * n, !bigEnd);
+	                        denominator = file.getUint32(valueOffset + 4 + 8 * n, !bigEnd);
+	                        vals[n] = new Number(numerator / denominator);
+	                        vals[n].numerator = numerator;
+	                        vals[n].denominator = denominator;
+	                    }
+	                    return vals;
+	                }
+
+	            case 9:
+	                // slong, 32 bit signed int
+	                if (numValues == 1) {
+	                    return file.getInt32(entryOffset + 8, !bigEnd);
+	                } else {
+	                    vals = [];
+	                    for (n = 0; n < numValues; n++) {
+	                        vals[n] = file.getInt32(valueOffset + 4 * n, !bigEnd);
+	                    }
+	                    return vals;
+	                }
+
+	            case 10:
+	                // signed rational, two slongs, first is numerator, second is denominator
+	                if (numValues == 1) {
+	                    return file.getInt32(valueOffset, !bigEnd) / file.getInt32(valueOffset + 4, !bigEnd);
+	                } else {
+	                    vals = [];
+	                    for (n = 0; n < numValues; n++) {
+	                        vals[n] = file.getInt32(valueOffset + 8 * n, !bigEnd) / file.getInt32(valueOffset + 4 + 8 * n, !bigEnd);
+	                    }
+	                    return vals;
+	                }
+	        }
+	    }
+
+	    /**
+	    * Given an IFD (Image File Directory) start offset
+	    * returns an offset to next IFD or 0 if it's the last IFD.
+	    */
+	    function getNextIFDOffset(dataView, dirStart, bigEnd) {
+	        //the first 2bytes means the number of directory entries contains in this IFD
+	        var entries = dataView.getUint16(dirStart, !bigEnd);
+
+	        // After last directory entry, there is a 4bytes of data,
+	        // it means an offset to next IFD.
+	        // If its value is '0x00000000', it means this is the last IFD and there is no linked IFD.
+
+	        return dataView.getUint32(dirStart + 2 + entries * 12, !bigEnd); // each entry is 12 bytes long
+	    }
+
+	    function readThumbnailImage(dataView, tiffStart, firstIFDOffset, bigEnd) {
+	        // get the IFD1 offset
+	        var IFD1OffsetPointer = getNextIFDOffset(dataView, tiffStart + firstIFDOffset, bigEnd);
+
+	        if (!IFD1OffsetPointer) {
+	            // console.log('******** IFD1Offset is empty, image thumb not found ********');
+	            return {};
+	        } else if (IFD1OffsetPointer > dataView.byteLength) {
+	            // this should not happen
+	            // console.log('******** IFD1Offset is outside the bounds of the DataView ********');
+	            return {};
+	        }
+	        // console.log('*******  thumbnail IFD offset (IFD1) is: %s', IFD1OffsetPointer);
+
+	        var thumbTags = readTags(dataView, tiffStart, tiffStart + IFD1OffsetPointer, IFD1Tags, bigEnd);
+
+	        // EXIF 2.3 specification for JPEG format thumbnail
+
+	        // If the value of Compression(0x0103) Tag in IFD1 is '6', thumbnail image format is JPEG.
+	        // Most of Exif image uses JPEG format for thumbnail. In that case, you can get offset of thumbnail
+	        // by JpegIFOffset(0x0201) Tag in IFD1, size of thumbnail by JpegIFByteCount(0x0202) Tag.
+	        // Data format is ordinary JPEG format, starts from 0xFFD8 and ends by 0xFFD9. It seems that
+	        // JPEG format and 160x120pixels of size are recommended thumbnail format for Exif2.1 or later.
+
+	        if (thumbTags['Compression']) {
+	            // console.log('Thumbnail image found!');
+
+	            switch (thumbTags['Compression']) {
+	                case 6:
+	                    // console.log('Thumbnail image format is JPEG');
+	                    if (thumbTags.JpegIFOffset && thumbTags.JpegIFByteCount) {
+	                        // extract the thumbnail
+	                        var tOffset = tiffStart + thumbTags.JpegIFOffset;
+	                        var tLength = thumbTags.JpegIFByteCount;
+	                        thumbTags['blob'] = new Blob([new Uint8Array(dataView.buffer, tOffset, tLength)], {
+	                            type: 'image/jpeg'
+	                        });
+	                    }
+	                    break;
+
+	                case 1:
+	                    console.log("Thumbnail image format is TIFF, which is not implemented.");
+	                    break;
+	                default:
+	                    console.log("Unknown thumbnail image format '%s'", thumbTags['Compression']);
+	            }
+	        } else if (thumbTags['PhotometricInterpretation'] == 2) {
+	            console.log("Thumbnail image format is RGB, which is not implemented.");
+	        }
+	        return thumbTags;
+	    }
+
+	    function getStringFromDB(buffer, start, length) {
+	        var outstr = "";
+	        for (var n = start; n < start + length; n++) {
+	            outstr += String.fromCharCode(buffer.getUint8(n));
+	        }
+	        return outstr;
+	    }
+
+	    function readEXIFData(file, start) {
+	        if (getStringFromDB(file, start, 4) != "Exif") {
+	            if (debug) console.log("Not valid EXIF data! " + getStringFromDB(file, start, 4));
+	            return false;
+	        }
+
+	        var bigEnd,
+	            tags,
+	            tag,
+	            exifData,
+	            gpsData,
+	            tiffOffset = start + 6;
+
+	        // test for TIFF validity and endianness
+	        if (file.getUint16(tiffOffset) == 0x4949) {
+	            bigEnd = false;
+	        } else if (file.getUint16(tiffOffset) == 0x4D4D) {
+	            bigEnd = true;
+	        } else {
+	            if (debug) console.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
+	            return false;
+	        }
+
+	        if (file.getUint16(tiffOffset + 2, !bigEnd) != 0x002A) {
+	            if (debug) console.log("Not valid TIFF data! (no 0x002A)");
+	            return false;
+	        }
+
+	        var firstIFDOffset = file.getUint32(tiffOffset + 4, !bigEnd);
+
+	        if (firstIFDOffset < 0x00000008) {
+	            if (debug) console.log("Not valid TIFF data! (First offset less than 8)", file.getUint32(tiffOffset + 4, !bigEnd));
+	            return false;
+	        }
+
+	        tags = readTags(file, tiffOffset, tiffOffset + firstIFDOffset, TiffTags, bigEnd);
+
+	        if (tags.ExifIFDPointer) {
+	            exifData = readTags(file, tiffOffset, tiffOffset + tags.ExifIFDPointer, ExifTags, bigEnd);
+	            for (tag in exifData) {
+	                switch (tag) {
+	                    case "LightSource":
+	                    case "Flash":
+	                    case "MeteringMode":
+	                    case "ExposureProgram":
+	                    case "SensingMethod":
+	                    case "SceneCaptureType":
+	                    case "SceneType":
+	                    case "CustomRendered":
+	                    case "WhiteBalance":
+	                    case "GainControl":
+	                    case "Contrast":
+	                    case "Saturation":
+	                    case "Sharpness":
+	                    case "SubjectDistanceRange":
+	                    case "FileSource":
+	                        exifData[tag] = StringValues[tag][exifData[tag]];
+	                        break;
+
+	                    case "ExifVersion":
+	                    case "FlashpixVersion":
+	                        exifData[tag] = String.fromCharCode(exifData[tag][0], exifData[tag][1], exifData[tag][2], exifData[tag][3]);
+	                        break;
+
+	                    case "ComponentsConfiguration":
+	                        exifData[tag] = StringValues.Components[exifData[tag][0]] + StringValues.Components[exifData[tag][1]] + StringValues.Components[exifData[tag][2]] + StringValues.Components[exifData[tag][3]];
+	                        break;
+	                }
+	                tags[tag] = exifData[tag];
+	            }
+	        }
+
+	        if (tags.GPSInfoIFDPointer) {
+	            gpsData = readTags(file, tiffOffset, tiffOffset + tags.GPSInfoIFDPointer, GPSTags, bigEnd);
+	            for (tag in gpsData) {
+	                switch (tag) {
+	                    case "GPSVersionID":
+	                        gpsData[tag] = gpsData[tag][0] + "." + gpsData[tag][1] + "." + gpsData[tag][2] + "." + gpsData[tag][3];
+	                        break;
+	                }
+	                tags[tag] = gpsData[tag];
+	            }
+	        }
+
+	        // extract thumbnail
+	        tags['thumbnail'] = readThumbnailImage(file, tiffOffset, firstIFDOffset, bigEnd);
+
+	        return tags;
+	    }
+
+	    function findXMPinJPEG(file) {
+
+	        if (!('DOMParser' in self)) {
+	            // console.warn('XML parsing not supported without DOMParser');
+	            return;
+	        }
+	        var dataView = new DataView(file);
+
+	        if (debug) console.log("Got file of length " + file.byteLength);
+	        if (dataView.getUint8(0) != 0xFF || dataView.getUint8(1) != 0xD8) {
+	            if (debug) console.log("Not a valid JPEG");
+	            return false; // not a valid jpeg
+	        }
+
+	        var offset = 2,
+	            length = file.byteLength,
+	            dom = new DOMParser();
+
+	        while (offset < length - 4) {
+	            if (getStringFromDB(dataView, offset, 4) == "http") {
+	                var startOffset = offset - 1;
+	                var sectionLength = dataView.getUint16(offset - 2) - 1;
+	                var xmpString = getStringFromDB(dataView, startOffset, sectionLength);
+	                var xmpEndIndex = xmpString.indexOf('xmpmeta>') + 8;
+	                xmpString = xmpString.substring(xmpString.indexOf('<x:xmpmeta'), xmpEndIndex);
+
+	                var indexOfXmp = xmpString.indexOf('x:xmpmeta') + 10;
+	                //Many custom written programs embed xmp/xml without any namespace. Following are some of them.
+	                //Without these namespaces, XML is thought to be invalid by parsers
+	                xmpString = xmpString.slice(0, indexOfXmp) + 'xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" ' + 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' + 'xmlns:tiff="http://ns.adobe.com/tiff/1.0/" ' + 'xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus" ' + 'xmlns:ext="http://www.gettyimages.com/xsltExtension/1.0" ' + 'xmlns:exif="http://ns.adobe.com/exif/1.0/" ' + 'xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#" ' + 'xmlns:stRef="http://ns.adobe.com/xap/1.0/sType/ResourceRef#" ' + 'xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/" ' + 'xmlns:xapGImg="http://ns.adobe.com/xap/1.0/g/img/" ' + 'xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" ' + xmpString.slice(indexOfXmp);
+
+	                var domDocument = dom.parseFromString(xmpString, 'text/xml');
+	                return xml2Object(domDocument);
+	            } else {
+	                offset++;
+	            }
+	        }
+	    }
+
+	    function xml2json(xml) {
+	        var json = {};
+
+	        if (xml.nodeType == 1) {
+	            // element node
+	            if (xml.attributes.length > 0) {
+	                json['@attributes'] = {};
+	                for (var j = 0; j < xml.attributes.length; j++) {
+	                    var attribute = xml.attributes.item(j);
+	                    json['@attributes'][attribute.nodeName] = attribute.nodeValue;
+	                }
+	            }
+	        } else if (xml.nodeType == 3) {
+	            // text node
+	            return xml.nodeValue;
+	        }
+
+	        // deal with children
+	        if (xml.hasChildNodes()) {
+	            for (var i = 0; i < xml.childNodes.length; i++) {
+	                var child = xml.childNodes.item(i);
+	                var nodeName = child.nodeName;
+	                if (json[nodeName] == null) {
+	                    json[nodeName] = xml2json(child);
+	                } else {
+	                    if (json[nodeName].push == null) {
+	                        var old = json[nodeName];
+	                        json[nodeName] = [];
+	                        json[nodeName].push(old);
+	                    }
+	                    json[nodeName].push(xml2json(child));
+	                }
+	            }
+	        }
+
+	        return json;
+	    }
+
+	    function xml2Object(xml) {
+	        try {
+	            var obj = {};
+	            if (xml.children.length > 0) {
+	                for (var i = 0; i < xml.children.length; i++) {
+	                    var item = xml.children.item(i);
+	                    var attributes = item.attributes;
+	                    for (var idx in attributes) {
+	                        var itemAtt = attributes[idx];
+	                        var dataKey = itemAtt.nodeName;
+	                        var dataValue = itemAtt.nodeValue;
+
+	                        if (dataKey !== undefined) {
+	                            obj[dataKey] = dataValue;
+	                        }
+	                    }
+	                    var nodeName = item.nodeName;
+
+	                    if (typeof obj[nodeName] == "undefined") {
+	                        obj[nodeName] = xml2json(item);
+	                    } else {
+	                        if (typeof obj[nodeName].push == "undefined") {
+	                            var old = obj[nodeName];
+
+	                            obj[nodeName] = [];
+	                            obj[nodeName].push(old);
+	                        }
+	                        obj[nodeName].push(xml2json(item));
+	                    }
+	                }
+	            } else {
+	                obj = xml.textContent;
+	            }
+	            return obj;
+	        } catch (e) {
+	            console.log(e.message);
+	        }
+	    }
+
+	    EXIF.enableXmp = function () {
+	        EXIF.isXmpEnabled = true;
+	    };
+
+	    EXIF.disableXmp = function () {
+	        EXIF.isXmpEnabled = false;
+	    };
+
+	    EXIF.getData = function (img, callback) {
+	        if ((self.Image && img instanceof self.Image || self.HTMLImageElement && img instanceof self.HTMLImageElement) && !img.complete) return false;
+
+	        if (!imageHasData(img)) {
+	            getImageData(img, callback);
+	        } else {
+	            if (callback) {
+	                callback.call(img);
+	            }
+	        }
+	        return true;
+	    };
+
+	    EXIF.getTag = function (img, tag) {
+	        if (!imageHasData(img)) return;
+	        return img.exifdata[tag];
+	    };
+
+	    EXIF.getIptcTag = function (img, tag) {
+	        if (!imageHasData(img)) return;
+	        return img.iptcdata[tag];
+	    };
+
+	    EXIF.getAllTags = function (img) {
+	        if (!imageHasData(img)) return {};
+	        var a,
+	            data = img.exifdata,
+	            tags = {};
+	        for (a in data) {
+	            if (data.hasOwnProperty(a)) {
+	                tags[a] = data[a];
+	            }
+	        }
+	        return tags;
+	    };
+
+	    EXIF.getAllIptcTags = function (img) {
+	        if (!imageHasData(img)) return {};
+	        var a,
+	            data = img.iptcdata,
+	            tags = {};
+	        for (a in data) {
+	            if (data.hasOwnProperty(a)) {
+	                tags[a] = data[a];
+	            }
+	        }
+	        return tags;
+	    };
+
+	    EXIF.pretty = function (img) {
+	        if (!imageHasData(img)) return "";
+	        var a,
+	            data = img.exifdata,
+	            strPretty = "";
+	        for (a in data) {
+	            if (data.hasOwnProperty(a)) {
+	                if (_typeof(data[a]) == "object") {
+	                    if (data[a] instanceof Number) {
+	                        strPretty += a + " : " + data[a] + " [" + data[a].numerator + "/" + data[a].denominator + "]\r\n";
+	                    } else {
+	                        strPretty += a + " : [" + data[a].length + " values]\r\n";
+	                    }
+	                } else {
+	                    strPretty += a + " : " + data[a] + "\r\n";
+	                }
+	            }
+	        }
+	        return strPretty;
+	    };
+
+	    EXIF.readFromBinaryFile = function (file) {
+	        return findEXIFinJPEG(file);
+	    };
+
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	            return EXIF;
+	        }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    }
+	}).call(undefined);
 
 /***/ })
 /******/ ]);

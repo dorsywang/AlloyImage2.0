@@ -5,10 +5,8 @@ export default class PixelProcesser{
     }
 
     doProcess(imgData, args){
-        return new Promise((rs, rj) => {
-            let result = this.process(imgData, {dorsyMath})(args);
+        let result = this.process(imgData, {dorsyMath})(args);
 
-            rs(result);
-        });
+        return result;
     }
 }

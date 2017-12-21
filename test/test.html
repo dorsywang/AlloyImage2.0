@@ -5,7 +5,7 @@
 	<title></title>
 </head>
 <body>
-
+<img src="img/7.jpg" id="m" alt="" />
 <script type="text/javascript" src="../dist/alloyimage-2.0.js"></script>
 
 <script type="text/javascript">
@@ -93,8 +93,22 @@ layer1.show();
 //console.log(b);
 
 //var b = new AlloyImage('img/7.jpg').act('灰度处理').show();
-var b = new AlloyImage('img/7.jpg')
+var b = new AlloyImage(200, 200, 'blue')
 b.show();
+
+var loader = AlloyImage.loader;
+
+Promise.all([loader('img/7.jpg'), loader('img/5.jpg')]).then(function(imgs){
+ //new AlloyImage(imgs[0], 200, 200).add(new AlloyImage(imgs[1], 200, 200).act('corrode'), 100, 100, '100%', 'rgb').show();
+ var m = new AlloyImage(imgs[0]).act("灰度处理").add(
+        new AlloyImage(imgs[0].width, imgs[0].height,"#808080")
+        .act("添加杂色")
+        .act("高斯模糊",4)
+        .act("色相/饱和度调节",32,19,0,true),
+        "叠加"
+      ).show();
+});
+
 
 
 </script>

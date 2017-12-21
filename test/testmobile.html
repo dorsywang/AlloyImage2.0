@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover" />
+	<meta charset="UTF-8">
+	<title></title>
+
+  <style type="text/css">
+canvas{
+  width: 320px;
+}
+  </style>
+</head>
+<body>
+
+<input id="file" type="file" />
+
+
+<script type="text/javascript" src="../dist/alloyimage-2.0.js"></script>
+<script type="text/javascript">
+var fileInput = document.getElementById('file');
+
+fileInput.onchange = function(e){
+    var file = e.target.files[0];
+    console.log(file instanceof File);
+
+    AlloyImage.loader(file).then(function(el){
+         new AlloyImage(el, 640).effect('rough').show();
+    });
+};
+</script>
+</body>
+</html>
